@@ -1,0 +1,48 @@
+# Visual Studio files
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Build artifacts
+bin/
+obj/
+*.exe
+*.dll
+*.pdb
+*.appx
+*.appxbundle
+*.msix
+*.msixbundle
+*.msixupload
+
+# NuGet Packages
+*.nupkg
+packages/
+project.lock.json
+project.assets.json
+
+# .NET Core and WinUI specific files
+**/publish/
+**/out/
+*.runtimeconfig.json
+*.deps.json
+*.csproj.user
+
+# Rider and JetBrains IDE files
+.idea/
+*.iml
+
+# Logs and crash reports
+*.log
+*.tlog
+hs_err_pid*
+
+# Temporary files
+*.tmp
+*.bak
+
+# Windows specific files
+Thumbs.db
+Desktop.ini
