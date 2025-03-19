@@ -5,35 +5,30 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Data.SqlClient;
+using Project.Utils;
 
 namespace Project.ClassModels
 {
     public class DoctorModel
     {
-        private readonly string _connectionString = "DE ADAUGAT CONNECTION STRING";
+        private readonly string _connectionString = DatabaseHelper.GetConnectionString();
 
-        public List<Doctor> GetDoctors()
+        public bool UpdateDoctor(Doctor doctor)
         {
-            List<Doctor> doctors = new List<Doctor>();
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
-                string query = "SELECT * FROM Doctors";
+                string query = "UPDATE Doctors SET UserID = @UserID, DepartmentID = @DepartmentID, Experience = @Experience, LicenseNumber = @LicenseNumber WHERE DoctorID = @DoctorID";
                 SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@UserID", doctor.UserID);
+                command.Parameters.AddWithValue("@DepartmentID", doctor.DepartmentID);
+                command.Parameters.AddWithValue("@YearsOfExperience", doctor.Experience);
+                command.Parameters.AddWithValue("@LicenseNumber", doctor.LicenseNumber);
+                command.Parameters.AddWithValue("@DoctorID", doctor.DoctorID);
+
                 connection.Open();
-                SqlDataReader reader = command.ExecuteReader();
-                while (reader.Read())
-                {
-                    doctors.Add(new Doctor(
-                        reader.GetGuid(0),
-                        reader.GetGuid(1),
-                        reader.GetGuid(2),
-                        reader.GetFloat(3),
-                        reader.GetFloat(4),
-                        reader.GetString(5)
-                    ));
-                }
+                int rowsAffected = command.ExecuteNonQuery();
+                return rowsAffected > 0;
             }
-            return doctors;
         }
     }
 }
