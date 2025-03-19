@@ -6,7 +6,7 @@ Welcome to the **Amenintarea Maimutei** team repository! This project is develop
 ---
 
 ## 📌 Project Overview
-The part of the application we develop will enable **administrators** to manage hospital operations efficiently and allow **patients** to provide feedback on their experiences. The Hospital project as a whole follows a structured development process where our team will gradually merge smaller components from multiple teams into a fully functional system.
+The part of the application we develop will enable **administrators** to manage hospital operations efficiently and allow **patients** to provide feedback on their experiences. The Hospital project as a whole follows a structured development process where our group will gradually merge smaller components from multiple teams into a fully functional system.
 
 ---
 
