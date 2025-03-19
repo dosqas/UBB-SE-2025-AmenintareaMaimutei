@@ -30,5 +30,35 @@ namespace Project.ClassModels
                 return rowsAffected > 0;
             }
         }
+
+        public bool DeleteDoctor(Guid doctorID)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                string query = "DELETE FROM Doctors WHERE DoctorID = @DoctorID";
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@DoctorID", doctorID);
+
+                connection.Open();
+                int rowsAffected = command.ExecuteNonQuery();
+                return rowsAffected > 0;
+            }
+        }
+
+        public bool DoesDoctorExist(Guid doctorID)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                string query = "SELECT COUNT(*) FROM Doctors WHERE DoctorID = @DoctorID";
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@DoctorID", doctorID);
+
+                connection.Open();
+                int count = (int)command.ExecuteScalar();
+                return count > 0;
+            }
+        }
     }
 }
+
+
