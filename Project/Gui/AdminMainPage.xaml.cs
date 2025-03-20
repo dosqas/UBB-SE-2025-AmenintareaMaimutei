@@ -12,6 +12,8 @@ using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
+using Project.Gui;
+using System.Diagnostics;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -50,6 +52,9 @@ namespace Project.Gui
                         break;
                     case "Add":
                         ContentFrame.Navigate(typeof(TestPage));
+                        break;
+                    case "Modify":
+                        ContentFrame.Navigate(typeof(ModifyDoctorView));
                         break;
                     default:
                         break;
