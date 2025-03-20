@@ -13,6 +13,24 @@ namespace Project.ClassModels
     {
         private readonly string _connectionString = DatabaseHelper.GetConnectionString();
 
+        public bool AddDoctor(Doctor doctor)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                string query = "INSERT INTO Doctors (DoctorID, UserID, DepartmentID, Experience, LicenseNumber) VALUES (@DoctorID, @UserID, @DepartmentID, @Experience, @LicenseNumber)";
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@DoctorID", doctor.DoctorID);
+                command.Parameters.AddWithValue("@UserID", doctor.UserID);
+                command.Parameters.AddWithValue("@DepartmentID", doctor.DepartmentID);
+                command.Parameters.AddWithValue("@Experience", doctor.Experience);
+                command.Parameters.AddWithValue("@LicenseNumber", doctor.LicenseNumber);
+
+                connection.Open();
+                int rowsAffected = command.ExecuteNonQuery();
+                return rowsAffected > 0;
+            }
+        }
+
         public bool UpdateDoctor(Doctor doctor)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))

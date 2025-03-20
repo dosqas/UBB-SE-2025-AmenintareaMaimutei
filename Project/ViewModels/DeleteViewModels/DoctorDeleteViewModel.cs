@@ -8,7 +8,7 @@ using DoctorModel = Project.ClassModels.DoctorModel;
 
 namespace Project.ViewModel
 {
-    class DeleteDoctorViewModel : INotifyPropertyChanged
+    class DoctorDeleteViewModel : INotifyPropertyChanged
     {
         private readonly DoctorModel _doctorModel = new DoctorModel();
 
@@ -39,7 +39,7 @@ namespace Project.ViewModel
 
         public ICommand DeleteDoctorCommand { get; }
 
-        public DeleteDoctorViewModel()
+        public DoctorDeleteViewModel()
         {
             DeleteDoctorCommand = new RelayCommand(RemoveDoctor);
         }

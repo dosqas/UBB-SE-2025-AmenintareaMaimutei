@@ -8,7 +8,7 @@ using ScheduleModel = Project.ClassModels.ScheduleModel;
 
 namespace Project.ViewModel
 {
-    class DeleteScheduleViewModel : INotifyPropertyChanged
+    class ScheduleDeleteViewModel : INotifyPropertyChanged
     {
         private readonly ScheduleModel _scheduleModel = new ScheduleModel();
 
@@ -38,7 +38,7 @@ namespace Project.ViewModel
 
         public ICommand DeleteScheduleCommand { get; }
 
-        public DeleteScheduleViewModel()
+        public ScheduleDeleteViewModel()
         {
             DeleteScheduleCommand = new RelayCommand(RemoveSchedule);
         }

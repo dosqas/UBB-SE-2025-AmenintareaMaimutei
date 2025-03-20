@@ -8,7 +8,7 @@ using DrugModel = Project.ClassModels.DrugModel;
 
 namespace Project.ViewModel
 {
-    class DeleteDrugViewModel : INotifyPropertyChanged
+    class DrugDeleteViewModel : INotifyPropertyChanged
     {
         private readonly DrugModel _drugModel = new DrugModel();
 
@@ -38,7 +38,7 @@ namespace Project.ViewModel
 
         public ICommand DeleteDrugCommand { get; }
 
-        public DeleteDrugViewModel()
+        public DrugDeleteViewModel()
         {
             DeleteDrugCommand = new RelayCommand(RemoveDrug);
         }

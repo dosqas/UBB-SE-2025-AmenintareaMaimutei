@@ -13,7 +13,7 @@ using System.Windows.Input;
 
 namespace Project.ViewModel
 {
-    class DoctorViewModel : INotifyPropertyChanged
+    class DoctorUpdateViewModel : INotifyPropertyChanged
     {
         private readonly DoctorModel _doctorModel = new DoctorModel();
 
@@ -39,7 +39,7 @@ namespace Project.ViewModel
 
         public ICommand SaveDoctorCommand { get; }
 
-        public DoctorViewModel()
+        public DoctorUpdateViewModel()
         {
             SaveDoctorCommand = new RelayCommand(SaveDoctor);
         }

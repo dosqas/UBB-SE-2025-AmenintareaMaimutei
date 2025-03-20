@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Project.Utils;
+using System.ComponentModel;
+using System.Windows.Input;
+using System.Windows;
+using DepartmentModel = Project.ClassModels.DepartmentModel;
 
-namespace Project.ViewModels.AddViewModels
-{
+namespace Project.ViewModels {
     internal class DepartmentAddViewModel
     {
     }
