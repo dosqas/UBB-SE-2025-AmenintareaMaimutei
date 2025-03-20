@@ -5,10 +5,10 @@
     <None Update="App.xaml">
       <SubType>Designer</SubType>
     </None>
-    <Page Update="Gui\Doctors.xaml">
+    <Page Update="Gui\BlankPage1.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Gui\TestPage.xaml">
+    <Page Update="Gui\Doctors.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Gui\HomePage.xaml">
