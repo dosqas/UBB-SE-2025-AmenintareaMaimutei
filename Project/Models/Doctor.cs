@@ -16,6 +16,7 @@ namespace Project.Models
         public float Rating { get; set; }
         public string LicenseNumber { get; set; }
         
+        public Doctor() { }
         public Doctor(Guid doctorID, Guid userID, Guid departmentID, float experience, float rating, string licenseNumber)
         {
             DoctorID = doctorID;

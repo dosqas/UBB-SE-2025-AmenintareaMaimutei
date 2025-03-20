@@ -13,6 +13,8 @@ namespace Project.Models
         public TimeSpan StartTime { get; set; }
         public TimeSpan EndTime { get; set; }
 
+        public Shift() {}
+
         public Shift(Guid shiftID, DateOnly date, TimeSpan startTime, TimeSpan endTime)
         {
             ShiftID = shiftID;
