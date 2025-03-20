@@ -93,10 +93,42 @@ namespace Project.ViewModels
 
         private bool ValidateDoctor(Doctor doctor)
         {
-            if (doctor.UserID == Guid.Empty) { ErrorMessage = "Invalid User ID"; return false; }
-            if (doctor.DepartmentID == Guid.Empty) { ErrorMessage = "Invalid Department ID"; return false; }
-            if (doctor.Experience < 0) { ErrorMessage = "Experience must be non-negative"; return false; }
-            if (string.IsNullOrWhiteSpace(doctor.LicenseNumber)) { ErrorMessage = "License Number is required"; return false; }
+            if (!_doctorModel.DoesUserExist(doctor.UserID))
+            {
+                ErrorMessage = "UserID doesn’t exist in the Users Records.";
+                return false;
+            }
+
+            if (!_doctorModel.IsUserDoctor(doctor.UserID))
+            {
+                ErrorMessage = "The user with this UserID is not a Doctor.";
+                return false;
+            }
+
+            if (_doctorModel.IsUserAlreadyDoctor(doctor.UserID))
+            {
+                ErrorMessage = "The user already exists in the Doctors Records.";
+                return false;
+            }
+
+            if (doctor.DepartmentID == Guid.Empty)
+            {
+                ErrorMessage = "DepartmentID doesn’t exist in the Departments Records.";
+                return false;
+            }
+
+            if (doctor.Experience < 0)
+            {
+                ErrorMessage = "The information provided should be a positive number.";
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(doctor.LicenseNumber))
+            {
+                ErrorMessage = "Please enter the License Number.";
+                return false;
+            }
+
             return true;
         }
 
