@@ -23,16 +23,21 @@ namespace Project.Gui
     /// </summary>
     public sealed partial class AdminMainPage : Window
     {
+        public static AdminMainPage Instance { get; private set; }
+        public Frame Frame => ContentFrame;
+
         public AdminMainPage()
         {
             this.InitializeComponent();
-
+            Instance = this;
+            ContentFrame.Navigate(typeof(HomePage));
         }
-        private HomePage homePage;
+
         public Frame getContentFrame()
         {
             return ContentFrame;
         }
+
         private void NavigationView_SelectionChanged(global::Microsoft.UI.Xaml.Controls.NavigationView sender, global::Microsoft.UI.Xaml.Controls.NavigationViewSelectionChangedEventArgs args)
         {
             if (args.SelectedItemContainer != null)

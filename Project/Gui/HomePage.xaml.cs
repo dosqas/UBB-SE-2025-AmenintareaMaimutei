@@ -23,13 +23,13 @@ namespace Project.Gui
     /// </summary>
     public sealed partial class HomePage : Page
     {
-        private AdminMainPage adminMainPage;
         public HomePage()
         {
             this.InitializeComponent();
         }
         public void DoctorButtonClick(object sender, RoutedEventArgs e)
         {
+            AdminMainPage.Instance.getContentFrame().Navigate(typeof(Doctors));
         }
     }
 }
