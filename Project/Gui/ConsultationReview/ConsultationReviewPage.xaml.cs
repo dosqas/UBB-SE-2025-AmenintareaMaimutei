@@ -13,6 +13,8 @@ using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using Microsoft.UI;
+using Project.Models;
+using Project.ClassModels;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -23,9 +25,13 @@ namespace Project.Gui.ConsultationReview
     public sealed partial class ConsultationReviewPage : Page
     {
         private int _selectedRating = 0;
+        private Guid _medicalRecordID;
+        private ReviewModel _reviewModel = new();
 
-        public ConsultationReviewPage(string doctorName, DateTime time)
+        public ConsultationReviewPage(string doctorName, DateTime time, Guid medicalRecordID)
         {
+            //TODO: add check if medicalRecordID exists or make sure it is initiated with a correct one
+            _medicalRecordID = medicalRecordID;
             this.InitializeComponent();
             DoctorNameText.Text = doctorName;
             ConsultationDateText.Text = time.ToString("yyyy-MM-dd HH:mm");
@@ -80,9 +86,27 @@ namespace Project.Gui.ConsultationReview
 
             if (FeedbackError.Visibility == Visibility.Collapsed && RatingError.Visibility == Visibility.Collapsed)
             {
-                // TODO: Add logic to submit the feedback and rating
-                StatusMessage.Text = "Thank you for your feedback!";
-                StatusMessage.Foreground = new SolidColorBrush(Colors.Green);
+                Review review = new Review(
+                    reviewID: Guid.NewGuid(),
+                    medicalRecordID: _medicalRecordID,
+                    text: FeedbackTextBox.Text,
+                    nrStars: _selectedRating
+                );
+
+                bool isSuccess = _reviewModel.AddReview(review);
+
+                if (isSuccess)
+                {
+                    StatusMessage.Text = "Thank you for your feedback!";
+                    StatusMessage.Foreground = new SolidColorBrush(Colors.Green);
+                }
+                else
+                {
+                    StatusMessage.Text = "Failed to submit feedback. Please try again later.";
+                    StatusMessage.Foreground = new SolidColorBrush(Colors.Red);
+                }
+
+
             }
             else
             {
