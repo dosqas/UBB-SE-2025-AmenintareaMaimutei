@@ -9,7 +9,7 @@ using DepartmentModel = Project.ClassModels.DepartmentModel;
 
 namespace Project.ViewModel
 {
-    class DeleteDepartmentViewModel : INotifyPropertyChanged
+    class DepartmentDeleteViewModel : INotifyPropertyChanged
     {
         private readonly DepartmentModel _departmentModel = new DepartmentModel();
 
@@ -39,7 +39,7 @@ namespace Project.ViewModel
 
         public ICommand DeleteDepartmentCommand { get; }
 
-        public DeleteDepartmentViewModel()
+        public DepartmentDeleteViewModel()
         {
             DeleteDepartmentCommand = new RelayCommand(RemoveDepartment);
         }

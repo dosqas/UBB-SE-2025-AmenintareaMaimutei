@@ -8,7 +8,7 @@ using EquipmentModel = Project.ClassModels.EquipmentModel;
 
 namespace Project.ViewModel
 {
-    class DeleteEquipmentViewModel : INotifyPropertyChanged
+    class EquipmentDeleteViewModel : INotifyPropertyChanged
     {
         private readonly EquipmentModel _equipmentModel = new EquipmentModel();
 
@@ -38,7 +38,7 @@ namespace Project.ViewModel
 
         public ICommand DeleteEquipmentCommand { get; }
 
-        public DeleteEquipmentViewModel()
+        public EquipmentDeleteViewModel()
         {
             DeleteEquipmentCommand = new RelayCommand(RemoveEquipment);
         }

@@ -13,6 +13,24 @@ namespace Project.ClassModels
     {
         private readonly string _connectionString = DatabaseHelper.GetConnectionString();
 
+        public bool AddDoctor(Doctor doctor)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                string query = "INSERT INTO Doctors (DoctorID, UserID, DepartmentID, Experience, LicenseNumber) VALUES (@DoctorID, @UserID, @DepartmentID, @Experience, @LicenseNumber)";
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@DoctorID", doctor.DoctorID);
+                command.Parameters.AddWithValue("@UserID", doctor.UserID);
+                command.Parameters.AddWithValue("@DepartmentID", doctor.DepartmentID);
+                command.Parameters.AddWithValue("@Experience", doctor.Experience);
+                command.Parameters.AddWithValue("@LicenseNumber", doctor.LicenseNumber);
+
+                connection.Open();
+                int rowsAffected = command.ExecuteNonQuery();
+                return rowsAffected > 0;
+            }
+        }
+
         public bool UpdateDoctor(Doctor doctor)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
@@ -56,6 +74,48 @@ namespace Project.ClassModels
                 connection.Open();
                 int count = (int)command.ExecuteScalar();
                 return count > 0;
+            }
+        }
+
+        public bool IsUserAlreadyDoctor(Guid userID)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                string query = "SELECT COUNT(*) FROM Doctors WHERE UserID = @UserID";
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@UserID", userID);
+
+                connection.Open();
+                int count = (int)command.ExecuteScalar();
+                return count > 0;
+            }
+        }
+
+        public bool DoesUserExist(Guid userID)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                string query = "SELECT COUNT(*) FROM Users WHERE UserID = @UserID";
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@UserID", userID);
+
+                connection.Open();
+                int count = (int)command.ExecuteScalar();
+                return count > 0;
+            }
+        }
+
+        public bool IsUserDoctor(Guid userID)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                string query = "SELECT Role FROM Users WHERE UserID = @UserID";
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@UserID", userID);
+
+                connection.Open();
+                string role = (string)command.ExecuteScalar();
+                return role == "Doctor";
             }
         }
     }

@@ -8,7 +8,7 @@ using RoomModel = Project.ClassModels.RoomModel;
 
 namespace Project.ViewModel
 {
-    class DeleteRoomViewModel : INotifyPropertyChanged
+    class RoomDeleteViewModel : INotifyPropertyChanged
     {
         private readonly RoomModel _roomModel = new RoomModel();
 
@@ -38,7 +38,7 @@ namespace Project.ViewModel
 
         public ICommand DeleteRoomCommand { get; }
 
-        public DeleteRoomViewModel()
+        public RoomDeleteViewModel()
         {
             DeleteRoomCommand = new RelayCommand(RemoveRoom);
         }
