@@ -15,6 +15,7 @@
   <ItemGroup>
     <None Remove="Gui\AdminMainPage.xaml" />
     <None Remove="Gui\Doctors.xaml" />
+    <None Remove="Gui\ModifyDoctorView.xaml" />
     <None Remove="Gui\TestPage.xaml" />
   </ItemGroup>
 
@@ -41,10 +42,16 @@
     <ProjectCapability Include="Msix" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="CommunityToolkit.WinUI.UI.Controls.DataGrid" Version="7.1.2" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="6.0.1" />
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.1742" />
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.6.250228001" />
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="9.0.3" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Gui\ModifyDoctorView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="Gui\Doctors.xaml">
