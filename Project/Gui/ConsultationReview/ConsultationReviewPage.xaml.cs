@@ -99,6 +99,11 @@ namespace Project.Gui.ConsultationReview
                 {
                     StatusMessage.Text = "Thank you for your feedback!";
                     StatusMessage.Foreground = new SolidColorBrush(Colors.Green);
+
+                    if (sender is Button submitButton)
+                    {
+                        submitButton.IsEnabled = false;
+                    }
                 }
                 else
                 {
