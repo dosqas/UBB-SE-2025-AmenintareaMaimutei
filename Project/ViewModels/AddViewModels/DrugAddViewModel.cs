@@ -1,4 +1,4 @@
-﻿using Project.Models;
+using Project.Models;
 using Project.Utils;
 using System;
 using System.ComponentModel;
@@ -127,3 +127,4 @@ namespace Project.ViewModels.AddViewModels
         }
     }
 }
+    
