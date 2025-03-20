@@ -11,18 +11,7 @@ namespace Project.ViewModels
     {
         private readonly DepartmentModel _departmentModel = new DepartmentModel();
 
-        private Guid _departmentID;
-        public Guid DepartmentID
-        {
-            get => _departmentID;
-            set
-            {
-                _departmentID = value;
-                OnPropertyChanged(nameof(DepartmentID));
-            }
-        }
-
-        private string _name;
+        private string _name = "";
         public string Name
         {
             get => _name;
@@ -33,7 +22,7 @@ namespace Project.ViewModels
             }
         }
 
-        private string _errorMessage;
+        private string _errorMessage = "";
         public string ErrorMessage
         {
             get => _errorMessage;
@@ -68,8 +57,11 @@ namespace Project.ViewModels
 
         private bool ValidateDepartment(Department department)
         {
-            if (department.DepartmentID == Guid.Empty) { ErrorMessage = "Invalid Department ID"; return false; }
-            if (string.IsNullOrWhiteSpace(department.Name)) { ErrorMessage = "Name is required"; return false; }
+            if (string.IsNullOrWhiteSpace(department.Name))
+            {
+                ErrorMessage = "Please enter the name of the department.";
+                return false;
+            }
             return true;
         }
 

@@ -17,19 +17,18 @@ namespace Project.ClassModels
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
-                string query = "INSERT INTO Doctors (DoctorID, UserID, DepartmentID, Experience, LicenseNumber) VALUES (@DoctorID, @UserID, @DepartmentID, @Experience, @LicenseNumber)";
+                string query = "INSERT INTO Departments (DepartmentID, Name) VALUES (@DepartmentID, @Name)";
                 SqlCommand command = new SqlCommand(query, connection);
-                command.Parameters.AddWithValue("@DoctorID", doctor.DoctorID);
-                command.Parameters.AddWithValue("@UserID", doctor.UserID);
-                command.Parameters.AddWithValue("@DepartmentID", doctor.DepartmentID);
-                command.Parameters.AddWithValue("@Experience", doctor.Experience);
-                command.Parameters.AddWithValue("@LicenseNumber", doctor.LicenseNumber);
+                command.Parameters.AddWithValue("@DepartmentID", department.DepartmentID);
+                command.Parameters.AddWithValue("@Name", department.Name);
 
                 connection.Open();
                 int rowsAffected = command.ExecuteNonQuery();
                 return rowsAffected > 0;
             }
         }
+
+        //Update dept.
 
         public bool DeleteDepartment(Guid departmentID)
         {
