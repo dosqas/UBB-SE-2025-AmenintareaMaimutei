@@ -14,6 +14,8 @@ namespace Project.Models
         public string Specification { get; set; }
         public int Supply { get; set; }
 
+        public Drug() {}
+
         public Drug(Guid drugID, string name, string administration, string specification, int supply)
         {
             DrugID = drugID;
