@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window
+    x:Class="Project.Gui.AdminMainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Project.Gui"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Title="AdminMainPage">
+
+    <Grid>
+        <NavigationView PaneDisplayMode="Top" SelectionChanged="NavigationView_SelectionChanged">
+            <NavigationView.MenuItems>
+                <NavigationViewItem Content="Home" Tag="HomePage"/>
+                <NavigationViewItem Content="Add" Tag="Add"/>
+                <NavigationViewItem Content="Modify"/>
+                <NavigationViewItem Content="Delete"/>
+            </NavigationView.MenuItems>
+            <Frame x:Name="ContentFrame"/>
+        </NavigationView>
+
+    </Grid>
+</Window>
