@@ -11,6 +11,8 @@ namespace Project.Models
         public Guid ScheduleID { get; set; }
         public Guid DoctorID { get; set; }
         public Guid ShiftID { get; set; }
+
+        public Schedule() {}
         public Schedule(Guid scheduleID, Guid doctorID, Guid shiftID)
         {
             ScheduleID = scheduleID;
