@@ -33,7 +33,6 @@ namespace Project.Gui
         {
             if (args.SelectedItem is NavigationViewItem selectedItem)
             {
-                // Navigate based on the selected menu item tag
                 string selectedTag = selectedItem.Tag.ToString();
 
                 if (selectedTag == "Doctors")
@@ -42,11 +41,11 @@ namespace Project.Gui
                 }
                 else if (selectedTag == "Equipment")
                 {
-                    HomePageFrame.Navigate(typeof(EquipmentPage)); // Assuming you have this page
+                    HomePageFrame.Navigate(typeof(EquipmentPage)); 
                 }
                 else if (selectedTag == "Rooms")
                 {
-                    HomePageFrame.Navigate(typeof(RoomAndDepartments)); // Assuming you have this page
+                    HomePageFrame.Navigate(typeof(RoomAndDepartments)); 
                 }
             }
         }
