@@ -10,11 +10,19 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
-        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-            <TextBlock HorizontalAlignment="Center" TextDecorations="Underline" Margin="0,15,0,15">Admin</TextBlock>
-            <Button Content="Doctors" HorizontalAlignment="Center" Margin="0,15,0,15" Click="DoctorButtonClick"/>
-            <Button Content="Equipment and consumables" HorizontalAlignment="Center" Margin="0,15,0,15"/>
-            <Button Content="Room and Departments" HorizontalAlignment="Center" Margin="0,15,0,15"/>
-        </StackPanel>
+        <!-- Split the screen into two parts: a Navigation pane on the left and a Frame for content on the right -->
+ 
+
+        <!-- Left-side Navigation Bar -->
+        <NavigationView PaneDisplayMode="Left" OpenPaneLength="200"
+                        SelectionChanged="NavigationView_SelectionChanged">
+            <NavigationView.MenuItems>
+                <NavigationViewItem Content="Doctors" Tag="Doctors" />
+                <NavigationViewItem Content="Equipment and Consumables" Tag="Equipment" />
+                <NavigationViewItem Content="Rooms and Departments" Tag="Rooms" />
+            </NavigationView.MenuItems>
+
+            <Frame x:Name="HomePageFrame" Grid.Column="1"/>
+        </NavigationView>
     </Grid>
 </Page>

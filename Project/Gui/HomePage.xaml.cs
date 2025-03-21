@@ -26,10 +26,29 @@ namespace Project.Gui
         public HomePage()
         {
             this.InitializeComponent();
+            HomePageFrame.Navigate(typeof(DoctorsPage));
+
         }
-        public void DoctorButtonClick(object sender, RoutedEventArgs e)
+        private void NavigationView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
         {
-            AdminMainPage.Instance.getContentFrame().Navigate(typeof(Doctors));
+            if (args.SelectedItem is NavigationViewItem selectedItem)
+            {
+                // Navigate based on the selected menu item tag
+                string selectedTag = selectedItem.Tag.ToString();
+
+                if (selectedTag == "Doctors")
+                {
+                    HomePageFrame.Navigate(typeof(DoctorsPage));
+                }
+                else if (selectedTag == "Equipment")
+                {
+                    HomePageFrame.Navigate(typeof(TestPage)); // Assuming you have this page
+                }
+                else if (selectedTag == "Rooms")
+                {
+                    HomePageFrame.Navigate(typeof(TestPage)); // Assuming you have this page
+                }
+            }
         }
     }
 }
