@@ -5,26 +5,49 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Project.Gui"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:models="using:Project.Models"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:models="using:Project.Models"
+    xmlns:utils="using:Project.Utils"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Page.Resources>
+        <utils:GuidToInt x:Key="GuidToInt"/>
+        <utils:AddOneConverter x:Key="AddOneConverter"/>
+
+    </Page.Resources>
 
     <Grid Padding="20">
         <StackPanel>
+
+
             <TextBlock Text="Doctor's List" HorizontalAlignment="Center" FontSize="24" FontWeight="Bold" Margin="0,0,0,20" />
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10">
+                <TextBox x:Name="SearchTextBox" Width="300" Height ="20" PlaceholderText="Search doctors..." TextChanged="SearchBox_TextChange" Margin="0,0,0,0"/>
+                <Button Content="Sort by Doctor ID" Click="SortByDoctorID" Margin="5"/>
+                <Button Content="Sort by Rating" Click="SortByRating" Margin="5"/>
+            </StackPanel>
+            <Grid ColumnDefinitions="50, 1*, 1*, 1*, 1*, 1*, 1*, 100" Margin="0,0,0,10">
+                <TextBlock Text="Doctor ID" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Grid.Column="1"/>
+                <TextBlock Text="User ID" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Grid.Column="2"/>
+                <TextBlock Text="Department ID" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Grid.Column="3"/>
+                <TextBlock Text="Experience" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Grid.Column="4"/>
+                <TextBlock Text="Rating" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Grid.Column="5"/>
+                <TextBlock Text="License Number" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Grid.Column="6"/>
+                <TextBlock Text="Actions" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Grid.Column="7"/>
+            </Grid>
+
             <ListView ItemsSource="{x:Bind Doctors, Mode=OneWay}" BorderThickness="1" BorderBrush="Gray">
                 <ListView.ItemTemplate>
                     <DataTemplate x:DataType="models:Doctor">
                         <Border BorderBrush="LightGray" BorderThickness="0,0,0,1" Padding="10">
                             <Grid ColumnDefinitions="50, 1*, 1*, 1*, 1*, 1*, 1*, 100">
-
-                                <TextBlock Text="{x:Bind DoctorID}" Grid.Column="1" TextTrimming="CharacterEllipsis"/>
+                                <!-- Display the position in the list -->
+                                <TextBlock Text="{x:Bind DoctorIDAsInt}" Grid.Column="1" TextTrimming="CharacterEllipsis"/>
                                 <TextBlock Text="{x:Bind UserID}" Grid.Column="2" TextTrimming="CharacterEllipsis"/>
                                 <TextBlock Text="{x:Bind DepartmentID}" Grid.Column="3" TextTrimming="CharacterEllipsis"/>
                                 <TextBlock Text="{x:Bind Experience}" Grid.Column="4" HorizontalAlignment="Center"/>
                                 <TextBlock Text="{x:Bind Rating}" Grid.Column="5" HorizontalAlignment="Center"/>
                                 <TextBlock Text="{x:Bind LicenseNumber}" Grid.Column="6"/>
-
                                 <Button Content="More Info" Click="MoreInfoClick" Tag="{x:Bind}" Grid.Column="7"
                                     Background="DodgerBlue" Foreground="White" Padding="5,2" FontSize="14"/>
                             </Grid>
@@ -34,5 +57,7 @@
             </ListView>
         </StackPanel>
     </Grid>
+
+
 
 </Page>

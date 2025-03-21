@@ -42,7 +42,7 @@ namespace Project.Gui
                 }
                 else if (selectedTag == "Equipment")
                 {
-                    HomePageFrame.Navigate(typeof(TestPage)); // Assuming you have this page
+                    HomePageFrame.Navigate(typeof(EquipmentPage)); // Assuming you have this page
                 }
                 else if (selectedTag == "Rooms")
                 {

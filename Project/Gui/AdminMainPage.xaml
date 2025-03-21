@@ -10,7 +10,7 @@
     Title="AdminMainPage">
 
     <Grid>
-        <NavigationView PaneDisplayMode="Top" SelectionChanged="NavigationView_SelectionChanged">
+        <NavigationView PaneDisplayMode="Top" SelectionChanged="NavigationView_SelectionChanged" IsSettingsVisible="False" IsBackButtonVisible="Collapsed">
             <NavigationView.MenuItems>
                 <NavigationViewItem Content="Home" Tag="HomePage"/>
                 <NavigationViewItem Content="Add" Tag="Add"/>
