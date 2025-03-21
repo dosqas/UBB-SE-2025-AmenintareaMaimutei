@@ -10,46 +10,54 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Windows.Media.Playback;
 
 namespace Project.ViewModel
 {
     class DoctorUpdateViewModel : INotifyPropertyChanged
     {
         private readonly DoctorModel _doctorModel = new DoctorModel();
+        public ObservableCollection<Doctor> Doctors { get; set; } = new ObservableCollection<Doctor>();
 
-        private Doctor _doctor = new Doctor();
-        public Doctor Doctor
-        {
-            get => _doctor;
-            set
-            {
-                _doctor = value;
-                OnPropertyChanged(nameof(Doctor));
-            }
-        }
+
 
         private string _errorMessage;
-        public string ErrorMessage { 
+        public string ErrorMessage
+        {
             get => _errorMessage;
-            set {
+            set
+            {
                 _errorMessage = value;
                 OnPropertyChanged(nameof(ErrorMessage));
             }
         }
 
-        public ICommand SaveDoctorCommand { get; }
+        public ICommand SaveChangesCommand { get; }
 
         public DoctorUpdateViewModel()
         {
-            SaveDoctorCommand = new RelayCommand(SaveDoctor);
+            SaveChangesCommand = new RelayCommand(SaveChanges);
+            LoadDoctors();
         }
 
-        private void SaveDoctor()
+        private void LoadDoctors()
         {
-            if (ValidateDoctor(Doctor))
+            Doctors.Clear();
+            foreach (Doctor doctor in _doctorModel.GetDoctors())
             {
-                bool success = _doctorModel.UpdateDoctor(Doctor);
-                ErrorMessage = success ? "Doctor updated successfully" : "Failed to update doctor";
+                Doctors.Add(doctor);
+            }
+        }
+
+        private void SaveChanges()
+        {
+            foreach (Doctor doctor in Doctors)
+            {
+                if (ValidateDoctor(doctor))
+                {
+                    bool success = _doctorModel.UpdateDoctor(doctor);
+                    ErrorMessage = success ? "Changes saved successfully!" : "Failed to save changes.";
+                }
             }
         }
 

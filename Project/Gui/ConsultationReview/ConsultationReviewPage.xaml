@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="Project.Gui.ConsultationReview.ConsultationReviewPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Project.Gui.ConsultationReview"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:converters="using:Project.Gui.Converters"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Page.Resources>
+        <converters:PercentageConverter x:Key="PercentageConverter"/>
+    </Page.Resources>
+
+    <Grid Name="ParentGrid" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <Grid Margin="20" Width="{Binding ActualWidth, ElementName=ParentGrid, Converter={StaticResource PercentageConverter}, ConverterParameter=0.5}"
+          HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Text="Doctor Name:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,10,0"/>
+            <TextBlock x:Name="DoctorNameText" Text="Dr. John Doe" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center"/>
+
+            <TextBlock Text="Consultation Date:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Margin="0,10,10,0"/>
+            <TextBlock x:Name="ConsultationDateText" Text="2023-10-01" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Margin="0,10,0,0"/>
+
+            <TextBlock Text="Rating:" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="0,10,10,0"/>
+            <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="1" Margin="0,10,0,0">
+            <StackPanel Orientation="Horizontal">
+                <Button x:Name="Star1" Content="★" Foreground="Gray" Click="StarClick" Tag="1"/>
+                <Button x:Name="Star2" Content="★" Foreground="Gray" Click="StarClick" Tag="2"/>
+                <Button x:Name="Star3" Content="★" Foreground="Gray" Click="StarClick" Tag="3"/>
+                <Button x:Name="Star4" Content="★" Foreground="Gray" Click="StarClick" Tag="4"/>
+                <Button x:Name="Star5" Content="★" Foreground="Gray" Click="StarClick" Tag="5"/>
+            </StackPanel>
+            <TextBlock x:Name="RatingError" Foreground="Red" Margin="10,0,0,0" VerticalAlignment="Center" Visibility="Collapsed"/>
+            </StackPanel>
+
+            <TextBlock Text="Feedback:" Grid.Row="3" Grid.Column="0" VerticalAlignment="Top" Margin="0,10,10,0"/>
+            <TextBox x:Name="FeedbackTextBox" Grid.Row="3" Grid.Column="1" Margin="0,10,0,0" Height="100" TextWrapping="Wrap" MaxLength="255"/>
+            <TextBlock x:Name="FeedbackError" Grid.Row="4" Grid.Column="1" Foreground="Red" Margin="10,0,0,0" VerticalAlignment="Center" Visibility="Collapsed"/>
+
+            <!-- Submit Button -->
+            <Button x:Name="SubmitButton" Content="Submit" Grid.Row="5" Grid.Column="1" HorizontalAlignment="Right" Margin="0,20,0,0" Click="SubmitButton_Click"/>
+
+            <!-- Status Message -->
+            <TextBlock x:Name="StatusMessage" Grid.Row="6" Grid.Column="1" Margin="0,10,0,0" VerticalAlignment="Center" Foreground="Green"/>
+        </Grid>
+    </Grid>
+</Page>

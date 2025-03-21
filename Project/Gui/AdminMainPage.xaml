@@ -14,7 +14,7 @@
             <NavigationView.MenuItems>
                 <NavigationViewItem Content="Home" Tag="HomePage"/>
                 <NavigationViewItem Content="Add" Tag="Add"/>
-                <NavigationViewItem Content="Modify"/>
+                <NavigationViewItem Content="Modify" Tag="Modify"/>
                 <NavigationViewItem Content="Delete"/>
             </NavigationView.MenuItems>
             <Frame x:Name="ContentFrame"/>
