@@ -11,9 +11,9 @@
 
     <Grid Padding="20">
         <StackPanel>
-            <TextBlock Text="Doctor's List" HorizontalAlignment="Center" FontSize="24" FontWeight="Bold" Margin="0,0,0,20" Se/>
+            <TextBlock Text="Doctor's List" HorizontalAlignment="Center" FontSize="24" FontWeight="Bold" Margin="0,0,0,20" />
             <ListView ItemsSource="{x:Bind Doctors, Mode=OneWay}" BorderThickness="1" BorderBrush="Gray">
-                <ListView.ItemTemplate Property="Focusable" Value="False">
+                <ListView.ItemTemplate>
                     <DataTemplate x:DataType="models:Doctor">
                         <Border BorderBrush="LightGray" BorderThickness="0,0,0,1" Padding="10">
                             <Grid ColumnDefinitions="50, 1*, 1*, 1*, 1*, 1*, 1*, 100">
