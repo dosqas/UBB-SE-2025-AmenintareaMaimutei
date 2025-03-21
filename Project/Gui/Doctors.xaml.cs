@@ -126,11 +126,11 @@ namespace Project.Gui
             {
                 if (direction == ListSortDirection.Ascending)
                 {
-                    sortedDoctors.Sort((x, y) => x.DoctorIDAsInt.CompareTo(y.DoctorIDAsInt));
+                    sortedDoctors.Sort((x, y) => x.DoctorID.CompareTo(y.DoctorID));
                 }
                 else
                 {
-                    sortedDoctors.Sort((x, y) => y.DoctorIDAsInt.CompareTo(x.DoctorIDAsInt));
+                    sortedDoctors.Sort((x, y) => y.DoctorID.CompareTo(x.DoctorID));
                 }
             }
             else if (field == "Rating")

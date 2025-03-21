@@ -46,7 +46,7 @@ namespace Project.Gui
                 }
                 else if (selectedTag == "Rooms")
                 {
-                    HomePageFrame.Navigate(typeof(TestPage)); // Assuming you have this page
+                    HomePageFrame.Navigate(typeof(RoomAndDepartments)); // Assuming you have this page
                 }
             }
         }
