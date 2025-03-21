@@ -30,6 +30,40 @@ namespace Project.ClassModels
             }
         }
 
+        public bool UpdateRoom(Room room)
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(_connectionString))
+                {
+                    string query = "UPDATE Rooms SET Capacity = @Capacity, DepartmentID = @DepartmentID, EquipmentID = @EquipmentID WHERE RoomID = @RoomID";
+                    SqlCommand command = new SqlCommand(query, connection);
+                    command.Parameters.AddWithValue("@Capacity", room.Capacity);
+                    command.Parameters.AddWithValue("@DepartmentID", room.DepartmentID);
+                    command.Parameters.AddWithValue("@EquipmentID", room.EquipmentID);
+                    command.Parameters.AddWithValue("@RoomID", room.RoomID);
+                    connection.Open();
+                    int rowsAffected = command.ExecuteNonQuery();
+                    return rowsAffected > 0;
+                }
+            }
+            catch (SqlException ex)
+            {
+                Console.WriteLine($"SQL Error: {ex.Message}");
+                return false;
+            }
+            catch (InvalidOperationException ex)
+            {
+                Console.WriteLine($"Invalid Operation: {ex.Message}");
+                return false;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+                return false;
+            }
+        }
+
         public bool DeleteRoom(Guid roomID)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
@@ -83,6 +117,47 @@ namespace Project.ClassModels
                 connection.Open();
                 int count = (int)command.ExecuteScalar();
                 return count > 0;
+            }
+        }
+
+        public List<Room>? GetRooms()
+        {
+            try
+            {
+                List<Room> rooms = new List<Room>();
+                using (SqlConnection connection = new SqlConnection(_connectionString))
+                {
+                    string query = "SELECT * FROM Rooms";
+                    SqlCommand command = new SqlCommand(query, connection);
+                    connection.Open();
+                    SqlDataReader reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        rooms.Add(new Room
+                        {
+                            RoomID = reader.GetGuid(0),
+                            Capacity = reader.GetInt32(1),
+                            DepartmentID = reader.GetGuid(2),
+                            EquipmentID = reader.GetGuid(3)
+                        });
+                    }
+                }
+                return rooms;
+            }
+            catch (SqlException ex)
+            {
+                Console.WriteLine($"SQL Error: {ex.Message}");
+                return null;
+            }
+            catch (InvalidOperationException ex)
+            {
+                Console.WriteLine($"Invalid Operation: {ex.Message}");
+                return null;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+                return null;
             }
         }
     }
