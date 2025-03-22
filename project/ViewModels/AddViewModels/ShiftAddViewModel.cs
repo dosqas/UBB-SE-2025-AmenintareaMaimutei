@@ -22,8 +22,8 @@ namespace Project.ViewModels.AddViewModels
             }
         }
 
-        private TimeSpan _startTime;
-        public TimeSpan StartTime
+        private TimeOnly _startTime;
+        public TimeOnly StartTime
         {
             get => _startTime;
             set
@@ -33,8 +33,8 @@ namespace Project.ViewModels.AddViewModels
             }
         }
 
-        private TimeSpan _endTime;
-        public TimeSpan EndTime
+        private TimeOnly _endTime;
+        public TimeOnly EndTime
         {
             get => _endTime;
             set

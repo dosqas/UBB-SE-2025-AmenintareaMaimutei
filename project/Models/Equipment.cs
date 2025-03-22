@@ -15,7 +15,7 @@ namespace Project.Models
         public string Specification { get; set; }
         public int Stock { get; set; }
 
-        public Equipment() {}
+        public Equipment() { Name = "Unspecified"; Type = "Unspecified"; Specification = "Unspecified"; }
         public Equipment(Guid equipmentID, string name, string type, string specification, int stock)
         {
             EquipmentID = equipmentID;

@@ -10,12 +10,12 @@ namespace Project.Models
     {
         public Guid ShiftID { get; set; }
         public DateOnly Date { get; set; }
-        public TimeSpan StartTime { get; set; }
-        public TimeSpan EndTime { get; set; }
+        public TimeOnly StartTime { get; set; }
+        public TimeOnly EndTime { get; set; }
 
         public Shift() {}
 
-        public Shift(Guid shiftID, DateOnly date, TimeSpan startTime, TimeSpan endTime)
+        public Shift(Guid shiftID, DateOnly date, TimeOnly startTime, TimeOnly endTime)
         {
             ShiftID = shiftID;
             Date = date;

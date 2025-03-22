@@ -11,7 +11,7 @@ namespace Project.Models
         public Guid DepartmentID { get; set; }
         public string Name { get; set; }
 
-        public Department() {}
+        public Department() { Name = "Unspecified"; }
         public Department(Guid departmentID, string name)
         {
             DepartmentID = departmentID;
