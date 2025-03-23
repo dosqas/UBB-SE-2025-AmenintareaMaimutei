@@ -33,6 +33,7 @@ namespace Project.ViewModels.UpdateViewModels
 
         public DrugUpdateViewModel()
         {
+            _errorMessage = string.Empty;
             SaveChangesCommand = new RelayCommand(SaveChanges);
             LoadDrugs();
         }

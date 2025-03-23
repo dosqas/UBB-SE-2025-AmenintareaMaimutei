@@ -36,6 +36,7 @@ namespace Project.ViewModel
 
         public DoctorUpdateViewModel()
         {
+            _errorMessage = string.Empty;
             SaveChangesCommand = new RelayCommand(SaveChanges);
             LoadDoctors();
         }
