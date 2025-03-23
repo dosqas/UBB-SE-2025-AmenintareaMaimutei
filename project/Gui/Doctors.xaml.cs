@@ -29,7 +29,7 @@ namespace Project.Gui
     {
         public ObservableCollection<Doctor> Doctors { get; set; } = new();
         private readonly DoctorModel _doctorModel = new();
-        public int DoctorIDAsInt => GuidToInt(DoctorID);
+        //public int DoctorIDAsInt => GuidToInt(DoctorID);
 
         private Dictionary<string, ListSortDirection> _sortingStates = new Dictionary<string, ListSortDirection>
         {
@@ -67,17 +67,23 @@ namespace Project.Gui
             Doctors.Clear();
             Doctors.Add(new Doctor
             {
-                DoctorID = Guid.NewGuid(),
-                UserID = Guid.NewGuid(),
-                DepartmentID = Guid.NewGuid(),
+                //DoctorID = Guid.NewGuid(),
+                //UserID = Guid.NewGuid(),
+                //DepartmentID = Guid.NewGuid(),
+                DoctorID = 1,
+                UserID = 1,
+                DepartmentID = 1,
                 Experience = 5,
                 LicenseNumber = "123456"
             });
             Doctors.Add(new Doctor
             {
-                DoctorID = Guid.NewGuid(),
-                UserID = Guid.NewGuid(),
-                DepartmentID = Guid.NewGuid(),
+                //DoctorID = Guid.NewGuid(),
+                //UserID = Guid.NewGuid(),
+                //DepartmentID = Guid.NewGuid(),
+                DoctorID = 2,
+                UserID = 2,
+                DepartmentID = 2,
                 Experience = 10,
                 LicenseNumber = "654321"
             });

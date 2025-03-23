@@ -87,7 +87,7 @@ namespace Project.Gui.ConsultationReview
 
             if (FeedbackError.Visibility == Visibility.Collapsed && RatingError.Visibility == Visibility.Collapsed)
             {
-                Review review = new Review( reviewID
+                Review review = new Review( reviewID: 0,
                     //reviewID: Guid.NewGuid(), --> reviewID is autoincremented in the database
                     medicalRecordID: _medicalRecordID,
                     text: FeedbackTextBox.Text,
