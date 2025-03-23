@@ -1,0 +1,27 @@
+<Page
+    x:Class="Project.Gui.DoctorInfoPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Project.Gui"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid Padding="20">
+        <StackPanel>
+            <Button Content="Back" Click="BackButton_Click" HorizontalAlignment="Left" Margin="0,0,0,20"/>
+            <TextBlock Text="Doctor Information" FontSize="24" FontWeight="Bold" Margin="0,0,0,20" />
+            <TextBlock Text="Doctor ID:" FontWeight="Bold" />
+            <TextBlock x:Name="DoctorIDTextBlock" Margin="0,0,0,10" />
+            <TextBlock Text="Department ID:" FontWeight="Bold" />
+            <TextBlock x:Name="DepartmentIDTextBlock" Margin="0,0,0,10" />
+            <TextBlock Text="License Number:" FontWeight="Bold" />
+            <TextBlock x:Name="LicenseNumberTextBlock" Margin="0,0,0,10" />
+            <TextBlock Text="Experience:" FontWeight="Bold" />
+            <TextBlock x:Name="ExperienceTextBlock" Margin="0,0,0,10" />
+            <TextBlock Text="Computed Salary:" FontWeight="Bold" />
+            <TextBlock x:Name="ComputedSalaryTextBlock" Margin="0,0,0,10" />
+        </StackPanel>
+    </Grid>
+</Page>

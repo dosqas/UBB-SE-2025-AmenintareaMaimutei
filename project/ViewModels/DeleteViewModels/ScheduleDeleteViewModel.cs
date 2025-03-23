@@ -12,8 +12,8 @@ namespace Project.ViewModel
     {
         private readonly ScheduleModel _scheduleModel = new ScheduleModel();
 
-        private Guid _scheduleID;
-        public Guid ScheduleID
+        private int _scheduleID;
+        public int ScheduleID
         {
             get => _scheduleID;
             set
@@ -45,7 +45,8 @@ namespace Project.ViewModel
 
         private void RemoveSchedule()
         {
-            if (ScheduleID == Guid.Empty)
+            //if (ScheduleID == Guid.Empty)
+            if (ScheduleID == 0)
             {
                 ErrorMessage = "No schedule was selected";
                 return;

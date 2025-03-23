@@ -11,8 +11,8 @@ namespace Project.ViewModels
     {
         private readonly DoctorModel _doctorModel = new DoctorModel();
 
-        private Guid _userID;
-        public Guid UserID
+        private int _userID;
+        public int UserID
         {
             get => _userID;
             set
@@ -22,8 +22,8 @@ namespace Project.ViewModels
             }
         }
 
-        private Guid _departmentID;
-        public Guid DepartmentID
+        private int _departmentID;
+        public int DepartmentID
         {
             get => _departmentID;
             set
@@ -77,7 +77,8 @@ namespace Project.ViewModels
         {
             var doctor = new Doctor
             {
-                DoctorID = Guid.NewGuid(),
+                //DoctorID = Guid.NewGuid(),
+                DoctorID = 0,
                 UserID = UserID,
                 DepartmentID = DepartmentID,
                 Experience = Experience,
@@ -111,7 +112,8 @@ namespace Project.ViewModels
                 return false;
             }
 
-            if (doctor.DepartmentID == Guid.Empty)
+            //if (doctor.DepartmentID == Guid.Empty)
+            if (!_doctorModel.DoesDepartmentExist(doctor.DepartmentID))
             {
                 ErrorMessage = "DepartmentID doesn’t exist in the Departments Records.";
                 return false;

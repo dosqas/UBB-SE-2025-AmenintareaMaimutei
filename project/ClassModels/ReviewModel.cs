@@ -15,7 +15,7 @@ namespace Project.ClassModels
     {
         private readonly string _connectionString = DatabaseHelper.GetConnectionString();
 
-        public Review? FetchReview(Guid medicalRecordID)
+        public Review? FetchReview(int medicalRecordID)
         {
             try
             {
@@ -30,8 +30,8 @@ namespace Project.ClassModels
 
                     if (reader.Read())
                     {
-                        Guid reviewID = reader.GetGuid(reader.GetOrdinal("ReviewID"));
-                        Guid medicalRecordIDFromDb = reader.GetGuid(reader.GetOrdinal("MedicalRecordID"));
+                        int reviewID = reader.GetInt32(reader.GetOrdinal("ReviewID"));
+                        int medicalRecordIDFromDb = reader.GetInt32(reader.GetOrdinal("MedicalRecordID"));
                         string text = reader.GetString(reader.GetOrdinal("Text"));
                         int nrStars = reader.GetInt32(reader.GetOrdinal("NrStars"));
 
@@ -66,9 +66,10 @@ namespace Project.ClassModels
             {
                 using (SqlConnection connection = new SqlConnection(_connectionString))
                 {
-                    string query = "INSERT INTO Reviews (ReviewID, MedicalRecordID, Text, NrStars) VALUES (@ReviewID, @MedicalRecordID, @Text, @NrStars)";
+                    //string query = "INSERT INTO Reviews (ReviewID, MedicalRecordID, Text, NrStars) VALUES (@ReviewID, @MedicalRecordID, @Text, @NrStars)";
+                    string query = "INSERT INTO Reviews (MedicalRecordID, Text, NrStars) VALUES (@MedicalRecordID, @Text, @NrStars)";
                     SqlCommand command = new SqlCommand(query, connection);
-                    command.Parameters.AddWithValue("@ReviewID", review.ReviewID);
+                    //command.Parameters.AddWithValue("@ReviewID", review.ReviewID);
                     command.Parameters.AddWithValue("@MedicalRecordID", review.MedicalRecordID);
                     command.Parameters.AddWithValue("@Text", review.Text);
                     command.Parameters.AddWithValue("@NrStars", review.NrStars);
@@ -95,7 +96,7 @@ namespace Project.ClassModels
             }
         }
 
-        public bool RemoveReview(Guid reviewID)
+        public bool RemoveReview(int reviewID)
         {
             try
             {

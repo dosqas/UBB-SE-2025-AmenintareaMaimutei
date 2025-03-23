@@ -8,11 +8,11 @@ namespace Project.Models
 {
     public class Department
     {
-        public Guid DepartmentID { get; set; }
+        public int DepartmentID { get; set; }
         public string Name { get; set; }
 
-        public Department() {}
-        public Department(Guid departmentID, string name)
+        public Department() { Name = "Unspecified"; }
+        public Department(int departmentID, string name)
         {
             DepartmentID = departmentID;
             Name = name;

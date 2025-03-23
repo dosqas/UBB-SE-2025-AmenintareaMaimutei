@@ -8,15 +8,15 @@ namespace Project.Models
 {
     public class Drug
     {
-        public Guid DrugID { get; set; }
+        public int DrugID { get; set; }
         public string Name { get; set; }
         public string Administration { get; set; }
         public string Specification { get; set; }
         public int Supply { get; set; }
 
-        public Drug() {}
+        public Drug() { Name = "Unspecified"; Administration = "0"; Specification = "0"; }
 
-        public Drug(Guid drugID, string name, string administration, string specification, int supply)
+        public Drug(int drugID, string name, string administration, string specification, int supply)
         {
             DrugID = drugID;
             Name = name;

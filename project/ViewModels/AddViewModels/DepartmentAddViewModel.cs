@@ -44,7 +44,8 @@ namespace Project.ViewModels
         {
             var department = new Department
             {
-                DepartmentID = Guid.NewGuid(),
+                //DepartmentID = Guid.NewGuid(),
+                DepartmentID = 0,
                 Name = Name
             };
 

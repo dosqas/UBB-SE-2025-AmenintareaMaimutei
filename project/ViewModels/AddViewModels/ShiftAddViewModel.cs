@@ -66,7 +66,8 @@ namespace Project.ViewModels.AddViewModels
         {
             var shift = new Shift
             {
-                ShiftID = Guid.NewGuid(),
+                //ShiftID = Guid.NewGuid(),
+                ShiftID = 0,
                 Date = Date,
                 StartTime = StartTime,
                 EndTime = EndTime

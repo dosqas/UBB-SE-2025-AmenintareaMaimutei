@@ -12,8 +12,8 @@ namespace Project.ViewModel
     {
         private readonly DrugModel _drugModel = new DrugModel();
 
-        private Guid _drugID;
-        public Guid DrugID
+        private int _drugID;
+        public int DrugID
         {
             get => _drugID;
             set
@@ -45,7 +45,8 @@ namespace Project.ViewModel
 
         private void RemoveDrug()
         {
-            if (DrugID == Guid.Empty)
+            //if (DrugID == Guid.Empty)
+            if (DrugID == 0)
             {
                 ErrorMessage = "No drug was selected";
                 return;

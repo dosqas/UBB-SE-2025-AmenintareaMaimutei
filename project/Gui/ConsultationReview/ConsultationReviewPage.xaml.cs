@@ -24,11 +24,12 @@ namespace Project.Gui.ConsultationReview
 
     public sealed partial class ConsultationReviewPage : Page
     {
+        private int _reviewID;
         private int _selectedRating = 0;
-        private Guid _medicalRecordID;
+        private int _medicalRecordID;
         private ReviewModel _reviewModel = new();
 
-        public ConsultationReviewPage(string doctorName, DateTime time, Guid medicalRecordID)
+        public ConsultationReviewPage(string doctorName, DateTime time, int medicalRecordID)
         {
             //TODO: add check if medicalRecordID exists or make sure it is initiated with a correct one
             _medicalRecordID = medicalRecordID;
@@ -86,8 +87,8 @@ namespace Project.Gui.ConsultationReview
 
             if (FeedbackError.Visibility == Visibility.Collapsed && RatingError.Visibility == Visibility.Collapsed)
             {
-                Review review = new Review(
-                    reviewID: Guid.NewGuid(),
+                Review review = new Review( reviewID: 0,
+                    //reviewID: Guid.NewGuid(), --> reviewID is autoincremented in the database
                     medicalRecordID: _medicalRecordID,
                     text: FeedbackTextBox.Text,
                     nrStars: _selectedRating

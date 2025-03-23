@@ -37,11 +37,17 @@ namespace Project.Gui
         {
             Rooms = new ObservableCollection<Room>();
             Departments = new ObservableCollection<Department>();
-            Departments.Add(new Department(Guid.NewGuid(), "Cardiology"));
-            Departments.Add(new Department(Guid.NewGuid(), "Neurology"));
+            //Departments.Add(new Department(Guid.NewGuid(), "Cardiology"));
+            //Departments.Add(new Department(Guid.NewGuid(), "Neurology"));
 
-            Rooms.Add(new Room(Guid.NewGuid(), 30, Departments[0].DepartmentID, Guid.NewGuid()));
-            Rooms.Add(new Room(Guid.NewGuid(), 25, Departments[1].DepartmentID, Guid.NewGuid()));
+            Departments.Add(new Department(1, "Cardiology"));
+            Departments.Add(new Department(2, "Neurology"));
+
+            //Rooms.Add(new Room(Guid.NewGuid(), 30, Departments[0].DepartmentID, Guid.NewGuid()));
+            //Rooms.Add(new Room(Guid.NewGuid(), 25, Departments[1].DepartmentID, Guid.NewGuid()));
+
+            Rooms.Add(new Room(1, 30, Departments[0].DepartmentID, 1));
+            Rooms.Add(new Room(2, 25, Departments[1].DepartmentID, 2));
         }
     }
 }

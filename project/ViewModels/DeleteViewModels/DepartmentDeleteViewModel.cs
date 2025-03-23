@@ -13,8 +13,8 @@ namespace Project.ViewModel
     {
         private readonly DepartmentModel _departmentModel = new DepartmentModel();
 
-        private Guid _departmentID;
-        public Guid DepartmentID
+        private int _departmentID;
+        public int DepartmentID
         {
             get => _departmentID;
             set
@@ -46,7 +46,8 @@ namespace Project.ViewModel
 
         private void RemoveDepartment()
         {
-            if (DepartmentID == Guid.Empty)
+            //if (DepartmentID == Guid.Empty)
+            if (DepartmentID == 0)
             {
                 ErrorMessage = "No department was selected";
                 return;

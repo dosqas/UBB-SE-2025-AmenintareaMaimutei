@@ -13,13 +13,18 @@ namespace Project.ClassModels
     {
         private readonly string _connectionString = DatabaseHelper.GetConnectionString();
 
+        private const double Type0Rate = 200d;
+        private const double Type1Rate = Type0Rate * 1.2d;
+        private const double Type2Rate = Type1Rate * 1.5d;
+
         public bool AddDoctor(Doctor doctor)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
-                string query = "INSERT INTO Doctors (DoctorID, UserID, DepartmentID, Experience, LicenseNumber) VALUES (@DoctorID, @UserID, @DepartmentID, @Experience, @LicenseNumber)";
+                //string query = "INSERT INTO Doctors (DoctorID, UserID, DepartmentID, Experience, LicenseNumber) VALUES (@DoctorID, @UserID, @DepartmentID, @Experience, @LicenseNumber)";
+                string query = "INSERT INTO Doctors (DepartmentID, Experience, LicenseNumber) VALUES (@DepartmentID, @Experience, @LicenseNumber)";
                 SqlCommand command = new SqlCommand(query, connection);
-                command.Parameters.AddWithValue("@DoctorID", doctor.DoctorID);
+                //command.Parameters.AddWithValue("@DoctorID", doctor.DoctorID);
                 command.Parameters.AddWithValue("@UserID", doctor.UserID);
                 command.Parameters.AddWithValue("@DepartmentID", doctor.DepartmentID);
                 command.Parameters.AddWithValue("@Experience", doctor.Experience);
@@ -37,9 +42,10 @@ namespace Project.ClassModels
             {
                 using (SqlConnection connection = new SqlConnection(_connectionString))
                 {
-                    string query = "UPDATE Doctors SET UserID = @UserID, DepartmentID = @DepartmentID, Experience = @Experience, LicenseNumber = @LicenseNumber WHERE DoctorID = @DoctorID";
+                    //string query = "UPDATE Doctors SET UserID = @UserID, DepartmentID = @DepartmentID, Experience = @Experience, LicenseNumber = @LicenseNumber WHERE DoctorID = @DoctorID";
+                    string query = "UPDATE Doctors SET DepartmentID = @DepartmentID, Experience = @Experience, LicenseNumber = @LicenseNumber WHERE DoctorID = @DoctorID";
                     SqlCommand command = new SqlCommand(query, connection);
-                    command.Parameters.AddWithValue("@UserID", doctor.UserID);
+                    //command.Parameters.AddWithValue("@UserID", doctor.UserID);
                     command.Parameters.AddWithValue("@DepartmentID", doctor.DepartmentID);
                     command.Parameters.AddWithValue("@Experience", doctor.Experience);
                     command.Parameters.AddWithValue("@LicenseNumber", doctor.LicenseNumber);
@@ -67,8 +73,8 @@ namespace Project.ClassModels
             }
         }
 
-        public bool DeleteDoctor(Guid doctorID)
-        {
+        public bool DeleteDoctor(int doctorID)
+        {   
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 string query = "DELETE FROM Doctors WHERE DoctorID = @DoctorID";
@@ -81,7 +87,7 @@ namespace Project.ClassModels
             }
         }
 
-        public bool DoesDoctorExist(Guid doctorID)
+        public bool DoesDoctorExist(int doctorID)   
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
@@ -95,7 +101,7 @@ namespace Project.ClassModels
             }
         }
 
-        public bool IsUserAlreadyDoctor(Guid userID)
+        public bool IsUserAlreadyDoctor(int userID)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
@@ -109,7 +115,7 @@ namespace Project.ClassModels
             }
         }
 
-        public bool DoesUserExist(Guid userID)
+        public bool DoesUserExist(int userID)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
@@ -123,7 +129,7 @@ namespace Project.ClassModels
             }
         }
 
-        public bool IsUserDoctor(Guid userID)
+        public bool IsUserDoctor(int userID)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
@@ -135,6 +141,79 @@ namespace Project.ClassModels
                 string role = (string)command.ExecuteScalar();
                 return role == "Doctor";
             }
+        }
+
+        public bool DoesDepartmentExist(int departmentID)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                string query = "SELECT COUNT(*) FROM Departments WHERE DepartmentID = @DepartmentID";
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@DepartmentID", departmentID);
+
+                connection.Open();
+                int count = (int)command.ExecuteScalar();
+                return count > 0;
+            }
+        }
+
+        public List<Shift> GetShiftsForCurrentMonth(int doctorID)
+        {
+            List<Shift> shifts = new List<Shift>();
+
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                string query = @"
+                    SELECT s.ShiftID, s.Date, s.StartTime, s.EndTime
+                    FROM GetCurrentMonthShiftsForDoctor(@DoctorID) s";
+
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@DoctorID", doctorID);
+
+                connection.Open();
+                SqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    shifts.Add(new Shift
+                    {
+                        ShiftID = reader.GetInt32(0),
+                        Date = DateOnly.FromDateTime(reader.GetDateTime(1)),
+                        StartTime = reader.GetTimeSpan(2),
+                        EndTime = reader.GetTimeSpan(3)
+                    });
+                }
+            }
+
+            return shifts;
+        }
+
+        public double ComputeDoctorSalary(int doctorID)
+        {
+            List<Shift> shifts = GetShiftsForCurrentMonth(doctorID);
+            double totalSalary = 0;
+
+            foreach (var shift in shifts)
+            {
+                double shiftRate = 0;
+
+                if (shift.StartTime == new TimeSpan(8, 0, 0) && shift.EndTime == new TimeSpan(20, 0, 0))
+                {
+                    shiftRate = Type0Rate * 12;
+                }
+                else if (shift.StartTime == new TimeSpan(20, 0, 0) && shift.EndTime == new TimeSpan(8, 0, 0))
+                {
+                    shiftRate = Type1Rate * 12;
+                }
+                else if (shift.StartTime == new TimeSpan(8, 0, 0) && shift.EndTime == new TimeSpan(8, 0, 0).Add(TimeSpan.FromDays(1)))
+                {
+                    shiftRate = Type2Rate * 24;
+                }
+
+                totalSalary += shiftRate;
+            }
+
+            return totalSalary;
         }
 
         public List<Doctor> GetDoctors()
@@ -151,9 +230,9 @@ namespace Project.ClassModels
                 {
                     doctors.Add(new Doctor
                     {
-                        DoctorID = reader.GetGuid(0),
-                        UserID = reader.GetGuid(1),
-                        DepartmentID = reader.GetGuid(2),
+                        DoctorID = reader.GetInt32(0),
+                        UserID = reader.GetInt32(1),
+                        DepartmentID = reader.GetInt32(2),
                         Experience = (float)reader.GetDouble(3),
                         LicenseNumber = reader.GetString(4),
                         Rating = (float)reader.GetDouble(5)

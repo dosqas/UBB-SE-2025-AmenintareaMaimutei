@@ -77,7 +77,8 @@ namespace Project.ViewModels.AddViewModels
         {
             var drug = new Drug
             {
-                DrugID = Guid.NewGuid(),
+                //DrugID = Guid.NewGuid(),
+                DrugID = 0,
                 Name = Name,
                 Administration = Administration,
                 Specification = Specification,

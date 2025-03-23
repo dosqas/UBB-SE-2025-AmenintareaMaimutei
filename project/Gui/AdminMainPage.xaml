@@ -16,6 +16,7 @@
                 <NavigationViewItem Content="Add" Tag="Add"/>
                 <NavigationViewItem Content="Modify" Tag="Modify"/>
                 <NavigationViewItem Content="Delete"/>
+                <NavigationViewItem Content="Log Out" Tag="LogOut"/>
             </NavigationView.MenuItems>
             <Frame x:Name="ContentFrame"/>
         </NavigationView>

@@ -8,12 +8,12 @@ namespace Project.Models
 {
     public class Schedule
     {
-        public Guid ScheduleID { get; set; }
-        public Guid DoctorID { get; set; }
-        public Guid ShiftID { get; set; }
+        public int ScheduleID { get; set; }
+        public int DoctorID { get; set; }
+        public int ShiftID { get; set; }
 
         public Schedule() {}
-        public Schedule(Guid scheduleID, Guid doctorID, Guid shiftID)
+        public Schedule(int scheduleID, int doctorID, int shiftID)
         {
             ScheduleID = scheduleID;
             DoctorID = doctorID;

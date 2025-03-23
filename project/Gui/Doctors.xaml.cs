@@ -29,7 +29,7 @@ namespace Project.Gui
     {
         public ObservableCollection<Doctor> Doctors { get; set; } = new();
         private readonly DoctorModel _doctorModel = new();
-        public int DoctorIDAsInt => GuidToInt(DoctorID);
+        //public int DoctorIDAsInt => GuidToInt(DoctorID);
 
         private Dictionary<string, ListSortDirection> _sortingStates = new Dictionary<string, ListSortDirection>
         {
@@ -43,7 +43,7 @@ namespace Project.Gui
             return BitConverter.ToInt32(b, 0);
         }
 
-        public Guid DoctorID { get; set; }  
+        public int DoctorID { get; set; }  
         public DoctorsPage()
         {
             this.InitializeComponent();
@@ -67,17 +67,17 @@ namespace Project.Gui
             Doctors.Clear();
             Doctors.Add(new Doctor
             {
-                DoctorID = Guid.NewGuid(),
-                UserID = Guid.NewGuid(),
-                DepartmentID = Guid.NewGuid(),
+                DoctorID = 1,
+                UserID = 1,
+                DepartmentID = 1,
                 Experience = 5,
                 LicenseNumber = "123456"
             });
             Doctors.Add(new Doctor
             {
-                DoctorID = Guid.NewGuid(),
-                UserID = Guid.NewGuid(),
-                DepartmentID = Guid.NewGuid(),
+                DoctorID = 2,
+                UserID = 2,
+                DepartmentID = 2,
                 Experience = 10,
                 LicenseNumber = "654321"
             });
@@ -91,7 +91,10 @@ namespace Project.Gui
         }
         private void MoreInfoClick(object sender, RoutedEventArgs e)
         {
-
+            if (sender is Button button && button.Tag is Doctor doctor)
+            {
+                Frame.Navigate(typeof(DoctorInfoPage), doctor);
+            }
         }
         private void SortByDoctorID(object sender, RoutedEventArgs e)
         {

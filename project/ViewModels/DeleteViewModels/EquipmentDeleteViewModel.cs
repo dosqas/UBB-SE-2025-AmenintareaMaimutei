@@ -12,8 +12,8 @@ namespace Project.ViewModel
     {
         private readonly EquipmentModel _equipmentModel = new EquipmentModel();
 
-        private Guid _equipmentID;
-        public Guid EquipmentID
+        private int _equipmentID;
+        public int EquipmentID
         {
             get => _equipmentID;
             set
@@ -45,7 +45,8 @@ namespace Project.ViewModel
 
         private void RemoveEquipment()
         {
-            if (EquipmentID == Guid.Empty)
+            //if (EquipmentID == Guid.Empty)
+            if (EquipmentID == 0)
             {
                 ErrorMessage = "No equipment was selected";
                 return;

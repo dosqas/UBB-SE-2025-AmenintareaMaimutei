@@ -17,9 +17,10 @@ namespace Project.ClassModels
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
-                string query = "INSERT INTO Departments (DepartmentID, Name) VALUES (@DepartmentID, @Name)";
+                //string query = "INSERT INTO Departments (DepartmentID, Name) VALUES (@DepartmentID, @Name)";
+                string query = "INSERT INTO Departments (Name) VALUES (@Name)";
                 SqlCommand command = new SqlCommand(query, connection);
-                command.Parameters.AddWithValue("@DepartmentID", department.DepartmentID);
+                //command.Parameters.AddWithValue("@DepartmentID", department.DepartmentID);
                 command.Parameters.AddWithValue("@Name", department.Name);
 
                 connection.Open();
@@ -61,7 +62,7 @@ namespace Project.ClassModels
             }
         }
 
-        public bool DeleteDepartment(Guid departmentID)
+        public bool DeleteDepartment(int departmentID)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
@@ -75,7 +76,7 @@ namespace Project.ClassModels
             }
         }
 
-        public bool DoesDepartmentExist(Guid departmentID)
+        public bool DoesDepartmentExist(int departmentID)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
@@ -102,7 +103,7 @@ namespace Project.ClassModels
                 {
                     departments.Add(new Department
                     {
-                        DepartmentID = reader.GetGuid(reader.GetOrdinal("DepartmentID")),
+                        DepartmentID = reader.GetInt32(reader.GetOrdinal("DepartmentID")),
                         Name = reader.GetString(reader.GetOrdinal("Name"))
                     });
                 }

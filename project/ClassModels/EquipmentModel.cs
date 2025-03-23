@@ -17,9 +17,10 @@ namespace Project.ClassModels
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
-                string query = "INSERT INTO Equipments (EquipmentID, Name, Type, Specification, Stock) VALUES (@EquipmentID, @Name, @Type, @Specification, @Stock)";
+                //string query = "INSERT INTO Equipments (EquipmentID, Name, Type, Specification, Stock) VALUES (@EquipmentID, @Name, @Type, @Specification, @Stock)";
+                string query = "INSERT INTO Equipments (Name, Type, Specification, Stock) VALUES (@Name, @Type, @Specification, @Stock)";
                 SqlCommand command = new SqlCommand(query, connection);
-                command.Parameters.AddWithValue("@EquipmentID", equipment.EquipmentID);
+                //command.Parameters.AddWithValue("@EquipmentID", equipment.EquipmentID);
                 command.Parameters.AddWithValue("@Name", equipment.Name);
                 command.Parameters.AddWithValue("@Type", equipment.Type);
                 command.Parameters.AddWithValue("@Specification", equipment.Specification);
@@ -31,7 +32,7 @@ namespace Project.ClassModels
             }
         }
 
-        public bool DeleteEquipment(Guid equipmentID)
+        public bool DeleteEquipment(int equipmentID)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
@@ -45,7 +46,7 @@ namespace Project.ClassModels
             }
         }
 
-        public bool DoesEquipmentExist(Guid equipmentID)
+        public bool DoesEquipmentExist(int equipmentID)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {

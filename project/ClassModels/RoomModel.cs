@@ -17,9 +17,10 @@ namespace Project.ClassModels
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
-                string query = "INSERT INTO Rooms (RoomID, Capacity, DepartmentID, EquipmentID) VALUES (@RoomID, @Capacity, @DepartmentID, @EquipmentID)";
+                //string query = "INSERT INTO Rooms (RoomID, Capacity, DepartmentID, EquipmentID) VALUES (@RoomID, @Capacity, @DepartmentID, @EquipmentID)";
+                string query = "INSERT INTO Rooms (Capacity, DepartmentID, EquipmentID) VALUES (@Capacity, @DepartmentID, @EquipmentID)";
                 SqlCommand command = new SqlCommand(query, connection);
-                command.Parameters.AddWithValue("@RoomID", room.RoomID);
+                //command.Parameters.AddWithValue("@RoomID", room.RoomID);
                 command.Parameters.AddWithValue("@Capacity", room.Capacity);
                 command.Parameters.AddWithValue("@DepartmentID", room.DepartmentID);
                 command.Parameters.AddWithValue("@EquipmentID", room.EquipmentID);
@@ -64,7 +65,7 @@ namespace Project.ClassModels
             }
         }
 
-        public bool DeleteRoom(Guid roomID)
+        public bool DeleteRoom(int roomID)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
@@ -78,7 +79,7 @@ namespace Project.ClassModels
             }
         }
 
-        public bool DoesRoomExist(Guid roomID)
+        public bool DoesRoomExist(int roomID)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
@@ -92,7 +93,7 @@ namespace Project.ClassModels
             }
         }
 
-        public bool DoesEquipmentExist(Guid equipmentID)
+        public bool DoesEquipmentExist(int equipmentID)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
@@ -106,7 +107,7 @@ namespace Project.ClassModels
             }
         }
 
-        public bool DoesDepartmentExist(Guid departmentID)
+        public bool DoesDepartmentExist(int departmentID)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
@@ -135,10 +136,13 @@ namespace Project.ClassModels
                     {
                         rooms.Add(new Room
                         {
-                            RoomID = reader.GetGuid(0),
+                            //RoomID = reader.GetGuid(0),
+                            RoomID = reader.GetInt32(0),
                             Capacity = reader.GetInt32(1),
-                            DepartmentID = reader.GetGuid(2),
-                            EquipmentID = reader.GetGuid(3)
+                            DepartmentID = reader.GetInt32(2),
+                            EquipmentID = reader.GetInt32(3)
+                            //DepartmentID = reader.GetGuid(2),
+                            //EquipmentID = reader.GetGuid(3)
                         });
                     }
                 }

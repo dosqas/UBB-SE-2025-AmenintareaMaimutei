@@ -8,16 +8,16 @@ namespace Project.Models
 {
     public class Doctor
     {
-        public Guid DoctorID { get; set; }
-        public Guid UserID { get; set; }
+        public int DoctorID { get; set; }
+        public int UserID { get; set; }
 
-        public Guid DepartmentID { get; set; }
+        public int DepartmentID { get; set; }
         public float Experience { get; set; }
         public float Rating { get; set; }
         public string LicenseNumber { get; set; }
 
-        public Doctor() { }
-        public Doctor(Guid doctorID, Guid userID, Guid departmentID, float experience, float rating, string licenseNumber)
+        public Doctor() { LicenseNumber = "0"; }
+        public Doctor(int doctorID, int userID, int departmentID, float experience, float rating, string licenseNumber)
         {
             DoctorID = doctorID;
             UserID = userID;
