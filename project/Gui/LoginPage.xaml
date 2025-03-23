@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window
+    x:Class="Project.Gui.LoginPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="LoginPage"
+    xmlns:local="using:Project.Gui"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid>
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+            <TextBox x:Name="Username" PlaceholderText="Username" Margin="0,0,0,10"/>
+            <PasswordBox x:Name="Password" PlaceholderText="Password" Margin="0,0,0,10"/>
+            <Button x:Name="loginButton" Content="Login" Click="LoginButton_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>

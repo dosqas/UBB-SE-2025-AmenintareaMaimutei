@@ -56,6 +56,11 @@ namespace Project.Gui
                     case "Modify":
                         ContentFrame.Navigate(typeof(ModifyDoctorView));
                         break;
+                    case "LogOut":
+                        var loginPage = new LoginPage();
+                        loginPage.Activate();
+                        this.Close();
+                        break;
                     default:
                         break;
                 }
