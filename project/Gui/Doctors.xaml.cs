@@ -67,9 +67,6 @@ namespace Project.Gui
             Doctors.Clear();
             Doctors.Add(new Doctor
             {
-                //DoctorID = Guid.NewGuid(),
-                //UserID = Guid.NewGuid(),
-                //DepartmentID = Guid.NewGuid(),
                 DoctorID = 1,
                 UserID = 1,
                 DepartmentID = 1,
@@ -78,9 +75,6 @@ namespace Project.Gui
             });
             Doctors.Add(new Doctor
             {
-                //DoctorID = Guid.NewGuid(),
-                //UserID = Guid.NewGuid(),
-                //DepartmentID = Guid.NewGuid(),
                 DoctorID = 2,
                 UserID = 2,
                 DepartmentID = 2,
@@ -97,7 +91,10 @@ namespace Project.Gui
         }
         private void MoreInfoClick(object sender, RoutedEventArgs e)
         {
-
+            if (sender is Button button && button.Tag is Doctor doctor)
+            {
+                Frame.Navigate(typeof(DoctorInfoPage), doctor);
+            }
         }
         private void SortByDoctorID(object sender, RoutedEventArgs e)
         {
