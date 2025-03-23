@@ -46,7 +46,8 @@ namespace Project.ViewModel
 
         private void RemoveDepartment()
         {
-            if (DepartmentID == Guid.Empty)
+            //if (DepartmentID == Guid.Empty)
+            if (DepartmentID == 0)
             {
                 ErrorMessage = "No department was selected";
                 return;

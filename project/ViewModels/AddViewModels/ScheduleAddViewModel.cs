@@ -13,8 +13,8 @@ namespace Project.ViewModels.AddViewModels
         private readonly ScheduleModel _scheduleModel = new ScheduleModel();
         private readonly string _connectionString = DatabaseHelper.GetConnectionString();
 
-        private Guid _doctorID;
-        public Guid DoctorID
+        private int _doctorID;
+        public int DoctorID
         {
             get => _doctorID;
             set
@@ -24,8 +24,8 @@ namespace Project.ViewModels.AddViewModels
             }
         }
 
-        private Guid _shiftID;
-        public Guid ShiftID
+        private int _shiftID;
+        public int ShiftID
         {
             get => _shiftID;
             set
@@ -57,7 +57,8 @@ namespace Project.ViewModels.AddViewModels
         {
             var schedule = new Schedule
             {
-                ScheduleID = Guid.NewGuid(),
+                //ScheduleID = Guid.NewGuid(),
+                ScheduleID = 0,
                 DoctorID = DoctorID,
                 ShiftID = ShiftID
             };
@@ -71,13 +72,15 @@ namespace Project.ViewModels.AddViewModels
 
         private bool ValidateSchedule(Schedule schedule)
         {
-            if (schedule.DoctorID == Guid.Empty || !_scheduleModel.DoesDoctorExist(schedule.DoctorID))
+            //if (schedule.DoctorID == Guid.Empty || !_scheduleModel.DoesDoctorExist(schedule.DoctorID))
+            if (schedule.DoctorID == 0 || !_scheduleModel.DoesDoctorExist(schedule.DoctorID))
             {
                 ErrorMessage = "DoctorID doesn’t exist in the Doctors Records.";
                 return false;
             }
 
-            if (schedule.ShiftID == Guid.Empty || !_scheduleModel.DoesShiftExist(schedule.ShiftID))
+            //if (schedule.ShiftID == Guid.Empty || !_scheduleModel.DoesShiftExist(schedule.ShiftID))
+            if (schedule.ShiftID == 0 || !_scheduleModel.DoesShiftExist(schedule.ShiftID))
             {
                 ErrorMessage = "ShiftID doesn’t exist in the Shifts Records.";
                 return false;

@@ -46,7 +46,8 @@ namespace Project.ViewModel
 
         private void RemoveDoctor()
         {
-            if (DoctorID == Guid.Empty)
+            //if (DoctorID == Guid.Empty)
+            if (DoctorID == 0)
             {
                 ErrorMessage = "No doctor was selected";
                 return;

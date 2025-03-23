@@ -17,9 +17,10 @@ namespace Project.ClassModels
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
-                string query = "INSERT INTO Schedules (ScheduleID, DoctorID, ShiftID) VALUES (@ScheduleID, @DoctorID, @ShiftID)";
+                //string query = "INSERT INTO Schedules (ScheduleID, DoctorID, ShiftID) VALUES (@ScheduleID, @DoctorID, @ShiftID)";
+                string query = "INSERT INTO Schedules (DoctorID, ShiftID) VALUES (@DoctorID, @ShiftID)";
                 SqlCommand command = new SqlCommand(query, connection);
-                command.Parameters.AddWithValue("@ScheduleID", schedule.ScheduleID);
+                //command.Parameters.AddWithValue("@ScheduleID", schedule.ScheduleID);
                 command.Parameters.AddWithValue("@DoctorID", schedule.DoctorID);
                 command.Parameters.AddWithValue("@ShiftID", schedule.ShiftID);
 
@@ -29,7 +30,7 @@ namespace Project.ClassModels
             }
         }
 
-        public bool DeleteSchedule(Guid scheduleID)
+        public bool DeleteSchedule(int scheduleID)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
@@ -43,7 +44,7 @@ namespace Project.ClassModels
             }
         }
 
-        public bool DoesScheduleExist(Guid scheduleID)
+        public bool DoesScheduleExist(int scheduleID)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
@@ -57,7 +58,7 @@ namespace Project.ClassModels
             }
         }
 
-        public bool DoesDoctorExist(Guid doctorID)
+        public bool DoesDoctorExist(int doctorID)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
@@ -71,7 +72,7 @@ namespace Project.ClassModels
             }
         }
 
-        public bool DoesShiftExist(Guid shiftID)
+        public bool DoesShiftExist(int shiftID)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {

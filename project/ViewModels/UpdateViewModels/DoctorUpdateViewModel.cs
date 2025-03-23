@@ -63,9 +63,13 @@ namespace Project.ViewModel
 
         private bool ValidateDoctor(Doctor doctor)
         {
-            if (doctor.DoctorID == Guid.Empty) { ErrorMessage = "Invalid Doctor ID"; return false; }
-            if (doctor.UserID == Guid.Empty) { ErrorMessage = "Invalid User ID"; return false; }
-            if (doctor.DepartmentID == Guid.Empty) { ErrorMessage = "Invalid Department ID"; return false; }
+            //if (doctor.DoctorID == Guid.Empty) { ErrorMessage = "Invalid Doctor ID"; return false; }
+            //if (doctor.UserID == Guid.Empty) { ErrorMessage = "Invalid User ID"; return false; }
+            //if (doctor.DepartmentID == Guid.Empty) { ErrorMessage = "Invalid Department ID"; return false; }
+            //if (doctor.Experience < 0) { ErrorMessage = "Experience must be non-negative"; return false; }
+            if (doctor.DoctorID == 0) { ErrorMessage = "Invalid Doctor ID"; return false; }
+            if (doctor.UserID == 0) { ErrorMessage = "Invalid User ID"; return false; }
+            if (doctor.DepartmentID == 0) { ErrorMessage = "Invalid Department ID"; return false; }
             if (doctor.Experience < 0) { ErrorMessage = "Experience must be non-negative"; return false; }
             if (string.IsNullOrWhiteSpace(doctor.LicenseNumber)) { ErrorMessage = "License Number is required"; return false; }
             return true;

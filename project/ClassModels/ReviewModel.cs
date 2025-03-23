@@ -66,9 +66,10 @@ namespace Project.ClassModels
             {
                 using (SqlConnection connection = new SqlConnection(_connectionString))
                 {
-                    string query = "INSERT INTO Reviews (ReviewID, MedicalRecordID, Text, NrStars) VALUES (@ReviewID, @MedicalRecordID, @Text, @NrStars)";
+                    //string query = "INSERT INTO Reviews (ReviewID, MedicalRecordID, Text, NrStars) VALUES (@ReviewID, @MedicalRecordID, @Text, @NrStars)";
+                    string query = "INSERT INTO Reviews (MedicalRecordID, Text, NrStars) VALUES (@MedicalRecordID, @Text, @NrStars)";
                     SqlCommand command = new SqlCommand(query, connection);
-                    command.Parameters.AddWithValue("@ReviewID", review.ReviewID);
+                    //command.Parameters.AddWithValue("@ReviewID", review.ReviewID);
                     command.Parameters.AddWithValue("@MedicalRecordID", review.MedicalRecordID);
                     command.Parameters.AddWithValue("@Text", review.Text);
                     command.Parameters.AddWithValue("@NrStars", review.NrStars);

@@ -12,8 +12,8 @@ namespace Project.ViewModel
     {
         private readonly RoomModel _roomModel = new RoomModel();
 
-        private Guid _roomID;
-        public Guid RoomID
+        private int _roomID;
+        public int RoomID
         {
             get => _roomID;
             set
@@ -45,7 +45,8 @@ namespace Project.ViewModel
 
         private void RemoveRoom()
         {
-            if (RoomID == Guid.Empty)
+            //if (RoomID == Guid.Empty)
+            if ( RoomID == 0)  
             {
                 ErrorMessage = "No room was selected";
                 return;

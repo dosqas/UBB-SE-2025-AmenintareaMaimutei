@@ -23,8 +23,8 @@ namespace Project.ViewModels.AddViewModels
             }
         }
 
-        private Guid _departmentID;
-        public Guid DepartmentID
+        private int _departmentID;
+        public int DepartmentID
         {
             get => _departmentID;
             set
@@ -34,8 +34,8 @@ namespace Project.ViewModels.AddViewModels
             }
         }
 
-        private Guid _equipmentID;
-        public Guid EquipmentID
+        private int _equipmentID;
+        public int EquipmentID
         {
             get => _equipmentID;
             set
@@ -67,7 +67,8 @@ namespace Project.ViewModels.AddViewModels
         {
             var room = new Room
             {
-                RoomID = Guid.NewGuid(),
+                //RoomID = Guid.NewGuid(),
+                RoomID = 0,
                 Capacity = Capacity,
                 DepartmentID = DepartmentID,
                 EquipmentID = EquipmentID
@@ -88,13 +89,15 @@ namespace Project.ViewModels.AddViewModels
                 return false;
             }
 
-            if (room.DepartmentID == Guid.Empty && !_roomModel.DoesDepartmentExist(room.DepartmentID))
+            //if (room.DepartmentID == Guid.Empty && !_roomModel.DoesDepartmentExist(room.DepartmentID))
+            if (!_roomModel.DoesDepartmentExist(room.DepartmentID))
             {
                 ErrorMessage = "DepartmentID doesn’t exist in the Departments Records.";
                 return false;
             }
 
-            if (room.EquipmentID != Guid.Empty && !_roomModel.DoesEquipmentExist(room.EquipmentID))
+            //if (room.EquipmentID != Guid.Empty && !_roomModel.DoesEquipmentExist(room.EquipmentID))
+            if (!_roomModel.DoesEquipmentExist(room.EquipmentID))
             {
                 ErrorMessage = "EquipmentID doesn’t exist in the Equipments Records.";
                 return false;

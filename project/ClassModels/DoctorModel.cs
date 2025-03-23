@@ -17,9 +17,10 @@ namespace Project.ClassModels
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
-                string query = "INSERT INTO Doctors (DoctorID, UserID, DepartmentID, Experience, LicenseNumber) VALUES (@DoctorID, @UserID, @DepartmentID, @Experience, @LicenseNumber)";
+                //string query = "INSERT INTO Doctors (DoctorID, UserID, DepartmentID, Experience, LicenseNumber) VALUES (@DoctorID, @UserID, @DepartmentID, @Experience, @LicenseNumber)";
+                string query = "INSERT INTO Doctors (DepartmentID, Experience, LicenseNumber) VALUES (@DepartmentID, @Experience, @LicenseNumber)";
                 SqlCommand command = new SqlCommand(query, connection);
-                command.Parameters.AddWithValue("@DoctorID", doctor.DoctorID);
+                //command.Parameters.AddWithValue("@DoctorID", doctor.DoctorID);
                 command.Parameters.AddWithValue("@UserID", doctor.UserID);
                 command.Parameters.AddWithValue("@DepartmentID", doctor.DepartmentID);
                 command.Parameters.AddWithValue("@Experience", doctor.Experience);
@@ -37,9 +38,10 @@ namespace Project.ClassModels
             {
                 using (SqlConnection connection = new SqlConnection(_connectionString))
                 {
-                    string query = "UPDATE Doctors SET UserID = @UserID, DepartmentID = @DepartmentID, Experience = @Experience, LicenseNumber = @LicenseNumber WHERE DoctorID = @DoctorID";
+                    //string query = "UPDATE Doctors SET UserID = @UserID, DepartmentID = @DepartmentID, Experience = @Experience, LicenseNumber = @LicenseNumber WHERE DoctorID = @DoctorID";
+                    string query = "UPDATE Doctors SET DepartmentID = @DepartmentID, Experience = @Experience, LicenseNumber = @LicenseNumber WHERE DoctorID = @DoctorID";
                     SqlCommand command = new SqlCommand(query, connection);
-                    command.Parameters.AddWithValue("@UserID", doctor.UserID);
+                    //command.Parameters.AddWithValue("@UserID", doctor.UserID);
                     command.Parameters.AddWithValue("@DepartmentID", doctor.DepartmentID);
                     command.Parameters.AddWithValue("@Experience", doctor.Experience);
                     command.Parameters.AddWithValue("@LicenseNumber", doctor.LicenseNumber);
@@ -134,6 +136,20 @@ namespace Project.ClassModels
                 connection.Open();
                 string role = (string)command.ExecuteScalar();
                 return role == "Doctor";
+            }
+        }
+
+        public bool DoesDepartmentExist(int departmentID)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                string query = "SELECT COUNT(*) FROM Departments WHERE DepartmentID = @DepartmentID";
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@DepartmentID", departmentID);
+
+                connection.Open();
+                int count = (int)command.ExecuteScalar();
+                return count > 0;
             }
         }
 

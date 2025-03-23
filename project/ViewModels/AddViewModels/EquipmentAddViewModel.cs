@@ -77,7 +77,8 @@ namespace Project.ViewModels.AddViewModels
         {
             var equipment = new Equipment
             {
-                EquipmentID = Guid.NewGuid(),
+                //EquipmentID = Guid.NewGuid(),
+                EquipmentID = 0,
                 Name = Name,
                 Type = Type,
                 Specification = Specification,

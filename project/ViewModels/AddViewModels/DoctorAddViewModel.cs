@@ -77,7 +77,8 @@ namespace Project.ViewModels
         {
             var doctor = new Doctor
             {
-                DoctorID = Guid.NewGuid(),
+                //DoctorID = Guid.NewGuid(),
+                DoctorID = 0,
                 UserID = UserID,
                 DepartmentID = DepartmentID,
                 Experience = Experience,
@@ -111,7 +112,8 @@ namespace Project.ViewModels
                 return false;
             }
 
-            if (doctor.DepartmentID == Guid.Empty)
+            //if (doctor.DepartmentID == Guid.Empty)
+            if (!_doctorModel.DoesDepartmentExist(doctor.DepartmentID))
             {
                 ErrorMessage = "DepartmentID doesn’t exist in the Departments Records.";
                 return false;

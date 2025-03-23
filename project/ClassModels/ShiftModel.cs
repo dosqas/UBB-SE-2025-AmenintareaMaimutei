@@ -17,9 +17,10 @@ namespace Project.ClassModels
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
-                string query = "INSERT INTO Shifts (ShiftID, Date, StartTime, EndTime) VALUES (@ShiftID, @Date, @StartTime, @EndTime)";
+                //string query = "INSERT INTO Shifts (ShiftID, Date, StartTime, EndTime) VALUES (@ShiftID, @Date, @StartTime, @EndTime)";
+                string query = "INSERT INTO Shifts (Date, StartTime, EndTime) VALUES (@Date, @StartTime, @EndTime)";
                 SqlCommand command = new SqlCommand(query, connection);
-                command.Parameters.AddWithValue("@ShiftID", shift.ShiftID);
+                //command.Parameters.AddWithValue("@ShiftID", shift.ShiftID);
                 command.Parameters.AddWithValue("@Date", shift.Date);
                 command.Parameters.AddWithValue("@StartTime", shift.StartTime);
                 command.Parameters.AddWithValue("@EndTime", shift.EndTime);

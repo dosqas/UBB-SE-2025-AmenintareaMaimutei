@@ -17,9 +17,10 @@ namespace Project.ClassModels
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
-                string query = "INSERT INTO Drugs (DrugID, Name, Administration, Specification, Supply) VALUES (@DrugID, @Name, @Administration, @Specification, @Supply)";
+                //string query = "INSERT INTO Drugs (DrugID, Name, Administration, Specification, Supply) VALUES (@DrugID, @Name, @Administration, @Specification, @Supply)";
+                string query = "INSERT INTO Drugs (Name, Administration, Specification, Supply) VALUES (@Name, @Administration, @Specification, @Supply)";
                 SqlCommand command = new SqlCommand(query, connection);
-                command.Parameters.AddWithValue("@DrugID", drug.DrugID);
+                //command.Parameters.AddWithValue("@DrugID", drug.DrugID);
                 command.Parameters.AddWithValue("@Name", drug.Name);
                 command.Parameters.AddWithValue("@Administration", drug.Administration);
                 command.Parameters.AddWithValue("@Specification", drug.Specification);
@@ -37,6 +38,7 @@ namespace Project.ClassModels
             {
                 using (SqlConnection connection = new SqlConnection(_connectionString))
                 {
+                    //string query = "UPDATE Drugs SET Name = @Name, Administration = @Administration, Specification = @Specification, Supply = @Supply WHERE DrugID = @DrugID";
                     string query = "UPDATE Drugs SET Name = @Name, Administration = @Administration, Specification = @Specification, Supply = @Supply WHERE DrugID = @DrugID";
                     SqlCommand command = new SqlCommand(query, connection);
                     command.Parameters.AddWithValue("@Name", drug.Name);

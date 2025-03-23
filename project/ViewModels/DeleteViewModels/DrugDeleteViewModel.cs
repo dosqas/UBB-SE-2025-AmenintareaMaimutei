@@ -45,7 +45,8 @@ namespace Project.ViewModel
 
         private void RemoveDrug()
         {
-            if (DrugID == Guid.Empty)
+            //if (DrugID == Guid.Empty)
+            if (DrugID == 0)
             {
                 ErrorMessage = "No drug was selected";
                 return;
