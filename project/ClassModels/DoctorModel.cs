@@ -13,6 +13,10 @@ namespace Project.ClassModels
     {
         private readonly string _connectionString = DatabaseHelper.GetConnectionString();
 
+        private const double Type0Rate = 200d;
+        private const double Type1Rate = Type0Rate * 1.2d;
+        private const double Type2Rate = Type1Rate * 1.5d;
+
         public bool AddDoctor(Doctor doctor)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
@@ -151,6 +155,65 @@ namespace Project.ClassModels
                 int count = (int)command.ExecuteScalar();
                 return count > 0;
             }
+        }
+
+        public List<Shift> GetShiftsForCurrentMonth(int doctorID)
+        {
+            List<Shift> shifts = new List<Shift>();
+
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                string query = @"
+                    SELECT s.ShiftID, s.Date, s.StartTime, s.EndTime
+                    FROM GetCurrentMonthShiftsForDoctor(@DoctorID) s";
+
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@DoctorID", doctorID);
+
+                connection.Open();
+                SqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    shifts.Add(new Shift
+                    {
+                        ShiftID = reader.GetInt32(0),
+                        Date = DateOnly.FromDateTime(reader.GetDateTime(1)),
+                        StartTime = reader.GetTimeSpan(2),
+                        EndTime = reader.GetTimeSpan(3)
+                    });
+                }
+            }
+
+            return shifts;
+        }
+
+        public double ComputeDoctorSalary(int doctorID)
+        {
+            List<Shift> shifts = GetShiftsForCurrentMonth(doctorID);
+            double totalSalary = 0;
+
+            foreach (var shift in shifts)
+            {
+                double shiftRate = 0;
+
+                if (shift.StartTime == new TimeSpan(8, 0, 0) && shift.EndTime == new TimeSpan(20, 0, 0))
+                {
+                    shiftRate = Type0Rate * 12;
+                }
+                else if (shift.StartTime == new TimeSpan(20, 0, 0) && shift.EndTime == new TimeSpan(8, 0, 0))
+                {
+                    shiftRate = Type1Rate * 12;
+                }
+                else if (shift.StartTime == new TimeSpan(8, 0, 0) && shift.EndTime == new TimeSpan(8, 0, 0).Add(TimeSpan.FromDays(1)))
+                {
+                    shiftRate = Type2Rate * 24;
+                }
+
+                totalSalary += shiftRate;
+            }
+
+            return totalSalary;
         }
 
         public List<Doctor> GetDoctors()

@@ -1,4 +1,7 @@
-﻿CREATE OR ALTER PROCEDURE DropTables
+﻿USE HospitalManagement;
+GO
+
+CREATE OR ALTER PROCEDURE DropTables
 AS
 BEGIN
 

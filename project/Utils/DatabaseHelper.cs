@@ -11,7 +11,7 @@ namespace Project.Utils
     {
         public static string GetConnectionString()
         {
-            return ConfigurationManager.ConnectionStrings["HospitalDB"].ConnectionString;
+            return ConfigurationManager.ConnectionStrings["HospitalManagement"].ConnectionString;
         }
     }
 }

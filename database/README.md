@@ -12,6 +12,7 @@ This document provides instructions for creating and setting up the Hospital Man
 
 ## Database Setup Instructions
 
+### **Option 1:**
 ### 1. Create the Database
 
 1. Open SQL Server Management Studio (SSMS) or your preferred SQL client.
@@ -20,9 +21,9 @@ This document provides instructions for creating and setting up the Hospital Man
 
    `CREATE DATABASE HospitalManagement;`
 
-### 2. Create the necessary procedures
+### 2. Create the necessary procedures and functions
 
-Open and execute the scripts in the following files in SSMS using the right context to create the necessary stored procedures:
+Open and execute the scripts in the following files in SSMS using the right context to create the necessary stored procedures and functions:
 
 1. `CreateTables.sql`
 2. `AddConstraints.sql`
@@ -34,6 +35,23 @@ Open and execute the scripts in the following files in SSMS using the right cont
 Execute the following script to build the database with dummy data:
 `RebuildDB.sql`
 
+##
+### **Option 2:**
+1. Open SSMS and Connect to your SQL Server 
+2. Open the `SetupDatabase.sql` file
+3. Run the script
+4. Refresh the database
+5. Go to HospitalManagement -> Database Diagrams -> Create New Diagram and add all the tables
+
 ## Diagram
 
 ![Database Diagram](database_diagram.png)
+
+## Using the database in the project
+
+Edit the `./project/Config/App.config` file to use your local SQL Server.
+```
+connectionString='Server=YOUR_SERVER;
+Database=HospitalManagement;
+Integrated Security=True; TrustServerCertificate=True;'
+```

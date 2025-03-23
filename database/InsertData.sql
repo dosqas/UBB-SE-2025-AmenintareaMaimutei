@@ -1,4 +1,7 @@
-﻿CREATE OR ALTER PROCEDURE InsertData
+﻿USE HospitalManagement;
+GO
+
+CREATE OR ALTER PROCEDURE InsertData
     @nrOfRows INT
 AS
 BEGIN

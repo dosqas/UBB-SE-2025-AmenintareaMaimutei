@@ -1,3 +1,6 @@
+USE HospitalManagement;
+GO
+
 CREATE OR ALTER PROCEDURE CreateTables
 AS
 BEGIN

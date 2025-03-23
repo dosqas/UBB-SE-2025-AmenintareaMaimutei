@@ -2,14 +2,18 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Navigation;
 using Project.Models;
+using Project.ClassModels; // Add this line to include the DoctorModel class
 
 namespace Project.Gui
 {
     public sealed partial class DoctorInfoPage : Page
     {
+        private DoctorModel _doctorModel; // Add a field for DoctorModel
+
         public DoctorInfoPage()
         {
             this.InitializeComponent();
+            _doctorModel = new DoctorModel(); // Initialize the DoctorModel
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -27,8 +31,8 @@ namespace Project.Gui
 
         private double ComputeSalary(Doctor doctor)
         {
-            // Implement your salary computation logic here
-            return doctor.Experience * 1000; // Example computation
+            // Use the DoctorModel to compute the salary
+            return _doctorModel.ComputeDoctorSalary(doctor.DoctorID);
         }
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
