@@ -43,7 +43,7 @@ namespace Project.Gui
             return BitConverter.ToInt32(b, 0);
         }
 
-        public Guid DoctorID { get; set; }  
+        public int DoctorID { get; set; }  
         public DoctorsPage()
         {
             this.InitializeComponent();

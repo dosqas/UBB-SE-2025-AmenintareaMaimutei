@@ -1,4 +1,4 @@
-﻿using System;
+﻿    using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,14 +8,14 @@ namespace Project.Models
 {
     public class Room
     {
-        public Guid RoomID { get; set; }
+        public int RoomID { get; set; }
         public int Capacity { get; set; }
-        public Guid DepartmentID { get; set; }
-        public Guid EquipmentID { get; set; }
+        public int DepartmentID { get; set; }
+        public int EquipmentID { get; set; }
 
         public Room() {}
 
-        public Room(Guid roomID, int capacity, Guid departmentID, Guid equipmentID)
+        public Room(int roomID, int capacity, int departmentID, int equipmentID)
         {
             RoomID = roomID;
             Capacity = capacity;

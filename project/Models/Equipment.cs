@@ -8,7 +8,7 @@ namespace Project.Models
 {
     public class Equipment
     {
-        public Guid EquipmentID { get; set; }
+        public int EquipmentID { get; set; }
 
         public string Name { get; set; }
         public string Type { get; set; }
@@ -16,7 +16,7 @@ namespace Project.Models
         public int Stock { get; set; }
 
         public Equipment() { Name = "Unspecified"; Type = "Unspecified"; Specification = "Unspecified"; }
-        public Equipment(Guid equipmentID, string name, string type, string specification, int stock)
+        public Equipment(int equipmentID, string name, string type, string specification, int stock)
         {
             EquipmentID = equipmentID;
             Name = name;

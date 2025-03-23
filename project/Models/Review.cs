@@ -8,12 +8,12 @@ namespace Project.Models
 {
     public class Review
     {
-        public Guid ReviewID { get; set; }
-        public Guid MedicalRecordID { get; set; }
+        public int ReviewID { get; set; }
+        public int MedicalRecordID { get; set; }
         public string Text { get; set; }
         public int NrStars { get; set; }
 
-        public Review(Guid reviewID, Guid medicalRecordID, string text, int nrStars)
+        public Review(int reviewID, int medicalRecordID, string text, int nrStars)
         {
             ReviewID = reviewID;
             MedicalRecordID = medicalRecordID;

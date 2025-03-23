@@ -13,8 +13,8 @@ namespace Project.ViewModel
     {
         private readonly DepartmentModel _departmentModel = new DepartmentModel();
 
-        private Guid _departmentID;
-        public Guid DepartmentID
+        private int _departmentID;
+        public int DepartmentID
         {
             get => _departmentID;
             set

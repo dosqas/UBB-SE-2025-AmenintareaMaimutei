@@ -67,8 +67,8 @@ namespace Project.ClassModels
             }
         }
 
-        public bool DeleteDoctor(Guid doctorID)
-        {
+        public bool DeleteDoctor(int doctorID)
+        {   
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 string query = "DELETE FROM Doctors WHERE DoctorID = @DoctorID";
@@ -81,7 +81,7 @@ namespace Project.ClassModels
             }
         }
 
-        public bool DoesDoctorExist(Guid doctorID)
+        public bool DoesDoctorExist(int doctorID)   
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
@@ -95,7 +95,7 @@ namespace Project.ClassModels
             }
         }
 
-        public bool IsUserAlreadyDoctor(Guid userID)
+        public bool IsUserAlreadyDoctor(int userID)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
@@ -109,7 +109,7 @@ namespace Project.ClassModels
             }
         }
 
-        public bool DoesUserExist(Guid userID)
+        public bool DoesUserExist(int userID)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
@@ -123,7 +123,7 @@ namespace Project.ClassModels
             }
         }
 
-        public bool IsUserDoctor(Guid userID)
+        public bool IsUserDoctor(int userID)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
@@ -151,9 +151,9 @@ namespace Project.ClassModels
                 {
                     doctors.Add(new Doctor
                     {
-                        DoctorID = reader.GetGuid(0),
-                        UserID = reader.GetGuid(1),
-                        DepartmentID = reader.GetGuid(2),
+                        DoctorID = reader.GetInt32(0),
+                        UserID = reader.GetInt32(1),
+                        DepartmentID = reader.GetInt32(2),
                         Experience = (float)reader.GetDouble(3),
                         LicenseNumber = reader.GetString(4),
                         Rating = (float)reader.GetDouble(5)

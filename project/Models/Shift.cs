@@ -8,14 +8,14 @@ namespace Project.Models
 {
     public class Shift
     {
-        public Guid ShiftID { get; set; }
+        public int ShiftID { get; set; }
         public DateOnly Date { get; set; }
-        public TimeOnly StartTime { get; set; }
-        public TimeOnly EndTime { get; set; }
+        public TimeSpan StartTime { get; set; }
+        public TimeSpan EndTime { get; set; }
 
         public Shift() {}
 
-        public Shift(Guid shiftID, DateOnly date, TimeOnly startTime, TimeOnly endTime)
+        public Shift(int shiftID, DateOnly date, TimeSpan startTime, TimeSpan endTime)
         {
             ShiftID = shiftID;
             Date = date;

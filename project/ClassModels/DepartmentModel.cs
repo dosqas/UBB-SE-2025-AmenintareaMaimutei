@@ -61,7 +61,7 @@ namespace Project.ClassModels
             }
         }
 
-        public bool DeleteDepartment(Guid departmentID)
+        public bool DeleteDepartment(int departmentID)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
@@ -75,7 +75,7 @@ namespace Project.ClassModels
             }
         }
 
-        public bool DoesDepartmentExist(Guid departmentID)
+        public bool DoesDepartmentExist(int departmentID)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
@@ -102,7 +102,7 @@ namespace Project.ClassModels
                 {
                     departments.Add(new Department
                     {
-                        DepartmentID = reader.GetGuid(reader.GetOrdinal("DepartmentID")),
+                        DepartmentID = reader.GetInt32(reader.GetOrdinal("DepartmentID")),
                         Name = reader.GetString(reader.GetOrdinal("Name"))
                     });
                 }

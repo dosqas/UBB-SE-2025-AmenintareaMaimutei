@@ -66,7 +66,7 @@ namespace Project.ClassModels
                 return false;
             }
         }
-        public bool DeleteDrug(Guid drugID)
+        public bool DeleteDrug(int drugID)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
@@ -80,7 +80,7 @@ namespace Project.ClassModels
             }
         }
 
-        public bool DoesDrugExist(Guid drugID)
+        public bool DoesDrugExist(int drugID)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
@@ -107,7 +107,7 @@ namespace Project.ClassModels
                 {
                     Drug drug = new Drug
                     {
-                        DrugID = reader.GetGuid(0),
+                        DrugID = reader.GetInt32(0),
                         Name = reader.GetString(1),
                         Administration = reader.GetString(2),
                         Specification = reader.GetString(3),

@@ -8,7 +8,7 @@ namespace Project.Models
 {
     public class User
     {
-        public Guid UserID { get; set; }
+        public int UserID { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
         public string Mail { get; set; }
@@ -20,7 +20,7 @@ namespace Project.Models
         public string PhoneNumber { get; set; }
         public DateTime RegistrationDate { get; set; }
 
-        public User(Guid userID, string username, string password, string mail, string role, string name, DateOnly birthdate, string cnp, string address, string phoneNumber, DateTime registrationDate)
+        public User(int userID, string username, string password, string mail, string role, string name, DateOnly birthdate, string cnp, string address, string phoneNumber, DateTime registrationDate)
         {
             UserID = userID;
             Username = username;

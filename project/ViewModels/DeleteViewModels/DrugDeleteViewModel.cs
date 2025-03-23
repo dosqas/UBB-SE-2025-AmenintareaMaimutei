@@ -12,8 +12,8 @@ namespace Project.ViewModel
     {
         private readonly DrugModel _drugModel = new DrugModel();
 
-        private Guid _drugID;
-        public Guid DrugID
+        private int _drugID;
+        public int DrugID
         {
             get => _drugID;
             set

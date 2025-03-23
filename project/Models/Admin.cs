@@ -8,10 +8,10 @@ namespace Project.Models
 {
     public class Admin
     {
-        public Guid AdminID { get; set; }
-        public Guid UserID { get; set; }
+        public int AdminID { get; set; }
+        public int UserID { get; set; }
 
-        public Admin(Guid adminId, Guid userId)
+        public Admin(int adminId, int userId)
         {
             AdminID = adminId;
             UserID = userId;
