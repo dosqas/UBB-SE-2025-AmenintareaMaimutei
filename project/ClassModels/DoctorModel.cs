@@ -232,10 +232,10 @@ namespace Project.ClassModels
                     {
                         DoctorID = reader.GetInt32(0),
                         UserID = reader.GetInt32(1),
-                        DepartmentID = reader.GetInt32(2),
-                        Experience = (float)reader.GetDouble(3),
-                        LicenseNumber = reader.GetString(4),
-                        Rating = (float)reader.GetDouble(5)
+                        Experience = (float)reader.GetDouble(2),
+                        Rating = (float)reader.GetDouble(3),
+                        DepartmentID = reader.GetInt32(4),
+                        LicenseNumber = reader.GetString(5)
                     });
                 }
             }
