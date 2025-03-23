@@ -13,6 +13,7 @@ using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using Project.ViewModel;
+using Project.Models;
 
 
 // To learn more about WinUI, the WinUI project structure,
@@ -25,12 +26,12 @@ namespace Project.Gui
     /// </summary>
     public sealed partial class ModifyDoctorView : Page
     {
-        //private DoctorUpdateViewModel _viewModel;
+        private DoctorUpdateViewModel _viewModel;
         public ModifyDoctorView()
         {
             this.InitializeComponent();
-            //_viewModel = new DoctorUpdateViewModel();
-            //DataContext = _viewModel;
+            _viewModel = new DoctorUpdateViewModel();
+            this.DataContext = _viewModel;
         }
     }
 }
