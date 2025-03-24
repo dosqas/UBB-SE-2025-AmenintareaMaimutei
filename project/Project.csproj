@@ -13,6 +13,13 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Gui\AddViews\AddDepartmentView.xaml" />
+    <None Remove="Gui\AddViews\AddDoctorView.xaml" />
+    <None Remove="Gui\AddViews\AddDrugView.xaml" />
+    <None Remove="Gui\AddViews\AddEquipmentView.xaml" />
+    <None Remove="Gui\AddViews\AddRoomView.xaml" />
+    <None Remove="Gui\AddViews\AddScheduleView.xaml" />
+    <None Remove="Gui\AddViews\AddShiftView.xaml" />
     <None Remove="Gui\AdminMainPage.xaml" />
     <None Remove="Gui\ConsultationReview\ConsultationReviewPage.xaml" />
     <None Remove="Gui\Doctors.xaml" />
@@ -53,6 +60,36 @@
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.1742" />
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.7.250310001" />
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="9.0.3" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Gui\AddViews\AddShiftView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Gui\AddViews\AddScheduleView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Gui\AddViews\AddRoomView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Gui\AddViews\AddEquipmentView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Gui\AddViews\AddDrugView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Gui\AddViews\AddDoctorView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="Gui\ModifyViews\ModifyRoomView.xaml">
@@ -108,6 +145,12 @@
 
   <ItemGroup>
     <Page Update="Gui\ModifyViews\ModifyDrugView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Gui\AddViews\AddDepartmentView.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
