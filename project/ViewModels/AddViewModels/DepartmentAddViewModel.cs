@@ -48,6 +48,7 @@ namespace Project.ViewModels.AddViewModels
             Departments.Clear();
             foreach (Department department in _departmentModel.GetDepartments())
             {
+                department.IsEditable = false;
                 Departments.Add(department);
             }
         }
@@ -57,7 +58,8 @@ namespace Project.ViewModels.AddViewModels
             var department = new Department
             {
                 DepartmentID = 0, 
-                Name = Name
+                Name = Name,
+               IsEditable = true
             };
 
             if (ValidateDepartment(department))

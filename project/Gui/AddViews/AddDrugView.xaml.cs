@@ -5,6 +5,8 @@ using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
+using Project.ClassModels;
+using Project.ViewModels.AddViewModels;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -23,9 +25,12 @@ namespace Project.Gui.AddViews
     /// </summary>
     public sealed partial class AddDrugView : Page
     {
+        private DrugAddViewModel _viewModel;
         public AddDrugView()
         {
             this.InitializeComponent();
+            _viewModel = new DrugAddViewModel();
+            this.DataContext = _viewModel;
         }
     }
 }
