@@ -48,33 +48,52 @@ namespace Project.ViewModels.UpdateViewModels
 
         private void SaveChanges()
         {
+            bool hasErrors = false;
+            StringBuilder errorMessages = new StringBuilder();
+
             foreach (Schedule schedule in Schedules)
             {
-                if (ValidateSchedule(schedule))
+                if (!ValidateSchedule(schedule))
+                {
+                    hasErrors = true;
+                    errorMessages.AppendLine("Schedule " + schedule.ScheduleID + ": " + ErrorMessage);
+                }
+                else
                 {
                     bool success = _scheduleModel.UpdateSchedule(schedule);
-                    ErrorMessage = success ? "Changes saved successfully!" : "Failed to save changes.";
+                    if (!success)
+                    {
+                        errorMessages.AppendLine("Failed to save changes for schedule: " + schedule.DoctorID);
+                        hasErrors = true;
+                    }
                 }
+            }
+            if (hasErrors)
+            {
+                ErrorMessage = errorMessages.ToString();
+            }
+            else
+            {
+                ErrorMessage = "Changes saved successfully";
             }
         }
 
         private bool ValidateSchedule(Schedule schedule)
         {
-            if (schedule.ScheduleID <= 0)
+            bool doctorExists = _scheduleModel.DoesDoctorExist(schedule.DoctorID);
+            if (!doctorExists)
             {
-                ErrorMessage = "Schedule ID is required.";
+                ErrorMessage = "DoctorID doesn’t exist in the Doctors Records";
                 return false;
             }
-            if (schedule.DoctorID <= 0)
+
+            bool shiftExists = _scheduleModel.DoesShiftExist(schedule.ShiftID);
+            if (!shiftExists)
             {
-                ErrorMessage = "Doctor ID is required.";
+                ErrorMessage = "ShiftID doesn’t exist in the Shifts Records";
                 return false;
             }
-            if (schedule.ShiftID <= 0)
-            {
-                ErrorMessage = "Shift ID is required.";
-                return false;
-            }
+
             return true;
         }
 

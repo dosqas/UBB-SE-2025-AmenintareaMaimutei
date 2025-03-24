@@ -10,20 +10,22 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
-        <StackPanel Margin="20">
-            <TextBlock Text="Modify Shift" FontSize="20" FontWeight="Bold" Margin="0,0,0,10" HorizontalAlignment="Center" />
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <StackPanel Margin="20">
+                <TextBlock Text="Modify Shift" FontSize="20" FontWeight="Bold" Margin="0,0,0,10" HorizontalAlignment="Center" />
 
-            <controls:DataGrid ItemsSource="{Binding Shifts}" AutoGenerateColumns="False" IsReadOnly="False" HorizontalAlignment="Stretch" Width="Auto">
-                <controls:DataGrid.Columns>
-                    <controls:DataGridTextColumn Header="Shift ID" Binding="{Binding ShiftID}" Width="*" IsReadOnly="True"/>
-                    <controls:DataGridTextColumn Header="Date" Binding="{Binding Path=Date, Converter={StaticResource DateOnlyToStringConverter},UpdateSourceTrigger=PropertyChanged}" IsReadOnly="False" Width="*"/>
-                    <controls:DataGridTextColumn Header="Start Time" Binding="{Binding Path=StartTime, Converter={StaticResource TimeSpanToStringConverter},UpdateSourceTrigger=PropertyChanged}" IsReadOnly="False" Width="*"/>
-                    <controls:DataGridTextColumn Header="End Time" Binding="{Binding Path=EndTime, Converter={StaticResource TimeSpanToStringConverter},UpdateSourceTrigger=PropertyChanged}" IsReadOnly="False" Width="*"/>
-                </controls:DataGrid.Columns>
-            </controls:DataGrid>
+                <controls:DataGrid ItemsSource="{Binding Shifts}" AutoGenerateColumns="False" IsReadOnly="False" HorizontalAlignment="Stretch" Width="Auto" Height="400">
+                    <controls:DataGrid.Columns>
+                        <controls:DataGridTextColumn Header="Shift ID" Binding="{Binding ShiftID}" Width="*" IsReadOnly="True"/>
+                        <controls:DataGridTextColumn Header="Date" Binding="{Binding Path=Date, Converter={StaticResource DateOnlyToStringConverter},UpdateSourceTrigger=PropertyChanged}" IsReadOnly="False" Width="*"/>
+                        <controls:DataGridTextColumn Header="Start Time" Binding="{Binding Path=StartTime, Converter={StaticResource TimeSpanToStringConverter},UpdateSourceTrigger=PropertyChanged}" IsReadOnly="False" Width="*"/>
+                        <controls:DataGridTextColumn Header="End Time" Binding="{Binding Path=EndTime, Converter={StaticResource TimeSpanToStringConverter},UpdateSourceTrigger=PropertyChanged}" IsReadOnly="False" Width="*"/>
+                    </controls:DataGrid.Columns>
+                </controls:DataGrid>
 
-            <Button Content="Save Changes" Command="{Binding SaveChangesCommand}" HorizontalAlignment="Center" Margin="10"/>
-            <TextBlock Text="{Binding ErrorMessage}" Foreground="Red" HorizontalAlignment="Center"/>
-        </StackPanel>
+                <Button Content="Save Changes" Command="{Binding SaveChangesCommand}" HorizontalAlignment="Center" Margin="10"/>
+                <TextBlock Text="{Binding ErrorMessage}" Foreground="Red" HorizontalAlignment="Center"/>
+            </StackPanel>
+        </ScrollViewer>
     </Grid>
 </Page>

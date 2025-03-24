@@ -49,33 +49,58 @@ namespace Project.ViewModels.UpdateViewModels
 
         private void SaveChanges()
         {
+            bool hasErrors = false;
+            StringBuilder errorMessages = new StringBuilder();
+
             foreach (Room room in Rooms)
             {
-                if (ValidateRoom(room))
+                if (!ValidateRoom(room))
+                {
+                    hasErrors = true;
+                    errorMessages.AppendLine("Room " + room.RoomID + ": " + ErrorMessage);
+                }
+                else
                 {
                     bool success = _roomModel.UpdateRoom(room);
-                    ErrorMessage = success ? "Changes saved successfully!" : "Failed to save changes.";
+                    if (!success)
+                    {
+                        errorMessages.AppendLine("Failed to save changes for room: " + room.RoomID);
+                        hasErrors = true;
+                    }
                 }
+            }
+            if (hasErrors)
+            {
+                ErrorMessage = errorMessages.ToString();
+            }
+            else
+            {
+                ErrorMessage = "Changes saved successfully";
             }
         }
 
         private bool ValidateRoom(Room room)
         {
-            if (room.Capacity < 0)
+            if (room.Capacity <= 0)
             {
-                ErrorMessage = "Capacity cannot be negative.";
+                ErrorMessage = "Please enter a number >0.";
                 return false;
             }
-            if (room.DepartmentID < 0)
+            
+            bool departmentExists = _roomModel.DoesDepartmentExist(room.DepartmentID);
+            if (!departmentExists)
             {
-                ErrorMessage = "Department ID cannot be negative.";
+                ErrorMessage = "Department ID doesn’t exist in the Departments Records";
                 return false;
             }
-            if (room.EquipmentID < 0)
+            
+            bool equipmentExists = _roomModel.DoesEquipmentExist(room.EquipmentID);
+            if(!equipmentExists)
             {
-                ErrorMessage = "Equipment ID cannot be negative.";
+                ErrorMessage = "Equipment ID doesn’t exist in the Equipment Records";
                 return false;
             }
+
             return true;
         }
 
