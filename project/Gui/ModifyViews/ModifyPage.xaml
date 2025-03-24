@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="Project.Gui.ModifyViews.ModifyPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Project.Gui.ModifyViews"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid>
+        <NavigationView PaneDisplayMode="Left" OpenPaneLength="200"
+                SelectionChanged="NavigationView_SelectionChanged" IsSettingsVisible="False" IsBackButtonVisible="Collapsed">
+            <NavigationView.MenuItems>
+                <NavigationViewItem Content="Doctors" Tag="Doctors" />
+                <NavigationViewItem Content="Equipment" Tag="Equipment" />
+                <NavigationViewItem Content="Drugs" Tag="Drugs" />
+                <NavigationViewItem Content="Schedule" Tag="Schedule" />
+                <NavigationViewItem Content="Shifts" Tag="Shifts" />
+                <NavigationViewItem Content="Departments" Tag="Departments" />
+                <NavigationViewItem Content="Rooms" Tag="Rooms" />
+            </NavigationView.MenuItems>
+
+            <Frame x:Name="ModifyPageFrame" Grid.Column="1"/>
+        </NavigationView>
+    </Grid>
+</Page>

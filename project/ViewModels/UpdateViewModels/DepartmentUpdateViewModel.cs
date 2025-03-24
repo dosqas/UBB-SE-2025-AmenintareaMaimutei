@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -45,22 +46,38 @@ namespace Project.ViewModels.UpdateViewModels
         }
         private void SaveChanges()
         {
+            bool hasErrors = false;
+            StringBuilder errorMessages = new StringBuilder();
+
             foreach (Department department in Departments)
             {
-                if (ValidateDepartment(department))
+                if (!ValidateDepartment(department))
+                {
+                    hasErrors = true;
+                    errorMessages.AppendLine("Department " + department.DepartmentID + ": " + ErrorMessage);
+                }
+                else
                 {
                     bool success = _departmentModel.UpdateDepartment(department);
-                    ErrorMessage = success ? "Changes saved successfully!" : "Failed to save changes.";
+                    if (!success)
+                    {
+                        errorMessages.AppendLine("Failed to save changes for department: " + department.DepartmentID);
+                        hasErrors = true;
+                    }
                 }
+            }
+            if (hasErrors)
+            {
+                ErrorMessage = errorMessages.ToString();
+            }
+            else
+            {
+                ErrorMessage = "Changes saved successfully";
             }
         }
         private bool ValidateDepartment(Department department)
         {
-            if (string.IsNullOrWhiteSpace(department.Name))
-            {
-                ErrorMessage = "Department name cannot be empty.";
-                return false;
-            }
+            if (!System.Text.RegularExpressions.Regex.IsMatch(department.Name, @"^[a-zA-Z0-9 ]*$")) { ErrorMessage = "Department Name should contain only alphanumeric characters"; return false; }
             return true;
         }
 

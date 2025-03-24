@@ -33,6 +33,7 @@
     <None Remove="Gui\ModifyViews\ModifyDepartmentView.xaml" />
     <None Remove="Gui\ModifyViews\ModifyDrugView.xaml" />
     <None Remove="Gui\ModifyViews\ModifyEquipmentView.xaml" />
+    <None Remove="Gui\ModifyViews\ModifyPage.xaml" />
     <None Remove="Gui\ModifyViews\ModifyRoomView.xaml" />
     <None Remove="Gui\ModifyViews\ModifyScheduleView.xaml" />
     <None Remove="Gui\ModifyViews\ModifyShiftView.xaml" />
@@ -70,6 +71,7 @@
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="9.0.3" />
   </ItemGroup>
   <ItemGroup>
+
     <Page Update="Gui\DeleteViews\DeleteRoomView.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -86,6 +88,7 @@
   </ItemGroup>
   <ItemGroup>
     <Page Update="Gui\DeleteViews\DeleteScheduleView.xaml">
+    <Page Update="Gui\ModifyViews\ModifyPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
