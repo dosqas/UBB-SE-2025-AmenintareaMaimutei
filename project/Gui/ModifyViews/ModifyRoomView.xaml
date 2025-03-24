@@ -10,20 +10,22 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
-        <StackPanel Margin="20">
-            <TextBlock Text="Modify Rooms" FontSize="20" FontWeight="Bold" Margin="0,0,0,10" HorizontalAlignment="Center"/>
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <StackPanel Margin="20">
+                <TextBlock Text="Modify Rooms" FontSize="20" FontWeight="Bold" Margin="0,0,0,10" HorizontalAlignment="Center"/>
 
-            <controls:DataGrid ItemsSource="{Binding Rooms}" AutoGenerateColumns="False" IsReadOnly="False" HorizontalAlignment="Stretch" Width="Auto">
-                <controls:DataGrid.Columns>
-                    <controls:DataGridTextColumn Header="Room ID" Binding="{Binding RoomID}" Width="*" IsReadOnly="True"/>
-                    <controls:DataGridTextColumn Header="Capacity" Binding="{Binding Capacity, UpdateSourceTrigger=PropertyChanged}" Width="*"/>
-                    <controls:DataGridTextColumn Header="Department ID" Binding="{Binding DepartmentID, UpdateSourceTrigger=PropertyChanged}" Width="*"/>
-                    <controls:DataGridTextColumn Header="Equipment ID" Binding="{Binding EquipmentID, UpdateSourceTrigger=PropertyChanged}" Width="*"/>
-                </controls:DataGrid.Columns>
-            </controls:DataGrid>
+                <controls:DataGrid ItemsSource="{Binding Rooms}" AutoGenerateColumns="False" IsReadOnly="False" HorizontalAlignment="Stretch" Width="Auto" Height="400">
+                    <controls:DataGrid.Columns>
+                        <controls:DataGridTextColumn Header="Room ID" Binding="{Binding RoomID}" Width="*" IsReadOnly="True"/>
+                        <controls:DataGridTextColumn Header="Capacity" Binding="{Binding Capacity, UpdateSourceTrigger=PropertyChanged}" Width="*"/>
+                        <controls:DataGridTextColumn Header="Department ID" Binding="{Binding DepartmentID, UpdateSourceTrigger=PropertyChanged}" Width="*"/>
+                        <controls:DataGridTextColumn Header="Equipment ID" Binding="{Binding EquipmentID, UpdateSourceTrigger=PropertyChanged}" Width="*"/>
+                    </controls:DataGrid.Columns>
+                </controls:DataGrid>
 
-            <Button Content="Save Changes" Command="{Binding SaveChangesCommand}" HorizontalAlignment="Center" Margin="10"/>
-            <TextBlock Text="{Binding ErrorMessage}" Foreground="Red" HorizontalAlignment="Center"/>
-        </StackPanel>
+                <Button Content="Save Changes" Command="{Binding SaveChangesCommand}" HorizontalAlignment="Center" Margin="10"/>
+                <TextBlock Text="{Binding ErrorMessage}" Foreground="Red" HorizontalAlignment="Center"/>
+            </StackPanel>
+        </ScrollViewer>
     </Grid>
 </Page>

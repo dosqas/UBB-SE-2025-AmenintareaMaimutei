@@ -11,21 +11,23 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
-        <StackPanel Margin="20">
-            <TextBlock Text="Modify Doctors" FontSize="20" FontWeight="Bold" Margin="0,0,0,10" HorizontalAlignment="Center"/>
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <StackPanel Margin="20">
+                <TextBlock Text="Modify Doctors" FontSize="20" FontWeight="Bold" Margin="0,0,0,10" HorizontalAlignment="Center"/>
 
-            <controls:DataGrid ItemsSource="{Binding Doctors}" AutoGenerateColumns="False" IsReadOnly="False" HorizontalAlignment="Stretch" Width="Auto">
-                <controls:DataGrid.Columns>
-                    <controls:DataGridTextColumn Header="Doctor ID" Binding="{Binding DoctorID}" Width="*" IsReadOnly="True"/>
-                    <controls:DataGridTextColumn Header="User ID" Binding="{Binding UserID, UpdateSourceTrigger=PropertyChanged}" Width="*"/>
-                    <controls:DataGridTextColumn Header="Department ID" Binding="{Binding DepartmentID, UpdateSourceTrigger=PropertyChanged}" Width="*"/>
-                    <controls:DataGridTextColumn Header="Experience" Binding="{Binding Experience, UpdateSourceTrigger=PropertyChanged}" Width="*"/>
-                    <controls:DataGridTextColumn Header="License Number" Binding="{Binding LicenseNumber,UpdateSourceTrigger=PropertyChanged}" Width="*"/>
-                </controls:DataGrid.Columns>
-            </controls:DataGrid>
+                <controls:DataGrid ItemsSource="{Binding Doctors}" AutoGenerateColumns="False" IsReadOnly="False" HorizontalAlignment="Stretch" Width="Auto" Height="400">
+                    <controls:DataGrid.Columns>
+                        <controls:DataGridTextColumn Header="Doctor ID" Binding="{Binding DoctorID}" Width="*" IsReadOnly="True"/>
+                        <controls:DataGridTextColumn Header="User ID" Binding="{Binding UserID, UpdateSourceTrigger=PropertyChanged}" Width="*"/>
+                        <controls:DataGridTextColumn Header="Department ID" Binding="{Binding DepartmentID, UpdateSourceTrigger=PropertyChanged}" Width="*"/>
+                        <controls:DataGridTextColumn Header="Experience" Binding="{Binding Experience, UpdateSourceTrigger=PropertyChanged}" Width="*"/>
+                        <controls:DataGridTextColumn Header="License Number" Binding="{Binding LicenseNumber,UpdateSourceTrigger=PropertyChanged}" Width="*"/>
+                    </controls:DataGrid.Columns>
+                </controls:DataGrid>
 
-            <Button Content="Save Changes" Command="{Binding SaveChangesCommand}" HorizontalAlignment="Center" Margin="10"/>
-            <TextBlock Text="{Binding ErrorMessage}" Foreground="Red" HorizontalAlignment="Center"/>
-        </StackPanel>
+                <Button Content="Save Changes" Command="{Binding SaveChangesCommand}" HorizontalAlignment="Center" Margin="10"/>
+                <TextBlock Text="{Binding ErrorMessage}" Foreground="Red" HorizontalAlignment="Center"/>
+            </StackPanel>
+        </ScrollViewer>
     </Grid>
 </Page>
