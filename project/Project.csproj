@@ -21,6 +21,8 @@
     <None Remove="Gui\ModifyViews\ModifyDrugView.xaml" />
     <None Remove="Gui\ModifyViews\ModifyEquipmentView.xaml" />
     <None Remove="Gui\ModifyViews\ModifyRoomView.xaml" />
+    <None Remove="Gui\ModifyViews\ModifyScheduleView.xaml" />
+    <None Remove="Gui\ModifyViews\ModifyShiftView.xaml" />
     <None Remove="Gui\TestPage.xaml" />
     <None Remove="Gui\LoginPage.xaml" />
   </ItemGroup>
@@ -53,6 +55,16 @@
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.1742" />
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.7.250310001" />
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="9.0.3" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Gui\ModifyViews\ModifyScheduleView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Gui\ModifyViews\ModifyShiftView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="Gui\ModifyViews\ModifyRoomView.xaml">
