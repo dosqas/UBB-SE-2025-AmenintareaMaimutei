@@ -3,7 +3,9 @@
     x:Class="Project.App"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:Project">
+    xmlns:local="using:Project"
+    xmlns:converters="using:Project.Utils">
+    
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -11,6 +13,8 @@
                 <!-- Other merged dictionaries here -->
             </ResourceDictionary.MergedDictionaries>
             <!-- Other app resources here -->
+            <converters:TimeSpanToStringConverter x:Key="TimeSpanToStringConverter" />
+            <converters:DateOnlyToStringConverter x:Key="DateOnlyToStringConverter" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>
