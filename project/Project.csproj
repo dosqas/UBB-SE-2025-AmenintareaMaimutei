@@ -13,6 +13,14 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Gui\AddPage.xaml" />
+    <None Remove="Gui\AddViews\AddDepartmentView.xaml" />
+    <None Remove="Gui\AddViews\AddDoctorView.xaml" />
+    <None Remove="Gui\AddViews\AddDrugView.xaml" />
+    <None Remove="Gui\AddViews\AddEquipmentView.xaml" />
+    <None Remove="Gui\AddViews\AddRoomView.xaml" />
+    <None Remove="Gui\AddViews\AddScheduleView.xaml" />
+    <None Remove="Gui\AddViews\AddShiftView.xaml" />
     <None Remove="Gui\AdminMainPage.xaml" />
     <None Remove="Gui\ConsultationReview\ConsultationReviewPage.xaml" />
     <None Remove="Gui\DeleteViews\DeleteDepartmentView.xaml" />
@@ -26,6 +34,8 @@
     <None Remove="Gui\ModifyViews\ModifyDrugView.xaml" />
     <None Remove="Gui\ModifyViews\ModifyEquipmentView.xaml" />
     <None Remove="Gui\ModifyViews\ModifyRoomView.xaml" />
+    <None Remove="Gui\ModifyViews\ModifyScheduleView.xaml" />
+    <None Remove="Gui\ModifyViews\ModifyShiftView.xaml" />
     <None Remove="Gui\TestPage.xaml" />
     <None Remove="Gui\LoginPage.xaml" />
   </ItemGroup>
@@ -61,21 +71,51 @@
   </ItemGroup>
   <ItemGroup>
     <Page Update="Gui\DeleteViews\DeleteRoomView.xaml">
+    <Page Update="Gui\AddPage.xaml">
+
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="Gui\DeleteViews\DeleteMainPage.xaml">
+    <Page Update="Gui\ModifyViews\ModifyScheduleView.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="Gui\DeleteViews\DeleteDoctorView.xaml">
+    <Page Update="Gui\AddViews\AddShiftView.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="Gui\DeleteViews\DeleteScheduleView.xaml">
+    <Page Update="Gui\AddViews\AddScheduleView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Gui\AddViews\AddRoomView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Gui\AddViews\AddEquipmentView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Gui\AddViews\AddDrugView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Gui\AddViews\AddDoctorView.xaml">
+        <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Gui\ModifyViews\ModifyShiftView.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
@@ -139,6 +179,7 @@
 
   <ItemGroup>
     <Page Update="Gui\DeleteViews\DeleteDepartmentView.xaml">
+    <Page Update="Gui\AddViews\AddDepartmentView.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>

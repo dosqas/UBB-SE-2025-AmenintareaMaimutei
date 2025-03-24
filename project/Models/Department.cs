@@ -10,12 +10,14 @@ namespace Project.Models
     {
         public int DepartmentID { get; set; }
         public string Name { get; set; }
+        public bool IsEditable { get; set; }
 
         public Department() { Name = "Unspecified"; }
         public Department(int departmentID, string name)
         {
             DepartmentID = departmentID;
             Name = name;
+            IsEditable = true;
         }
     }
 }

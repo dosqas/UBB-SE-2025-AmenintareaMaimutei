@@ -43,9 +43,9 @@ namespace Project.ClassModels
                 using (SqlConnection connection = new SqlConnection(_connectionString))
                 {
                     //string query = "UPDATE Doctors SET UserID = @UserID, DepartmentID = @DepartmentID, Experience = @Experience, LicenseNumber = @LicenseNumber WHERE DoctorID = @DoctorID";
-                    string query = "UPDATE Doctors SET DepartmentID = @DepartmentID, Experience = @Experience, LicenseNumber = @LicenseNumber WHERE DoctorID = @DoctorID";
+                    string query = "UPDATE Doctors SET UserID = @UserID, DepartmentID = @DepartmentID, Experience = @Experience, LicenseNumber = @LicenseNumber WHERE DoctorID = @DoctorID";
                     SqlCommand command = new SqlCommand(query, connection);
-                    //command.Parameters.AddWithValue("@UserID", doctor.UserID);
+                    command.Parameters.AddWithValue("@UserID", doctor.UserID);
                     command.Parameters.AddWithValue("@DepartmentID", doctor.DepartmentID);
                     command.Parameters.AddWithValue("@Experience", doctor.Experience);
                     command.Parameters.AddWithValue("@LicenseNumber", doctor.LicenseNumber);
@@ -154,6 +154,19 @@ namespace Project.ClassModels
                 connection.Open();
                 int count = (int)command.ExecuteScalar();
                 return count > 0;
+            }
+        }
+
+        public bool UserExistsInDoctors(int userID)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                string query = "SELECT COUNT(*) FROM Doctors WHERE UserID = @UserID";
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@UserID", userID);
+                connection.Open();
+                int count = (int)command.ExecuteScalar();
+                return count > 1;
             }
         }
 

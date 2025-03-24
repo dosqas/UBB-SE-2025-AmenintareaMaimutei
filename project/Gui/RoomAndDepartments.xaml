@@ -22,9 +22,9 @@
 
         <TextBlock Text="Departments" HorizontalAlignment="Center" FontSize="24" FontWeight="Bold" Margin="-20,0,0,20" Grid.Row="0"/>
 
-        <Grid Grid.Row="1" ColumnDefinitions="420, 660">
-            <TextBlock Text="Department ID" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="0"/>
-            <TextBlock Text="Name" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="1"/>
+        <Grid Grid.Row="1" ColumnDefinitions="1*,2*">
+            <TextBlock Text="Department ID" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="0" Margin="34,0,0,0" />
+            <TextBlock Text="Name" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="1" Margin="-17,0,0,0" />
         </Grid>
 
         <ListView ItemsSource="{x:Bind Departments, Mode=OneWay}" BorderThickness="1" BorderBrush="Gray" Grid.Row="2">
@@ -42,10 +42,10 @@
 
         <TextBlock Text="Rooms" HorizontalAlignment="Center" FontSize="24" FontWeight="Bold" Margin="0,20,0,5" Grid.Row="3"/>
 
-        <Grid Grid.Row="4" ColumnDefinitions="420, 300, 420">
-            <TextBlock Text="Room ID" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="0"/>
+        <Grid Grid.Row="4" ColumnDefinitions="1*, 1*, 1*">
+            <TextBlock Text="Room ID" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="0" Margin="28,0,0,0" />
             <TextBlock Text="Capacity" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="1"/>
-            <TextBlock Text="Department ID" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="2"/>
+            <TextBlock Text="Department ID" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="2" Margin="-28,0,0,0"/>
         </Grid>
 
         <ListView ItemsSource="{x:Bind Rooms, Mode=OneWay}" BorderThickness="1" BorderBrush="Gray" Grid.Row="5">
