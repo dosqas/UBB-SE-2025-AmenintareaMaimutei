@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="Project.Gui.DeleteViews.DeleteScheduleView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Project.Gui.DeleteViews"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="using:CommunityToolkit.WinUI.UI.Controls"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid>
+        <StackPanel Margin="20">
+            <TextBlock Text="Delete Schedule" FontSize="20" FontWeight="Bold" Margin="0,0,0,10" HorizontalAlignment="Center"/>
+
+            <controls:DataGrid 
+                ItemsSource="{Binding Schedules}" 
+                AutoGenerateColumns="False" 
+                IsReadOnly="True" 
+                HorizontalAlignment="Stretch" 
+                Width="Auto" 
+                SelectionMode="Single"
+                SelectedItem="{Binding SelectedSchedule}">
+
+                <controls:DataGrid.Columns>
+                    <controls:DataGridTextColumn Header="Schedule ID" Binding="{Binding ScheduleID}" Width="*" />
+                    <controls:DataGridTextColumn Header="Doctor ID" Binding="{Binding DoctorID}" Width="*" />
+                    <controls:DataGridTextColumn Header="Shift ID" Binding="{Binding ShiftID}" Width="*" />
+                </controls:DataGrid.Columns>
+            </controls:DataGrid>
+
+            <TextBox 
+                Text="{Binding ScheduleID, UpdateSourceTrigger=PropertyChanged}" 
+                Margin="0,10" 
+                PlaceholderText="Enter Schedule ID to delete" 
+                HorizontalAlignment="Stretch"/>
+
+            <Button 
+                Content="Delete Schedule" 
+                Command="{Binding DeleteScheduleCommand}" 
+                HorizontalAlignment="Center" 
+                Margin="10"
+                IsEnabled="{Binding CanDeleteSchedule}"/>
+
+            <TextBlock Text="{Binding ErrorMessage}" Foreground="Red" HorizontalAlignment="Center"/>
+        </StackPanel>
+    </Grid>
+</Page>

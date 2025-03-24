@@ -15,6 +15,7 @@ using Microsoft.UI.Xaml.Navigation;
 using Project.Gui;
 using System.Diagnostics;
 using Project.Gui.ModifyViews;
+using Project.Gui.DeleteViews;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -61,6 +62,9 @@ namespace Project.Gui
                         var loginPage = new LoginPage();
                         loginPage.Activate();
                         this.Close();
+                        break;
+                    case "Delete":
+                        ContentFrame.Navigate(typeof(DeleteMainPage));
                         break;
                     default:
                         break;

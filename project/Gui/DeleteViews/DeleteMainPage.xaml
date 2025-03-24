@@ -1,0 +1,18 @@
+<Page
+    x:Class="Project.Gui.DeleteViews.DeleteMainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Project.Gui.DeleteViews"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="10">
+        <Button Content="Delete Doctors" Click="DeleteDoctors_Click" />
+        <Button Content="Delete Rooms" Click="DeleteRooms_Click" />
+        <Button Content="Delete Departments" Click="DeleteDepartments_Click" />
+        <Button Content="Delete Schedules" Click="DeleteSchedules_Click" />
+        <Button Content="Delete Drugs" Click="DeleteDrugs_Click" />
+        <Button Content="Delete Equipments" Click="DeleteEquipments_Click" />
+    </StackPanel>
+</Page>

@@ -85,5 +85,27 @@ namespace Project.ClassModels
                 return count > 0;
             }
         }
+
+        public List<Schedule> GetSchedules()
+        {
+            List<Schedule> schedules = new List<Schedule>();
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                string query = "SELECT * FROM Schedules";
+                SqlCommand command = new SqlCommand(query, connection);
+                connection.Open();
+                SqlDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    schedules.Add(new Schedule
+                    {
+                        ScheduleID = reader.GetInt32(reader.GetOrdinal("ScheduleID")),
+                        DoctorID = reader.GetInt32(reader.GetOrdinal("DoctorID")),
+                        ShiftID = reader.GetInt32(reader.GetOrdinal("ShiftID"))
+                    });
+                }
+            }
+            return schedules;
+        }
     }
 }

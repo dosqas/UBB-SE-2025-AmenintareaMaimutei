@@ -1,16 +1,32 @@
+using Project.ClassModels;
 using Project.Models;
 using Project.Utils;
 using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Input;
-using System.Windows;
-using ScheduleModel = Project.ClassModels.ScheduleModel;
+using Microsoft.UI.Xaml.Controls; // Ensure you're using WinUI for ContentDialog
 
-namespace Project.ViewModel
+namespace Project.ViewModels.DeleteViewModels
 {
     class ScheduleDeleteViewModel : INotifyPropertyChanged
     {
         private readonly ScheduleModel _scheduleModel = new ScheduleModel();
+
+        public ObservableCollection<Schedule> Schedules { get; } = new ObservableCollection<Schedule>();
+
+        private Schedule? _selectedSchedule;
+        public Schedule? SelectedSchedule
+        {
+            get => _selectedSchedule;
+            set
+            {
+                _selectedSchedule = value;
+                ScheduleID = value?.ScheduleID ?? 0;
+                OnPropertyChanged(nameof(SelectedSchedule));
+                OnPropertyChanged(nameof(CanDeleteSchedule));
+            }
+        }
 
         private int _scheduleID;
         public int ScheduleID
@@ -20,15 +36,14 @@ namespace Project.ViewModel
             {
                 _scheduleID = value;
                 OnPropertyChanged(nameof(ScheduleID));
+                OnPropertyChanged(nameof(CanDeleteSchedule));
             }
         }
 
-        private string? _errorMessage;
-
-
+        private string _errorMessage = "";
         public string ErrorMessage
         {
-            get => _errorMessage ?? string.Empty;
+            get => _errorMessage;
             set
             {
                 _errorMessage = value;
@@ -36,38 +51,65 @@ namespace Project.ViewModel
             }
         }
 
+        public bool CanDeleteSchedule => ScheduleID != 0;
+
         public ICommand DeleteScheduleCommand { get; }
 
         public ScheduleDeleteViewModel()
         {
-            DeleteScheduleCommand = new RelayCommand(RemoveSchedule);
+            DeleteScheduleCommand = new RelayCommand(RemoveSchedule, () => CanDeleteSchedule);
+            LoadSchedules();
         }
 
-        private void RemoveSchedule()
+        private void LoadSchedules()
         {
-            //if (ScheduleID == Guid.Empty)
+            Schedules.Clear();
+            foreach (var schedule in _scheduleModel.GetSchedules())
+            {
+                Schedules.Add(schedule);
+            }
+        }
+
+        private async void RemoveSchedule()
+        {
             if (ScheduleID == 0)
             {
-                ErrorMessage = "No schedule was selected";
+                ErrorMessage = "No schedule was selected.";
                 return;
             }
 
             if (!_scheduleModel.DoesScheduleExist(ScheduleID))
             {
-                ErrorMessage = "ScheduleID doesn't exist in the Schedule Records";
+                ErrorMessage = "ScheduleID doesn't exist in the records.";
                 return;
             }
 
-            // MessageBoxResult result = MessageBox.Show($"Are you sure you want to delete schedule {ScheduleID}?", 
-            //                                           "Confirm Deletion", 
-            //                                           MessageBoxButton.YesNo, 
-            //                                           MessageBoxImage.Warning);
+            // Confirmation Dialog
+            var dialog = new ContentDialog
+            {
+                Title = "Confirm Deletion",
+                Content = $"Are you sure you want to delete schedule {ScheduleID}?",
+                PrimaryButtonText = "Yes",
+                CloseButtonText = "No",
+                DefaultButton = ContentDialogButton.Close,
+               // XamlRoot = App.MainWindow.Content.XamlRoot // Ensure App.xaml.cs has MainWindow reference
+            };
 
-            // if (result == MessageBoxResult.Yes)
-            // {
-            //     bool success = _scheduleModel.DeleteSchedule(ScheduleID);
-            //     ErrorMessage = success ? "Schedule deleted successfully" : "Failed to delete schedule";
-            // }
+            var result = await dialog.ShowAsync();
+
+            if (result == ContentDialogResult.Primary)
+            {
+                bool success = _scheduleModel.DeleteSchedule(ScheduleID);
+                if (success)
+                {
+                    ErrorMessage = "Schedule deleted successfully.";
+                    LoadSchedules(); // Refresh list
+                }
+                else
+                {
+                    ErrorMessage = "Failed to delete schedule.";
+                }
+            }
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
