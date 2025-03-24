@@ -1,15 +1,17 @@
+using Project.ClassModels;
 using Project.Models;
 using Project.Utils;
 using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Input;
-using EquipmentModel = Project.ClassModels.EquipmentModel;
 
 namespace Project.ViewModels.AddViewModels
 {
     internal class EquipmentAddViewModel : INotifyPropertyChanged
     {
         private readonly EquipmentModel _equipmentModel = new EquipmentModel();
+        public ObservableCollection<Equipment> Equipments { get; set; } = new ObservableCollection<Equipment>();
 
         private string _name = "";
         public string Name
@@ -18,7 +20,7 @@ namespace Project.ViewModels.AddViewModels
             set
             {
                 _name = value;
-                OnPropertyChanged(nameof(Type));
+                OnPropertyChanged(nameof(Name));
             }
         }
 
@@ -71,13 +73,22 @@ namespace Project.ViewModels.AddViewModels
         public EquipmentAddViewModel()
         {
             SaveEquipmentCommand = new RelayCommand(SaveEquipment);
+            LoadEquipments();
+        }
+
+        private void LoadEquipments()
+        {
+            Equipments.Clear();
+            foreach (Equipment equipment in _equipmentModel.GetEquipments())
+            {
+                Equipments.Add(equipment);
+            }
         }
 
         private void SaveEquipment()
         {
             var equipment = new Equipment
             {
-                //EquipmentID = Guid.NewGuid(),
                 EquipmentID = 0,
                 Name = Name,
                 Type = Type,
@@ -89,6 +100,10 @@ namespace Project.ViewModels.AddViewModels
             {
                 bool success = _equipmentModel.AddEquipment(equipment);
                 ErrorMessage = success ? "Equipment added successfully" : "Failed to add equipment";
+                if (success)
+                {
+                    LoadEquipments();
+                }
             }
         }
 
@@ -128,3 +143,4 @@ namespace Project.ViewModels.AddViewModels
         }
     }
 }
+

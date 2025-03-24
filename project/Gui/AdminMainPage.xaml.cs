@@ -15,6 +15,7 @@ using Microsoft.UI.Xaml.Navigation;
 using Project.Gui;
 using System.Diagnostics;
 using Project.Gui.ModifyViews;
+using Project.Gui.AddViews;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -52,7 +53,7 @@ namespace Project.Gui
                         ContentFrame.Navigate(typeof(HomePage));
                         break;
                     case "Add":
-                        ContentFrame.Navigate(typeof(TestPage));
+                        ContentFrame.Navigate(typeof(AddPage));
                         break;
                     case "Modify":
                         ContentFrame.Navigate(typeof(ModifyDoctorView));

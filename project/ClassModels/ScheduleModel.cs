@@ -124,7 +124,8 @@ namespace Project.ClassModels
             List<Schedule> schedules = new List<Schedule>();
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
-                string query = "SELECT * FROM Schedules";
+                string query = "SELECT ScheduleID, DoctorID, ShiftID FROM Schedules";
+              
                 SqlCommand command = new SqlCommand(query, connection);
                 connection.Open();
                 SqlDataReader reader = command.ExecuteReader();

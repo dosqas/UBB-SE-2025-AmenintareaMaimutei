@@ -1,15 +1,17 @@
-﻿using Project.Models;
+﻿using Project.ClassModels;
+using Project.Models;
 using Project.Utils;
 using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Input;
-using DoctorModel = Project.ClassModels.DoctorModel;
 
-namespace Project.ViewModels
+namespace Project.ViewModels.AddViewModels
 {
     class DoctorAddViewModel : INotifyPropertyChanged
     {
         private readonly DoctorModel _doctorModel = new DoctorModel();
+        public ObservableCollection<Doctor> Doctors { get; set; } = new ObservableCollection<Doctor>();
 
         private int _userID;
         public int UserID
@@ -71,13 +73,22 @@ namespace Project.ViewModels
         public DoctorAddViewModel()
         {
             SaveDoctorCommand = new RelayCommand(SaveDoctor);
+            LoadDoctors();
+        }
+
+        private void LoadDoctors()
+        {
+            Doctors.Clear();
+            foreach (Doctor doctor in _doctorModel.GetDoctors())
+            {
+                Doctors.Add(doctor);
+            }
         }
 
         private void SaveDoctor()
         {
             var doctor = new Doctor
             {
-                //DoctorID = Guid.NewGuid(),
                 DoctorID = 0,
                 UserID = UserID,
                 DepartmentID = DepartmentID,
@@ -89,6 +100,10 @@ namespace Project.ViewModels
             {
                 bool success = _doctorModel.AddDoctor(doctor);
                 ErrorMessage = success ? "Doctor added successfully" : "Failed to add doctor";
+                if (success)
+                {
+                    LoadDoctors();
+                }
             }
         }
 
@@ -112,7 +127,6 @@ namespace Project.ViewModels
                 return false;
             }
 
-            //if (doctor.DepartmentID == Guid.Empty)
             if (!_doctorModel.DoesDepartmentExist(doctor.DepartmentID))
             {
                 ErrorMessage = "DepartmentID doesn’t exist in the Departments Records.";
