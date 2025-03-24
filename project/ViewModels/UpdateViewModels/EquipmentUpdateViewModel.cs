@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -47,34 +48,45 @@ namespace Project.ViewModels.UpdateViewModels
 
         private void SaveChanges()
         {
+            bool hasErrors = false;
+            StringBuilder errorMessages = new StringBuilder();
+
             foreach (Equipment equipment in Equipments)
             {
-                if (ValidateEquipment(equipment))
+                if (!ValidateEquipment(equipment))
+                {
+                    hasErrors = true;
+                    errorMessages.AppendLine("Equipment " + equipment.EquipmentID + ": " + ErrorMessage);
+                }
+                else
                 {
                     bool success = _equipmentModel.UpdateEquipment(equipment);
-                    ErrorMessage = success ? "Changes saved successfully!" : "Failed to save changes.";
+                    if (!success)
+                    {
+                        errorMessages.AppendLine("Failed to save changes for equipment: " + equipment.EquipmentID);
+                        hasErrors = true;
+                    }
                 }
+            }
+            if (hasErrors)
+            {
+                ErrorMessage = errorMessages.ToString();
+            }
+            else
+            {
+                ErrorMessage = "Changes saved successfully";
             }
         }
 
         private bool ValidateEquipment(Equipment equipment)
         {
-            if (string.IsNullOrWhiteSpace(equipment.Name))
-            {
-                ErrorMessage = "Equipment name cannot be empty!";
-                return false;
-            }
-            if (string.IsNullOrWhiteSpace(equipment.Specification))
-            {
-                ErrorMessage = "Equipment specification cannot be empty!";
-                return false;
-            }
-            if(string.IsNullOrWhiteSpace(equipment.Type))
-            {
-                ErrorMessage = "Equipment type cannot be empty!";
-                return false;
-            }
-            if(equipment.Stock <= 0)
+            if (!System.Text.RegularExpressions.Regex.IsMatch(equipment.Name, @"^[a-zA-Z0-9 ]*$")) { ErrorMessage = "Please enter the name of the equipment"; return false; }
+
+            if (!System.Text.RegularExpressions.Regex.IsMatch(equipment.Specification, @"^[a-zA-Z0-9 ,.-]*$")) { ErrorMessage = "Please enter the specifications of the equipment"; return false; }
+
+            if (!System.Text.RegularExpressions.Regex.IsMatch(equipment.Type, @"^[a-zA-Z0-9 ]*$")) { ErrorMessage = "Please enter the type of the equipment"; return false; }
+            
+            if (equipment.Stock <= 0)
             {
                 ErrorMessage = "Equipment stock must be greater than 0!";
                 return false;
