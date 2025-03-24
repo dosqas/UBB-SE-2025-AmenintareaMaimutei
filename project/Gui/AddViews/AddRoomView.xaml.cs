@@ -24,11 +24,11 @@ namespace Project.Gui.AddViews
     /// </summary>
     public sealed partial class AddRoomView : Page
     {
-        private RoomAndDepartments _viewModel;
+        private RoomAddViewModel _viewModel;
         public AddRoomView()
         {
             this.InitializeComponent();
-            _viewModel = new RoomAndDepartments();
+            _viewModel = new RoomAddViewModel();
             this.DataContext = _viewModel;
         }
     }
