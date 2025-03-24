@@ -1,15 +1,17 @@
+using Project.ClassModels;
 using Project.Models;
 using Project.Utils;
 using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Input;
-using ShiftModel = Project.ClassModels.ShiftModel;
 
 namespace Project.ViewModels.AddViewModels
 {
     internal class ShiftAddViewModel : INotifyPropertyChanged
     {
         private readonly ShiftModel _shiftModel = new ShiftModel();
+        public ObservableCollection<Shift> Shifts { get; set; } = new ObservableCollection<Shift>();
 
         private DateOnly _date;
         public DateOnly Date
@@ -60,13 +62,22 @@ namespace Project.ViewModels.AddViewModels
         public ShiftAddViewModel()
         {
             SaveShiftCommand = new RelayCommand(SaveShift);
+            LoadShifts();
+        }
+
+        private void LoadShifts()
+        {
+            Shifts.Clear();
+            foreach (Shift shift in _shiftModel.GetShifts())
+            {
+                Shifts.Add(shift);
+            }
         }
 
         private void SaveShift()
         {
             var shift = new Shift
             {
-                //ShiftID = Guid.NewGuid(),
                 ShiftID = 0,
                 Date = Date,
                 StartTime = StartTime,
@@ -77,6 +88,10 @@ namespace Project.ViewModels.AddViewModels
             {
                 bool success = _shiftModel.AddShift(shift);
                 ErrorMessage = success ? "Shift added successfully" : "Failed to add shift";
+                if (success)
+                {
+                    LoadShifts();
+                }
             }
         }
 
@@ -104,3 +119,5 @@ namespace Project.ViewModels.AddViewModels
         }
     }
 }
+
+
