@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Data.SqlClient;
 using Project.Utils;
+using System.Runtime.InteropServices.Marshalling;
 
 namespace Project.ClassModels
 {
@@ -59,5 +60,32 @@ namespace Project.ClassModels
                 return count > 0;
             }
         }
+        public List<Equipment> GetEquipments()
+        {
+            List<Equipment> equipments = new();
+
+            using(SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                string query = "SELECT * FROM Equipments";
+                SqlCommand command = new SqlCommand(query, connection);
+                connection.Open();
+                SqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    equipments.Add(new Equipment
+                    {
+                        EquipmentID = reader.GetInt32(0),
+                        Name = reader.GetString(1),
+                        Specification = reader.GetString(2),
+                        Type = reader.GetString(3),
+                        Stock = reader.GetInt32(4)
+                    });
+                }
+            }
+
+            return equipments;
+        }
+
     }
 }

@@ -29,7 +29,6 @@ namespace Project.Gui
     {
         public ObservableCollection<Doctor> Doctors { get; set; } = new();
         private readonly DoctorModel _doctorModel = new();
-        //public int DoctorIDAsInt => GuidToInt(DoctorID);
 
         private Dictionary<string, ListSortDirection> _sortingStates = new Dictionary<string, ListSortDirection>
         {
@@ -37,11 +36,6 @@ namespace Project.Gui
             { "Experience", ListSortDirection.Ascending },
             { "Rating", ListSortDirection.Ascending }
         };
-        private int GuidToInt(Guid value)
-        {
-            byte[] b = value.ToByteArray();
-            return BitConverter.ToInt32(b, 0);
-        }
 
         public int DoctorID { get; set; }  
         public DoctorsPage()
@@ -50,37 +44,16 @@ namespace Project.Gui
             loadDoctors();
             DataContext = this;
         }
-        public static int Guid2Int(Guid value)
-        {
-            byte[] b = value.ToByteArray();
-            int bint = BitConverter.ToInt32(b, 0);
-            return bint;
-        }
+
         private void loadDoctors()
         {
-            //Doctors.Clear();
-            //List<Doctor> doctors = _doctorModel.GetDoctors();
-            //foreach (Doctor doctor in doctors)
-            //{
-            //    Doctors.Add(doctor);
-            //}
             Doctors.Clear();
-            Doctors.Add(new Doctor
+            List<Doctor> doctors = _doctorModel.GetDoctors();
+            foreach (Doctor doctor in doctors)
             {
-                DoctorID = 1,
-                UserID = 1,
-                DepartmentID = 1,
-                Experience = 5,
-                LicenseNumber = "123456"
-            });
-            Doctors.Add(new Doctor
-            {
-                DoctorID = 2,
-                UserID = 2,
-                DepartmentID = 2,
-                Experience = 10,
-                LicenseNumber = "654321"
-            });
+                Doctors.Add(doctor);
+            }
+    
             var Sorted = SortDoctors(Doctors, "DoctorId", ListSortDirection.Ascending);
             Doctors.Clear();
 
@@ -149,29 +122,38 @@ namespace Project.Gui
             }
             return new ObservableCollection<Doctor>(sortedDoctors);
         }
-        private void SearchBox_TextChange(object sender, RoutedEventArgs e)
+        private async void SearchBox_TextChange(object sender, RoutedEventArgs e)
         {
-            string search = SearchTextBox.Text.ToString();
+            string search = SearchTextBox.Text.Trim();
 
-            if (search == "")
+            if (string.IsNullOrEmpty(search))
             {
                 loadDoctors();
                 return;
             }
 
             var filteredDoctors = Doctors.Where(doctor => doctor.UserID.ToString().Contains(search)).ToList();
+
+            if (filteredDoctors.Count == 0)
+            {
+                var dialog = new ContentDialog
+                {
+                    Title = "No Results",
+                    Content = "No doctors found with this id.",
+                    CloseButtonText = "OK",
+                    XamlRoot = this.XamlRoot 
+                };
+
+                await dialog.ShowAsync();
+                return;
+            }
+
             Doctors.Clear();
-            foreach(var doctor in filteredDoctors)
+            foreach (var doctor in filteredDoctors)
             {
                 Doctors.Add(doctor);
             }
-            //var searchBox = (SearchBox)sender;
-            //var filteredDoctors = Doctors.Where(doctor => doctor.LicenseNumber.Contains(searchBox.Text)).ToList();
-            //Doctors.Clear();
-            //foreach (var doctor in filteredDoctors)
-            //{
-            //    Doctors.Add(doctor);
-            //}
         }
+
     }
 }

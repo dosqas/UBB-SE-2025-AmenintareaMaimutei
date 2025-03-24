@@ -21,7 +21,7 @@
                 <Button Content="Sort by Doctor ID" Click="SortByDoctorID" Margin="5"/>
                 <Button Content="Sort by Rating" Click="SortByRating" Margin="5"/>
             </StackPanel>
-            <Grid ColumnDefinitions="50, 1*, 1*, 1*, 1*, 1*, 1*, 100" Margin="0,0,0,10">
+            <Grid ColumnDefinitions="30, 1*, 1*, 1*, 1*, 1*, 1*, 100" Margin="0,0,0,10">
                 <TextBlock Text="Doctor ID" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Grid.Column="1"/>
                 <TextBlock Text="User ID" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Grid.Column="2"/>
                 <TextBlock Text="Department ID" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Grid.Column="3"/>
@@ -31,17 +31,17 @@
                 <TextBlock Text="Actions" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Grid.Column="7"/>
             </Grid>
 
-            <ListView ItemsSource="{x:Bind Doctors, Mode=OneWay}" BorderThickness="1" BorderBrush="Gray">
+            <ListView ItemsSource="{x:Bind Doctors, Mode=OneWay}" BorderThickness="1" BorderBrush="Gray" SelectionMode="None">
                 <ListView.ItemTemplate>
                     <DataTemplate x:DataType="models:Doctor">
                         <Border BorderBrush="LightGray" BorderThickness="0,0,0,1" Padding="10">
-                            <Grid ColumnDefinitions="50, 1*, 1*, 1*, 1*, 1*, 1*, 100">
-                                <TextBlock Text="{x:Bind DoctorID}" Grid.Column="1" TextTrimming="CharacterEllipsis"/>
-                                <TextBlock Text="{x:Bind UserID}" Grid.Column="2" TextTrimming="CharacterEllipsis"/>
-                                <TextBlock Text="{x:Bind DepartmentID}" Grid.Column="3" TextTrimming="CharacterEllipsis"/>
+                            <Grid ColumnDefinitions="Auto, 1*, 1*, 1*, 1*, 1*, 1*, Auto">
+                                <TextBlock Text="{x:Bind DoctorID}" Grid.Column="1" TextTrimming="CharacterEllipsis" HorizontalAlignment="Center"/>
+                                <TextBlock Text="{x:Bind UserID}" Grid.Column="2"  HorizontalAlignment="Center" TextTrimming="CharacterEllipsis"/>
+                                <TextBlock Text="{x:Bind DepartmentID}" Grid.Column="3"  HorizontalAlignment="Center" TextTrimming="CharacterEllipsis"/>
                                 <TextBlock Text="{x:Bind Experience}" Grid.Column="4" HorizontalAlignment="Center"/>
                                 <TextBlock Text="{x:Bind Rating}" Grid.Column="5" HorizontalAlignment="Center"/>
-                                <TextBlock Text="{x:Bind LicenseNumber}" Grid.Column="6"/>
+                                <TextBlock Text="{x:Bind LicenseNumber}"  HorizontalAlignment="Center" Grid.Column="6"/>
                                 <Button Content="More Info" Click="MoreInfoClick" Tag="{x:Bind}" Grid.Column="7"
                                     Background="DodgerBlue" Foreground="White" Padding="5,2" FontSize="14"/>
                             </Grid>

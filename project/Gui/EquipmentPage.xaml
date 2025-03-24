@@ -17,32 +17,34 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Text="Equipment" HorizontalAlignment="Center" FontSize="24" FontWeight="Bold" Margin="0,0,0,20" Grid.Row="0"/>
+        <TextBlock Text="Equipment" HorizontalAlignment="Center" FontSize="24" FontWeight="Bold" 
+               Margin="0,0,0,20" Grid.Row="0"/>
 
-        <Grid Grid.Row="1" ColumnDefinitions="50, 1*, 1*, 1*, 1*, 100" Margin="0,0,0,10">
-            <TextBlock Text="Equipment ID" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Grid.Column="1"/>
-            <TextBlock Text="Name" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Grid.Column="2"/>
-            <TextBlock Text="Type" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Grid.Column="3"/>
-            <TextBlock Text="Specification" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Grid.Column="4"/>
-            <TextBlock Text="Stock" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Grid.Column="5"/>
+        <Grid Grid.Row="1" ColumnDefinitions="270, 160, 275, 160, 280" Margin="0,0,0,10">
+            <TextBlock Text="Equipment ID" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="0"/>
+            <TextBlock Text="Name" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="1"/>
+            <TextBlock Text="Type" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="2"/>
+            <TextBlock Text="Specification" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="3"/>
+            <TextBlock Text="Stock" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="4"/>
         </Grid>
 
         <ListView ItemsSource="{x:Bind Equipments, Mode=OneWay}" BorderThickness="1" BorderBrush="Gray" Grid.Row="2">
             <ListView.ItemTemplate>
                 <DataTemplate x:DataType="models:Equipment">
                     <Border BorderBrush="LightGray" BorderThickness="0,0,0,1" Padding="10">
-                        <Grid ColumnDefinitions="50, 1*, 1*, 1*, 1*, 100">
-                            <TextBlock Text="{x:Bind EquipmentID}" Grid.Column="1" TextTrimming="CharacterEllipsis"/>
-                            <TextBlock Text="{x:Bind Name}" Grid.Column="2" TextTrimming="CharacterEllipsis"/>
-                            <TextBlock Text="{x:Bind Type}" Grid.Column="3" TextTrimming="CharacterEllipsis"/>
-                            <TextBlock Text="{x:Bind Specification}" Grid.Column="4" HorizontalAlignment="Center"/>
-                            <TextBlock Text="{x:Bind Stock}" Grid.Column="5" HorizontalAlignment="Center"/>
+                        <Grid ColumnDefinitions="1*, 1*, 1*, 1*, 1*">
+                            <TextBlock Text="{x:Bind EquipmentID}" Grid.Column="0" HorizontalAlignment="Center" TextTrimming="CharacterEllipsis"/>
+                            <TextBlock Text="{x:Bind Name}" Grid.Column="1" HorizontalAlignment="Center" TextTrimming="CharacterEllipsis"/>
+                            <TextBlock Text="{x:Bind Type}" Grid.Column="2" HorizontalAlignment="Center" TextTrimming="CharacterEllipsis"/>
+                            <TextBlock Text="{x:Bind Specification}" Grid.Column="3" HorizontalAlignment="Center"/>
+                            <TextBlock Text="{x:Bind Stock}" Grid.Column="4" HorizontalAlignment="Center"/>
                         </Grid>
                     </Border>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
     </Grid>
+
 
 
 </Page>

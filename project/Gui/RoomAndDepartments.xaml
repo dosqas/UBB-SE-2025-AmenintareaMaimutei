@@ -20,48 +20,49 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Text="Departments" HorizontalAlignment="Center" FontSize="24" FontWeight="Bold" Margin="0,0,0,20" Grid.Row="0"/>
+        <TextBlock Text="Departments" HorizontalAlignment="Center" FontSize="24" FontWeight="Bold" Margin="-20,0,0,20" Grid.Row="0"/>
 
-        <Grid Grid.Row="1" ColumnDefinitions="50, 1*, 1*" Margin="0,0,0,10">
-            <TextBlock Text="Department ID" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Grid.Column="1"/>
-            <TextBlock Text="Name" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Grid.Column="2"/>
+        <Grid Grid.Row="1" ColumnDefinitions="420, 660">
+            <TextBlock Text="Department ID" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="0"/>
+            <TextBlock Text="Name" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="1"/>
         </Grid>
 
         <ListView ItemsSource="{x:Bind Departments, Mode=OneWay}" BorderThickness="1" BorderBrush="Gray" Grid.Row="2">
             <ListView.ItemTemplate>
                 <DataTemplate x:DataType="model:Department">
                     <Border BorderBrush="LightGray" BorderThickness="0,0,0,1" Padding="10">
-                        <Grid ColumnDefinitions="50, 2*, 1*">
-                            <TextBlock Text="{x:Bind DepartmentID}" Grid.Column="1" TextTrimming="CharacterEllipsis"/>
-                            <TextBlock Text="{x:Bind Name}" Grid.Column="2" HorizontalAlignment="Left" Margin="20,0,0,0" TextTrimming="CharacterEllipsis"/>
+                        <Grid ColumnDefinitions="1*, 2*">
+                            <TextBlock Text="{x:Bind DepartmentID}" Grid.Column="0" HorizontalAlignment="Center" TextTrimming="CharacterEllipsis"/>
+                            <TextBlock Text="{x:Bind Name}" Grid.Column="1" HorizontalAlignment="Center" TextTrimming="CharacterEllipsis"/>
                         </Grid>
                     </Border>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
 
-        <TextBlock Text="Rooms" HorizontalAlignment="Center" FontSize="24" FontWeight="Bold" Margin="20,20,0,5" Grid.Row="3"/>
+        <TextBlock Text="Rooms" HorizontalAlignment="Center" FontSize="24" FontWeight="Bold" Margin="0,20,0,5" Grid.Row="3"/>
 
-        <Grid Grid.Row="4" ColumnDefinitions="50, 1*, 1*, 1*" Margin="0,0,0,10">
-            <TextBlock Text="Room ID" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Grid.Column="1"/>
-            <TextBlock Text="Capacity" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Grid.Column="2"/>
-            <TextBlock Text="Department ID" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Grid.Column="3"/>
+        <Grid Grid.Row="4" ColumnDefinitions="420, 300, 420">
+            <TextBlock Text="Room ID" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="0"/>
+            <TextBlock Text="Capacity" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="1"/>
+            <TextBlock Text="Department ID" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="2"/>
         </Grid>
 
         <ListView ItemsSource="{x:Bind Rooms, Mode=OneWay}" BorderThickness="1" BorderBrush="Gray" Grid.Row="5">
             <ListView.ItemTemplate>
                 <DataTemplate x:DataType="model:Room">
                     <Border BorderBrush="LightGray" BorderThickness="0,0,0,1" Padding="10">
-                        <Grid ColumnDefinitions="50, 1*, 1*, 1*">
-                            <TextBlock Text="{x:Bind RoomID}" Grid.Column="1" TextTrimming="CharacterEllipsis"/>
-                            <TextBlock Text="{x:Bind Capacity}" Grid.Column="2" HorizontalAlignment="Center"/>
-                            <TextBlock Text="{x:Bind DepartmentID}" Grid.Column="3" HorizontalAlignment="Center"/>
+                        <Grid ColumnDefinitions="1*, 1*, 1*">
+                            <TextBlock Text="{x:Bind RoomID}" Grid.Column="0" HorizontalAlignment="Center" TextTrimming="CharacterEllipsis"/>
+                            <TextBlock Text="{x:Bind Capacity}" Grid.Column="1" HorizontalAlignment="Center"/>
+                            <TextBlock Text="{x:Bind DepartmentID}" Grid.Column="2" HorizontalAlignment="Center"/>
                         </Grid>
                     </Border>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
     </Grid>
+
 
 
 

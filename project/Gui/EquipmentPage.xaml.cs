@@ -29,7 +29,7 @@ namespace Project.Gui
     public sealed partial class EquipmentPage : Page
     {
         public ObservableCollection<Equipment> Equipments { get; set; } = new();
-
+        private readonly EquipmentModel _equipmentModell = new();
         public EquipmentPage()
         {
             this.InitializeComponent();
@@ -38,13 +38,12 @@ namespace Project.Gui
 
         private void LoadEquiptment()
         {
-          Equipments = new ObservableCollection<Equipment>();
-          //Equipments.Add(new Equipment(Guid.NewGuid(), "Stethoscope", "Medical", "For checking heart rate", 10));
-          //Equipments.Add(new Equipment(Guid.NewGuid(), "Thermometer", "Medical", "For checking body temperature", 20));
-          //Equipments.Add(new Equipment(Guid.NewGuid(), "Sphygmomanometer", "Medical", "For checking blood pressure", 15));
-            Equipments.Add(new Equipment(1, "Stethoscope", "Medical", "For checking heart rate", 10));
-            Equipments.Add(new Equipment(2, "Thermometer", "Medical", "For checking body temperature", 20));
-            Equipments.Add(new Equipment(3, "Sphygmomanometer", "Medical", "For checking blood pressure", 15));
+            Equipments.Clear();
+            List<Equipment> equipments = _equipmentModell.GetEquipments();
+            foreach(Equipment equipment in equipments)
+            {
+                Equipments.Add(equipment);
+            }
         }
     }
 }
