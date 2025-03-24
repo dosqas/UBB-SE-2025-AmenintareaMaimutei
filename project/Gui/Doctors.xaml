@@ -28,7 +28,7 @@
                 <TextBlock Text="Experience" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Grid.Column="4"/>
                 <TextBlock Text="Rating" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Grid.Column="5"/>
                 <TextBlock Text="License Number" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Grid.Column="6"/>
-                <TextBlock Text="Actions" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Grid.Column="7"/>
+                <TextBlock Text="Info" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Grid.Column="7" Margin="-20,0,0,0"/>
             </Grid>
 
             <ListView ItemsSource="{x:Bind Doctors, Mode=OneWay}" BorderThickness="1" BorderBrush="Gray" SelectionMode="None">
