@@ -55,7 +55,7 @@ namespace Project.Gui
                         ContentFrame.Navigate(typeof(TestPage));
                         break;
                     case "Modify":
-                        ContentFrame.Navigate(typeof(ModifyRoomView));
+                        ContentFrame.Navigate(typeof(ModifyScheduleView));
                         break;
                     case "LogOut":
                         var loginPage = new LoginPage();
