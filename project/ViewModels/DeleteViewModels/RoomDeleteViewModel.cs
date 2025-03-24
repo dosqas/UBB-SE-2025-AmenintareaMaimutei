@@ -1,18 +1,26 @@
-using Project.Models;
-using Project.Utils;
-using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Input;
-using System.Windows;
-using RoomModel = Project.ClassModels.RoomModel;
+using Project.ClassModels;
+using Project.Models;
+using Project.Utils;
 
-namespace Project.ViewModel
+namespace Project.ViewModels.DeleteViewModels
 {
     class RoomDeleteViewModel : INotifyPropertyChanged
     {
         private readonly RoomModel _roomModel = new RoomModel();
-
+        private ObservableCollection<Room> _rooms;
         private int _roomID;
+        private string _errorMessage;
+
+        public ObservableCollection<Room> Rooms
+        {
+            get { return _rooms; }
+            set { SetProperty(ref _rooms, value); }
+        }
+
         public int RoomID
         {
             get => _roomID;
@@ -20,11 +28,9 @@ namespace Project.ViewModel
             {
                 _roomID = value;
                 OnPropertyChanged(nameof(RoomID));
+                OnPropertyChanged(nameof(CanDeleteRoom));
             }
         }
-
-        private string? _errorMessage;
-
 
         public string ErrorMessage
         {
@@ -38,15 +44,24 @@ namespace Project.ViewModel
 
         public ICommand DeleteRoomCommand { get; }
 
+        public bool CanDeleteRoom => RoomID > 0;
+
         public RoomDeleteViewModel()
         {
-            DeleteRoomCommand = new RelayCommand(RemoveRoom);
+            // Load rooms for the DataGrid
+            Rooms = new ObservableCollection<Room>(_roomModel.GetRooms());
+
+            DeleteRoomCommand = new RelayCommand(RemoveRoom, CanExecuteDeleteRoom);
+        }
+
+        private bool CanExecuteDeleteRoom()
+        {
+            return RoomID > 0;
         }
 
         private void RemoveRoom()
         {
-            //if (RoomID == Guid.Empty)
-            if ( RoomID == 0)  
+            if (RoomID == 0)
             {
                 ErrorMessage = "No room was selected";
                 return;
@@ -54,26 +69,28 @@ namespace Project.ViewModel
 
             if (!_roomModel.DoesRoomExist(RoomID))
             {
-                ErrorMessage = "RoomID doesn't exist in the Room Records";
+                ErrorMessage = "RoomID doesn't exist in the records";
                 return;
             }
 
-            // MessageBoxResult result = MessageBox.Show($"Are you sure you want to delete room {RoomID}?", 
-            //                                           "Confirm Deletion", 
-            //                                           MessageBoxButton.YesNo, 
-            //                                           MessageBoxImage.Warning);
-
-            // if (result == MessageBoxResult.Yes)
-            // {
-            //     bool success = _roomModel.DeleteRoom(RoomID);
-            //     ErrorMessage = success ? "Room deleted successfully" : "Failed to delete room";
-            // }
+            bool success = _roomModel.DeleteRoom(RoomID);
+            ErrorMessage = success ? "Room deleted successfully" : "Failed to delete room";
         }
 
-        public event PropertyChangedEventHandler? PropertyChanged;
+        public event PropertyChangedEventHandler PropertyChanged;
+
         protected void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private void SetProperty<T>(ref T field, T value, [System.Runtime.CompilerServices.CallerMemberName] string propertyName = null)
+        {
+            if (!EqualityComparer<T>.Default.Equals(field, value))
+            {
+                field = value;
+                OnPropertyChanged(propertyName);
+            }
         }
     }
 }

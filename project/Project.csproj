@@ -23,6 +23,11 @@
     <None Remove="Gui\AddViews\AddShiftView.xaml" />
     <None Remove="Gui\AdminMainPage.xaml" />
     <None Remove="Gui\ConsultationReview\ConsultationReviewPage.xaml" />
+    <None Remove="Gui\DeleteViews\DeleteDepartmentView.xaml" />
+    <None Remove="Gui\DeleteViews\DeleteDoctorView.xaml" />
+    <None Remove="Gui\DeleteViews\DeleteMainPage.xaml" />
+    <None Remove="Gui\DeleteViews\DeleteRoomView.xaml" />
+    <None Remove="Gui\DeleteViews\DeleteScheduleView.xaml" />
     <None Remove="Gui\Doctors.xaml" />
     <None Remove="Gui\ModifyDoctorView.xaml" />
     <None Remove="Gui\ModifyViews\ModifyDepartmentView.xaml" />
@@ -66,6 +71,23 @@
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="9.0.3" />
   </ItemGroup>
   <ItemGroup>
+
+    <Page Update="Gui\DeleteViews\DeleteRoomView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Gui\DeleteViews\DeleteMainPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Gui\DeleteViews\DeleteDoctorView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Gui\DeleteViews\DeleteScheduleView.xaml">
     <Page Update="Gui\ModifyViews\ModifyPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -174,12 +196,19 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Page Update="Gui\DeleteViews\DeleteDepartmentView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+
+  <ItemGroup>
     <Page Update="Gui\AddViews\AddDepartmentView.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
 
-  <!--
+
+	    <!--
     Defining the "HasPackageAndPublishMenuAddedByProject" property here allows the Solution
     Explorer "Package and Publish" context menu entry to be enabled for this project even if
     the Windows App SDK Nuget package has not yet been restored.
