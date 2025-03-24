@@ -112,8 +112,8 @@ namespace Project.ClassModels
                         DrugID = reader.GetInt32(0),
                         Name = reader.GetString(1),
                         Administration = reader.GetString(2),
-                        Specification = reader.GetString(3),
-                        Supply = reader.GetInt32(4)
+                        Supply = reader.GetInt32(3),
+                        Specification = reader.GetString(4)
                     };
                     drugs.Add(drug);
                 }
