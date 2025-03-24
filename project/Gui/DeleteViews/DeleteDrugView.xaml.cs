@@ -12,6 +12,7 @@ using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
+using Project.ViewModel;
 using Project.ViewModels.DeleteViewModels;
 
 // To learn more about WinUI, the WinUI project structure,
@@ -22,14 +23,15 @@ namespace Project.Gui.DeleteViews
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class DeleteDoctorView : Page
+    public sealed partial class DeleteDrugView : Page
     {
-        private DoctorDeleteViewModel _viewmodel;
-        public DeleteDoctorView()
+        private DrugDeleteViewModel _viewModel;
+
+        public DeleteDrugView()
         {
             this.InitializeComponent();
-            _viewmodel = new DoctorDeleteViewModel();
-            this.DataContext = _viewmodel;
+            _viewModel = new DrugDeleteViewModel();
+            this.DataContext = _viewModel;
         }
     }
 }

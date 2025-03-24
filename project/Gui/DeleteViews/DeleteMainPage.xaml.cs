@@ -1,4 +1,3 @@
-using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 
 namespace Project.Gui.DeleteViews
@@ -10,34 +9,32 @@ namespace Project.Gui.DeleteViews
             this.InitializeComponent();
         }
 
-        private void DeleteDoctors_Click(object sender, RoutedEventArgs e)
+        private void NavigationView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
         {
-            Frame.Navigate(typeof(DeleteDoctorView));
-        }
-
-        private void DeleteRooms_Click(object sender, RoutedEventArgs e)
-        {
-            Frame.Navigate(typeof(DeleteRoomView));
-        }
-
-        private void DeleteDepartments_Click(object sender, RoutedEventArgs e)
-        {
-            Frame.Navigate(typeof(DeleteDepartmentView));
-        }
-
-        private void DeleteSchedules_Click(object sender, RoutedEventArgs e)
-        {
-            Frame.Navigate(typeof(DeleteScheduleView));
-        }
-
-        private void DeleteDrugs_Click(object sender, RoutedEventArgs e)
-        {
-           // Frame.Navigate(typeof(DeleteDrugView));
-        }
-
-        private void DeleteEquipments_Click(object sender, RoutedEventArgs e)
-        {
-            //Frame.Navigate(typeof(DeleteEquipmentView));
+            if (args.SelectedItem is NavigationViewItem selectedItem)
+            {
+                switch (selectedItem.Tag)
+                {
+                    case "DeleteDoctors":
+                        ContentFrame.Navigate(typeof(DeleteDoctorView));
+                        break;
+                    case "DeleteRooms":
+                        ContentFrame.Navigate(typeof(DeleteRoomView));
+                        break;
+                    case "DeleteDepartments":
+                        ContentFrame.Navigate(typeof(DeleteDepartmentView));
+                        break;
+                    case "DeleteSchedules":
+                        ContentFrame.Navigate(typeof(DeleteScheduleView));
+                        break;
+                    case "DeleteDrugs":
+                        ContentFrame.Navigate(typeof(DeleteDrugView));
+                        break;
+                    case "DeleteEquipments":
+                        ContentFrame.Navigate(typeof(DeleteEquipmentView));
+                        break;
+                }
+            }
         }
     }
 }

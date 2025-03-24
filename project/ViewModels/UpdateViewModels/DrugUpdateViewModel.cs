@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -49,32 +50,44 @@ namespace Project.ViewModels.UpdateViewModels
 
         private void SaveChanges()
         {
+            bool hasErrors = false;
+            StringBuilder errorMessages = new StringBuilder();
+
             foreach (Drug drug in Drugs)
             {
-                if (ValidateDrug(drug))
+                if (!ValidateDrug(drug))
+                {
+                    hasErrors = true;
+                    errorMessages.AppendLine("Drug " + drug.DrugID + ": " + ErrorMessage);
+                }
+                else
                 {
                     bool success = _drugModel.UpdateDrug(drug);
-                    ErrorMessage = success ? "Changes saved successfully!" : "Failed to save changes.";
+                    if (!success)
+                    {
+                        errorMessages.AppendLine("Failed to save changes for drug: " + drug.DrugID);
+                        hasErrors = true;
+                    }
                 }
             }
+            if (hasErrors)
+            {
+                ErrorMessage = errorMessages.ToString();
+            }
+            else
+            {
+                ErrorMessage = "Changes saved successfully";
+            }
         }
+
         private bool ValidateDrug(Drug drug)
         {
-            if (string.IsNullOrWhiteSpace(drug.Name))
-            {
-                ErrorMessage = "Drug name cannot be empty.";
-                return false;
-            }
-            if (string.IsNullOrWhiteSpace(drug.Administration))
-            {
-                ErrorMessage = "Administration method cannot be empty.";
-                return false;
-            }
-            if (string.IsNullOrWhiteSpace(drug.Specification))
-            {
-                ErrorMessage = "Specification cannot be empty.";
-                return false;
-            }
+            if (!System.Text.RegularExpressions.Regex.IsMatch(drug.Name, @"^[a-zA-Z0-9 ]*$")) { ErrorMessage = "Name should contain only alphanumeric characters"; return false; }
+
+            if (!System.Text.RegularExpressions.Regex.IsMatch(drug.Administration, @"^[a-zA-Z0-9 ]*$")) { ErrorMessage = "Administration should contain only alphanumeric characters"; return false; }
+            
+            if (!System.Text.RegularExpressions.Regex.IsMatch(drug.Specification, @"^[a-zA-Z0-9 ,.-]*$")) { ErrorMessage = "Specification should contain only alphanumeric characters"; return false; }
+            
             if (drug.Supply <= 0)
             {
                 ErrorMessage = "Supply cannot be negative or zero.";

@@ -5,14 +5,31 @@
     xmlns:local="using:Project.Gui.DeleteViews"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="10">
-        <Button Content="Delete Doctors" Click="DeleteDoctors_Click" />
-        <Button Content="Delete Rooms" Click="DeleteRooms_Click" />
-        <Button Content="Delete Departments" Click="DeleteDepartments_Click" />
-        <Button Content="Delete Schedules" Click="DeleteSchedules_Click" />
-        <Button Content="Delete Drugs" Click="DeleteDrugs_Click" />
-        <Button Content="Delete Equipments" Click="DeleteEquipments_Click" />
-    </StackPanel>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <NavigationView x:Name="NavigationView" PaneDisplayMode="Left"
+                        SelectionChanged="NavigationView_SelectionChanged"
+                        IsSettingsVisible="False"
+                        IsBackButtonVisible="Collapsed"
+                        OpenPaneLength="200"
+                        CompactPaneLength="60">
+            <NavigationView.MenuItems>
+                <NavigationViewItem Content="Doctors" Tag="DeleteDoctors"/>
+                <NavigationViewItem Content="Rooms" Tag="DeleteRooms"/>
+                <NavigationViewItem Content="Departments" Tag="DeleteDepartments"/>
+                <NavigationViewItem Content="Schedules" Tag="DeleteSchedules"/>
+                <NavigationViewItem Content="Drugs" Tag="DeleteDrugs"/>
+                <NavigationViewItem Content="Equipments" Tag="DeleteEquipments"/>
+            </NavigationView.MenuItems>
+        </NavigationView>
+
+        <Frame x:Name="ContentFrame" Grid.Column="1"/>
+    </Grid>
 </Page>

@@ -1,17 +1,17 @@
+using Project.ClassModels;
 using Project.Models;
 using Project.Utils;
 using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Data.SqlClient;
 using System.Windows.Input;
-using ScheduleModel = Project.ClassModels.ScheduleModel;
 
 namespace Project.ViewModels.AddViewModels
 {
     internal class ScheduleAddViewModel : INotifyPropertyChanged
     {
         private readonly ScheduleModel _scheduleModel = new ScheduleModel();
-        private readonly string _connectionString = DatabaseHelper.GetConnectionString();
+        public ObservableCollection<Schedule> Schedules { get; set; } = new ObservableCollection<Schedule>();
 
         private int _doctorID;
         public int DoctorID
@@ -51,13 +51,22 @@ namespace Project.ViewModels.AddViewModels
         public ScheduleAddViewModel()
         {
             SaveScheduleCommand = new RelayCommand(SaveSchedule);
+            LoadSchedules();
+        }
+
+        private void LoadSchedules()
+        {
+            Schedules.Clear();
+            foreach (Schedule schedule in _scheduleModel.GetSchedules())
+            {
+                Schedules.Add(schedule);
+            }
         }
 
         private void SaveSchedule()
         {
             var schedule = new Schedule
             {
-                //ScheduleID = Guid.NewGuid(),
                 ScheduleID = 0,
                 DoctorID = DoctorID,
                 ShiftID = ShiftID
@@ -67,19 +76,21 @@ namespace Project.ViewModels.AddViewModels
             {
                 bool success = _scheduleModel.AddSchedule(schedule);
                 ErrorMessage = success ? "Schedule added successfully" : "Failed to add schedule";
+                if (success)
+                {
+                    LoadSchedules();
+                }
             }
         }
 
         private bool ValidateSchedule(Schedule schedule)
         {
-            //if (schedule.DoctorID == Guid.Empty || !_scheduleModel.DoesDoctorExist(schedule.DoctorID))
             if (schedule.DoctorID == 0 || !_scheduleModel.DoesDoctorExist(schedule.DoctorID))
             {
                 ErrorMessage = "DoctorID doesn’t exist in the Doctors Records.";
                 return false;
             }
 
-            //if (schedule.ShiftID == Guid.Empty || !_scheduleModel.DoesShiftExist(schedule.ShiftID))
             if (schedule.ShiftID == 0 || !_scheduleModel.DoesShiftExist(schedule.ShiftID))
             {
                 ErrorMessage = "ShiftID doesn’t exist in the Shifts Records.";
@@ -96,3 +107,4 @@ namespace Project.ViewModels.AddViewModels
         }
     }
 }
+

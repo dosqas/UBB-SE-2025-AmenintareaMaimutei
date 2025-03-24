@@ -1,18 +1,26 @@
-using Project.Models;
-using Project.Utils;
-using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Input;
-using System.Windows;
-using DrugModel = Project.ClassModels.DrugModel;
+using Project.ClassModels;
+using Project.Models;
+using Project.Utils;
 
-namespace Project.ViewModel
+namespace Project.ViewModels.DeleteViewModels
 {
     class DrugDeleteViewModel : INotifyPropertyChanged
     {
         private readonly DrugModel _drugModel = new DrugModel();
-
+        private ObservableCollection<Drug> _drugs;
         private int _drugID;
+        private string _errorMessage;
+
+        public ObservableCollection<Drug> Drugs
+        {
+            get { return _drugs; }
+            set { SetProperty(ref _drugs, value); }
+        }
+
         public int DrugID
         {
             get => _drugID;
@@ -20,11 +28,9 @@ namespace Project.ViewModel
             {
                 _drugID = value;
                 OnPropertyChanged(nameof(DrugID));
+                OnPropertyChanged(nameof(CanDeleteDrug));
             }
         }
-
-        private string? _errorMessage;
-
 
         public string ErrorMessage
         {
@@ -38,14 +44,23 @@ namespace Project.ViewModel
 
         public ICommand DeleteDrugCommand { get; }
 
+        public bool CanDeleteDrug => DrugID > 0;
+
         public DrugDeleteViewModel()
         {
-            DeleteDrugCommand = new RelayCommand(RemoveDrug);
+            // Load drugs for the DataGrid
+            Drugs = new ObservableCollection<Drug>(_drugModel.GetDrugs());
+
+            DeleteDrugCommand = new RelayCommand(RemoveDrug, CanExecuteDeleteDrug);
+        }
+
+        private bool CanExecuteDeleteDrug()
+        {
+            return DrugID > 0;
         }
 
         private void RemoveDrug()
         {
-            //if (DrugID == Guid.Empty)
             if (DrugID == 0)
             {
                 ErrorMessage = "No drug was selected";
@@ -54,26 +69,28 @@ namespace Project.ViewModel
 
             if (!_drugModel.DoesDrugExist(DrugID))
             {
-                ErrorMessage = "DrugID doesn't exist in the Drug Records";
+                ErrorMessage = "DrugID doesn't exist in the records";
                 return;
             }
 
-            // MessageBoxResult result = MessageBox.Show($"Are you sure you want to delete drug {DrugID}?", 
-            //                                           "Confirm Deletion", 
-            //                                           MessageBoxButton.YesNo, 
-            //                                           MessageBoxImage.Warning);
-
-            // if (result == MessageBoxResult.Yes)
-            // {
-            //     bool success = _drugModel.DeleteDrug(DrugID);
-            //     ErrorMessage = success ? "Drug deleted successfully" : "Failed to delete drug";
-            // }
+            bool success = _drugModel.DeleteDrug(DrugID);
+            ErrorMessage = success ? "Drug deleted successfully" : "Failed to delete drug";
         }
 
-        public event PropertyChangedEventHandler? PropertyChanged;
+        public event PropertyChangedEventHandler PropertyChanged;
+
         protected void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private void SetProperty<T>(ref T field, T value, [System.Runtime.CompilerServices.CallerMemberName] string propertyName = null)
+        {
+            if (!EqualityComparer<T>.Default.Equals(field, value))
+            {
+                field = value;
+                OnPropertyChanged(propertyName);
+            }
         }
     }
 }

@@ -12,24 +12,24 @@ using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
-using Project.ViewModels.DeleteViewModels;
+using Project.ViewModels.UpdateViewModels;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
 
-namespace Project.Gui.DeleteViews
+namespace Project.Gui.ModifyViews
 {
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class DeleteDoctorView : Page
+    public sealed partial class ModifyScheduleView : Page
     {
-        private DoctorDeleteViewModel _viewmodel;
-        public DeleteDoctorView()
+        private ScheduleUpdateViewModel _viewModel;
+        public ModifyScheduleView()
         {
             this.InitializeComponent();
-            _viewmodel = new DoctorDeleteViewModel();
-            this.DataContext = _viewmodel;
+            _viewModel = new ScheduleUpdateViewModel();
+            this.DataContext = _viewModel;
         }
     }
 }

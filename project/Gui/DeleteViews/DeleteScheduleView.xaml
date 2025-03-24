@@ -26,7 +26,6 @@
                 <controls:DataGrid.Columns>
                     <controls:DataGridTextColumn Header="Schedule ID" Binding="{Binding ScheduleID}" Width="*" />
                     <controls:DataGridTextColumn Header="Doctor ID" Binding="{Binding DoctorID}" Width="*" />
-                    <controls:DataGridTextColumn Header="Shift ID" Binding="{Binding ShiftID}" Width="*" />
                 </controls:DataGrid.Columns>
             </controls:DataGrid>
 

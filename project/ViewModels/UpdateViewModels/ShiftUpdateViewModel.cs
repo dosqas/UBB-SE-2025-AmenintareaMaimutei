@@ -4,20 +4,18 @@ using Project.Utils;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
-using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace Project.ViewModels.UpdateViewModels
 {
-    class EquipmentUpdateViewModel : INotifyPropertyChanged
+    class ShiftUpdateViewModel : INotifyPropertyChanged
     {
-        private readonly EquipmentModel _equipmentModel = new EquipmentModel();
-        public ObservableCollection<Equipment> Equipments { get; set; } = new ObservableCollection<Equipment>();
+        private readonly ShiftModel _shiftModel = new ShiftModel();
+        public ObservableCollection<Shift> Shifts { get; set; } = new ObservableCollection<Shift>();
 
         private string _errorMessage;
         public string ErrorMessage
@@ -29,41 +27,40 @@ namespace Project.ViewModels.UpdateViewModels
                 OnPropertyChanged(nameof(ErrorMessage));
             }
         }
+
         public ICommand SaveChangesCommand { get; }
-        public EquipmentUpdateViewModel()
+        public ShiftUpdateViewModel()
         {
             _errorMessage = string.Empty;
             SaveChangesCommand = new RelayCommand(SaveChanges);
-            LoadEquipments();
+            LoadShifts();
         }
-
-       private void LoadEquipments()
+        private void LoadShifts()
         {
-            Equipments.Clear();
-            foreach (Equipment equipment in _equipmentModel.GetEquipments())
+            Shifts.Clear();
+            foreach (Shift shift in _shiftModel.GetShifts())
             {
-                Equipments.Add(equipment);
+                Shifts.Add(shift);
             }
         }
-
         private void SaveChanges()
         {
             bool hasErrors = false;
             StringBuilder errorMessages = new StringBuilder();
 
-            foreach (Equipment equipment in Equipments)
+            foreach (Shift shift in Shifts)
             {
-                if (!ValidateEquipment(equipment))
+                if (!ValidateShift(shift))
                 {
                     hasErrors = true;
-                    errorMessages.AppendLine("Equipment " + equipment.EquipmentID + ": " + ErrorMessage);
+                    errorMessages.AppendLine("Shift " + shift.ShiftID + ": " + ErrorMessage);
                 }
                 else
                 {
-                    bool success = _equipmentModel.UpdateEquipment(equipment);
+                    bool success = _shiftModel.UpdateShift(shift);
                     if (!success)
                     {
-                        errorMessages.AppendLine("Failed to save changes for equipment: " + equipment.EquipmentID);
+                        errorMessages.AppendLine("Failed to save changes for shift: " + shift.ShiftID);
                         hasErrors = true;
                     }
                 }
@@ -78,25 +75,26 @@ namespace Project.ViewModels.UpdateViewModels
             }
         }
 
-        private bool ValidateEquipment(Equipment equipment)
+        private bool ValidateShift(Shift shift)
         {
-            if (!System.Text.RegularExpressions.Regex.IsMatch(equipment.Name, @"^[a-zA-Z0-9 ]*$")) { ErrorMessage = "Please enter the name of the equipment"; return false; }
-
-            if (!System.Text.RegularExpressions.Regex.IsMatch(equipment.Specification, @"^[a-zA-Z0-9 ,.-]*$")) { ErrorMessage = "Please enter the specifications of the equipment"; return false; }
-
-            if (!System.Text.RegularExpressions.Regex.IsMatch(equipment.Type, @"^[a-zA-Z0-9 ]*$")) { ErrorMessage = "Please enter the type of the equipment"; return false; }
-            
-            if (equipment.Stock <= 0)
+            if(shift.StartTime != new TimeSpan(8, 0, 0) && shift.StartTime != new TimeSpan(20, 0, 0))
             {
-                ErrorMessage = "Equipment stock must be greater than 0!";
+                ErrorMessage = "Start time should be either 8:00 AM or 8:00 PM";
+                return false;
+            }
+            if (shift.EndTime != new TimeSpan(8, 0, 0) && shift.EndTime != new TimeSpan(20, 0, 0))
+            {
+                ErrorMessage = "End time should be either 8:00 AM or 8:00 PM";
                 return false;
             }
             return true;
         }
+
         public event PropertyChangedEventHandler? PropertyChanged;
         private void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
     }
 }

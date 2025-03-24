@@ -15,6 +15,7 @@ using Microsoft.UI.Xaml.Navigation;
 using Project.Gui;
 using System.Diagnostics;
 using Project.Gui.ModifyViews;
+using Project.Gui.AddViews;
 using Project.Gui.DeleteViews;
 
 // To learn more about WinUI, the WinUI project structure,
@@ -53,10 +54,10 @@ namespace Project.Gui
                         ContentFrame.Navigate(typeof(HomePage));
                         break;
                     case "Add":
-                        ContentFrame.Navigate(typeof(TestPage));
+                        ContentFrame.Navigate(typeof(AddPage));
                         break;
                     case "Modify":
-                        ContentFrame.Navigate(typeof(ModifyRoomView));
+                        ContentFrame.Navigate(typeof(ModifyShiftView));
                         break;
                     case "LogOut":
                         var loginPage = new LoginPage();

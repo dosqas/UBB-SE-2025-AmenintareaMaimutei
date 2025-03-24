@@ -1,18 +1,26 @@
-using Project.Models;
-using Project.Utils;
-using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Input;
-using System.Windows;
-using DoctorModel = Project.ClassModels.DoctorModel;
+using Project.ClassModels;
+using Project.Models;
+using Project.Utils;
 
-namespace Project.ViewModel
+namespace Project.ViewModels.DeleteViewModels
 {
     class DoctorDeleteViewModel : INotifyPropertyChanged
     {
         private readonly DoctorModel _doctorModel = new DoctorModel();
-
+        private ObservableCollection<Doctor> _doctors;
         private int _doctorID;
+        private string _errorMessage;
+
+        public ObservableCollection<Doctor> Doctors
+        {
+            get { return _doctors; }
+            set { SetProperty(ref _doctors, value); }
+        }
+
         public int DoctorID
         {
             get => _doctorID;
@@ -20,11 +28,9 @@ namespace Project.ViewModel
             {
                 _doctorID = value;
                 OnPropertyChanged(nameof(DoctorID));
+                OnPropertyChanged(nameof(CanDeleteDoctor));
             }
         }
-
-        private string? _errorMessage;
-
 
         public string ErrorMessage
         {
@@ -36,17 +42,25 @@ namespace Project.ViewModel
             }
         }
 
-
         public ICommand DeleteDoctorCommand { get; }
+
+        public bool CanDeleteDoctor => DoctorID > 0;
 
         public DoctorDeleteViewModel()
         {
-            DeleteDoctorCommand = new RelayCommand(RemoveDoctor);
+            // Load doctors for the DataGrid
+            Doctors = new ObservableCollection<Doctor>(_doctorModel.GetDoctors());
+
+            DeleteDoctorCommand = new RelayCommand(RemoveDoctor, CanExecuteDeleteDoctor);
+        }
+
+        private bool CanExecuteDeleteDoctor()
+        {
+            return DoctorID > 0;
         }
 
         private void RemoveDoctor()
         {
-            //if (DoctorID == Guid.Empty)
             if (DoctorID == 0)
             {
                 ErrorMessage = "No doctor was selected";
@@ -55,26 +69,28 @@ namespace Project.ViewModel
 
             if (!_doctorModel.DoesDoctorExist(DoctorID))
             {
-                ErrorMessage = "DoctorID doesn't exist in the Doctor Records";
+                ErrorMessage = "DoctorID doesn't exist in the records";
                 return;
             }
 
-            // MessageBoxResult result = MessageBox.Show($"Are you sure you want to delete doctor {DoctorID}?", 
-            //                                           "Confirm Deletion", 
-            //                                           MessageBoxButton.YesNo, 
-            //                                           MessageBoxImage.Warning);
-
-            // if (result == MessageBoxResult.Yes)
-            // {
-            //     bool success = _doctorModel.DeleteDoctor(DoctorID);
-            //     ErrorMessage = success ? "Doctor deleted successfully" : "Failed to delete doctor";
-            // }
+            bool success = _doctorModel.DeleteDoctor(DoctorID);
+            ErrorMessage = success ? "Doctor deleted successfully" : "Failed to delete doctor";
         }
 
-        public event PropertyChangedEventHandler? PropertyChanged;
+        public event PropertyChangedEventHandler PropertyChanged;
+
         protected void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private void SetProperty<T>(ref T field, T value, [System.Runtime.CompilerServices.CallerMemberName] string propertyName = null)
+        {
+            if (!EqualityComparer<T>.Default.Equals(field, value))
+            {
+                field = value;
+                OnPropertyChanged(propertyName);
+            }
         }
     }
 }
