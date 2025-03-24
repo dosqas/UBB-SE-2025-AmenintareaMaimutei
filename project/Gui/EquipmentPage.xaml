@@ -8,7 +8,7 @@
     xmlns:models="using:Project.Models"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-
+    
     <Grid Padding="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -27,7 +27,8 @@
             <TextBlock Text="Stock" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="4" Margin="-35,0,0,0" />
         </Grid>
 
-        <ListView ItemsSource="{x:Bind Equipments, Mode=OneWay}" BorderThickness="1" BorderBrush="Gray" Grid.Row="2">
+        <ListView ItemsSource="{x:Bind Equipments, Mode=OneWay}" BorderThickness="1" BorderBrush="Gray" Grid.Row="2"
+                  ScrollViewer.VerticalScrollBarVisibility="Auto">
             <ListView.ItemTemplate>
                 <DataTemplate x:DataType="models:Equipment">
                     <Border BorderBrush="LightGray" BorderThickness="0,0,0,1" Padding="10">

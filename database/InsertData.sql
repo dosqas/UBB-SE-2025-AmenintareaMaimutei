@@ -71,7 +71,7 @@ BEGIN
         VALUES (
             GETDATE(),
             CASE WHEN @i % 3 = 0 THEN '08:00:00' WHEN @i % 3 = 1 THEN '20:00:00' ELSE '08:00:00' END,
-            CASE WHEN @i % 3 = 0 THEN '16:00:00' WHEN @i % 3 = 1 THEN '08:00:00' ELSE '16:00:00' END
+            CASE WHEN @i % 3 = 0 THEN '20:00:00' WHEN @i % 3 = 1 THEN '08:00:00' ELSE '08:00:00' END
         );
 
         -- Insert into Schedules
