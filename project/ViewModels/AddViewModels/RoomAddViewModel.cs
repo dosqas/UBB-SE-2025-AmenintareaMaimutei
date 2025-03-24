@@ -99,7 +99,7 @@ namespace Project.ViewModels.AddViewModels
         {
             if (room.Capacity <= 0)
             {
-                ErrorMessage = "Please enter a number >0.";
+                ErrorMessage = "Please enter a number >0 for the capacity.";
                 return false;
             }
 
