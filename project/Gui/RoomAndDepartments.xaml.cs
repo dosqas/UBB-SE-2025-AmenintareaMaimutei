@@ -14,6 +14,7 @@ using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using Project.Models;
 using System.Collections.ObjectModel;
+using Project.ClassModels;
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
 
@@ -27,6 +28,8 @@ namespace Project.Gui
         public ObservableCollection<Room> Rooms { get; set; } = new();
         public ObservableCollection<Department> Departments { get; set; } = new();
 
+        private readonly RoomModel _roomModel = new();
+        private readonly DepartmentModel _departmentModel = new();
         public RoomAndDepartments()
         {
             this.InitializeComponent();
@@ -35,19 +38,16 @@ namespace Project.Gui
 
         private void Load()
         {
-            Rooms = new ObservableCollection<Room>();
-            Departments = new ObservableCollection<Department>();
-            //Departments.Add(new Department(Guid.NewGuid(), "Cardiology"));
-            //Departments.Add(new Department(Guid.NewGuid(), "Neurology"));
-
-            Departments.Add(new Department(1, "Cardiology"));
-            Departments.Add(new Department(2, "Neurology"));
-
-            //Rooms.Add(new Room(Guid.NewGuid(), 30, Departments[0].DepartmentID, Guid.NewGuid()));
-            //Rooms.Add(new Room(Guid.NewGuid(), 25, Departments[1].DepartmentID, Guid.NewGuid()));
-
-            Rooms.Add(new Room(1, 30, Departments[0].DepartmentID, 1));
-            Rooms.Add(new Room(2, 25, Departments[1].DepartmentID, 2));
+            Departments.Clear();
+            foreach(Department department in _departmentModel.GetDepartments())
+            {
+                Departments.Add(department);
+            }
+            Rooms.Clear();
+            foreach (Room room in _roomModel.GetRooms())
+            {
+                Rooms.Add(room);
+            }
         }
     }
 }
