@@ -45,24 +45,48 @@ namespace Project.ViewModels.UpdateViewModels
         }
         private void SaveChanges()
         {
+            bool hasErrors = false;
+            StringBuilder errorMessages = new StringBuilder();
+
             foreach (Shift shift in Shifts)
             {
-                if (ValidateShift(shift))
+                if (!ValidateShift(shift))
+                {
+                    hasErrors = true;
+                    errorMessages.AppendLine("Shift " + shift.ShiftID + ": " + ErrorMessage);
+                }
+                else
                 {
                     bool success = _shiftModel.UpdateShift(shift);
-                    ErrorMessage = success ? "Changes saved successfully!" : "Failed to save changes.";
+                    if (!success)
+                    {
+                        errorMessages.AppendLine("Failed to save changes for shift: " + shift.ShiftID);
+                        hasErrors = true;
+                    }
                 }
+            }
+            if (hasErrors)
+            {
+                ErrorMessage = errorMessages.ToString();
+            }
+            else
+            {
+                ErrorMessage = "Changes saved successfully";
             }
         }
 
         private bool ValidateShift(Shift shift)
         {
-            if (shift.ShiftID <= 0)
+            if(shift.StartTime != new TimeSpan(8, 0, 0) && shift.StartTime != new TimeSpan(20, 0, 0))
             {
-                ErrorMessage = "Shift name cannot be empty.";
+                ErrorMessage = "Start time should be either 8:00 AM or 8:00 PM";
                 return false;
             }
-            
+            if (shift.EndTime != new TimeSpan(8, 0, 0) && shift.EndTime != new TimeSpan(20, 0, 0))
+            {
+                ErrorMessage = "End time should be either 8:00 AM or 8:00 PM";
+                return false;
+            }
             return true;
         }
 
