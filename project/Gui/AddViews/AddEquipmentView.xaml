@@ -3,13 +3,58 @@
     x:Class="Project.Gui.AddViews.AddEquipmentView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:Project.Gui.AddViews"
+    xmlns:local="using:Project.Utils"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="using:CommunityToolkit.WinUI.UI.Controls"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Grid>
+    <Page.Resources>
+        <local:MessageToColorConverter x:Key="MessageToColorConverter"/>
+        <local:ZeroToEmptyStringConverter x:Key="ZeroToEmptyStringConverter"/>
+    </Page.Resources>
 
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="Add Equipment" FontSize="20" FontWeight="Bold" Margin="0,0,0,10" HorizontalAlignment="Center" Grid.Row="0"/>
+
+        <TextBox Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                 PlaceholderText="Enter equipment name" Margin="0,0,0,10" Grid.Row="1"/>
+
+        <TextBox Text="{Binding Type, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                 PlaceholderText="Enter equipment type" Margin="0,0,0,10" Grid.Row="2"/>
+
+        <TextBox Text="{Binding Specification, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                 PlaceholderText="Enter specification" Margin="0,0,0,10" Grid.Row="3"/>
+
+        <TextBox Text="{Binding Supply, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource ZeroToEmptyStringConverter}}"
+                 PlaceholderText="Enter stock" Margin="0,0,0,10" Grid.Row="4"/>
+
+        <Button Content="Add Equipment" Command="{Binding SaveEquipmentCommand}" HorizontalAlignment="Center" Margin="0,0,0,10" Grid.Row="5"/>
+
+        <TextBlock Text="{Binding ErrorMessage}" Foreground="{Binding ErrorMessage, Converter={StaticResource MessageToColorConverter}}" HorizontalAlignment="Center" FontSize="10" FontWeight="Bold" Margin="0,3,0,10" Grid.Row="6"/>
+
+        <ScrollViewer Grid.Row="7" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+            <controls:DataGrid ItemsSource="{Binding Equipments}" AutoGenerateColumns="False" IsReadOnly="True" HorizontalAlignment="Stretch" Width="Auto">
+                <controls:DataGrid.Columns>
+                    <controls:DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*"/>
+                    <controls:DataGridTextColumn Header="Type" Binding="{Binding Type}" Width="*"/>
+                    <controls:DataGridTextColumn Header="Specification" Binding="{Binding Specification}" Width="*"/>
+                    <controls:DataGridTextColumn Header="Stock" Binding="{Binding Stock}" Width="*"/>
+                </controls:DataGrid.Columns>
+            </controls:DataGrid>
+        </ScrollViewer>
     </Grid>
 </Page>
+

@@ -48,7 +48,6 @@ namespace Project.ViewModels.AddViewModels
             Departments.Clear();
             foreach (Department department in _departmentModel.GetDepartments())
             {
-                department.IsEditable = false;
                 Departments.Add(department);
             }
         }
@@ -57,9 +56,8 @@ namespace Project.ViewModels.AddViewModels
         {
             var department = new Department
             {
-                DepartmentID = 0, 
+                DepartmentID = 0,
                 Name = Name,
-               IsEditable = true
             };
 
             if (ValidateDepartment(department))
@@ -68,7 +66,7 @@ namespace Project.ViewModels.AddViewModels
                 ErrorMessage = success ? "Department added successfully" : "Failed to add department";
                 if (success)
                 {
-                    LoadDepartments(); 
+                    LoadDepartments();
                 }
             }
         }
