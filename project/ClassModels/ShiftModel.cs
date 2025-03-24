@@ -31,6 +31,41 @@ namespace Project.ClassModels
             }
         }
 
+        public bool UpdateShift(Shift shift)
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(_connectionString))
+                {
+                    string query = "UPDATE Shifts SET Date = @Date, StartTime = @StartTime, EndTime = @EndTime WHERE ShiftID = @ShiftID";
+                    SqlCommand command = new SqlCommand(query, connection);
+                    command.Parameters.AddWithValue("@Date", shift.Date);
+                    command.Parameters.AddWithValue("@StartTime", shift.StartTime);
+                    command.Parameters.AddWithValue("@EndTime", shift.EndTime);
+                    command.Parameters.AddWithValue("@ShiftID", shift.ShiftID);
+
+                    connection.Open();
+                    int rowsAffected = command.ExecuteNonQuery();
+                    return rowsAffected > 0;
+                }
+            }
+            catch (SqlException ex)
+            {
+                Console.WriteLine($"SQL Error: {ex.Message}");
+                return false;
+            }
+            catch (InvalidOperationException ex)
+            {
+                Console.WriteLine($"Invalid Operation: {ex.Message}");
+                return false;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Unexpected Error: {ex.Message}");
+                return false;
+            }
+        }
+
         public bool DoesShiftExist(Guid shiftID)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
@@ -43,6 +78,30 @@ namespace Project.ClassModels
                 int count = (int)command.ExecuteScalar();
                 return count > 0;
             }
+        }
+
+        public List<Shift> GetShifts()
+        {
+            List<Shift> shifts = new List<Shift>();
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                string query = "SELECT * FROM Shifts";
+                SqlCommand command = new SqlCommand(query, connection);
+                connection.Open();
+                SqlDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    Shift shift = new Shift
+                    {
+                        ShiftID = reader.GetInt32(0),
+                        Date = DateOnly.FromDateTime(reader.GetDateTime(1)),
+                        StartTime = reader.GetTimeSpan(2),
+                        EndTime = reader.GetTimeSpan(3)
+                    };
+                    shifts.Add(shift);
+                }
+            }
+            return shifts;
         }
     }
 }
