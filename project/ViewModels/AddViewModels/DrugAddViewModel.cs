@@ -1,15 +1,17 @@
+using Project.ClassModels;
 using Project.Models;
 using Project.Utils;
 using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Input;
-using DrugModel = Project.ClassModels.DrugModel;
 
 namespace Project.ViewModels.AddViewModels
 {
     internal class DrugAddViewModel : INotifyPropertyChanged
     {
         private readonly DrugModel _drugModel = new DrugModel();
+        public ObservableCollection<Drug> Drugs { get; set; } = new ObservableCollection<Drug>();
 
         private string _name = "";
         public string Name
@@ -71,13 +73,22 @@ namespace Project.ViewModels.AddViewModels
         public DrugAddViewModel()
         {
             SaveDrugCommand = new RelayCommand(SaveDrug);
+            LoadDrugs();
+        }
+
+        private void LoadDrugs()
+        {
+            Drugs.Clear();
+            foreach (Drug drug in _drugModel.GetDrugs())
+            {
+                Drugs.Add(drug);
+            }
         }
 
         private void SaveDrug()
         {
             var drug = new Drug
             {
-                //DrugID = Guid.NewGuid(),
                 DrugID = 0,
                 Name = Name,
                 Administration = Administration,
@@ -89,6 +100,10 @@ namespace Project.ViewModels.AddViewModels
             {
                 bool success = _drugModel.AddDrug(drug);
                 ErrorMessage = success ? "Drug added successfully" : "Failed to add drug";
+                if (success)
+                {
+                    LoadDrugs();
+                }
             }
         }
 
@@ -128,4 +143,3 @@ namespace Project.ViewModels.AddViewModels
         }
     }
 }
-    

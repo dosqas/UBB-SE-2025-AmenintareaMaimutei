@@ -17,8 +17,8 @@
             <controls:DataGrid ItemsSource="{Binding Doctors}" AutoGenerateColumns="False" IsReadOnly="False" HorizontalAlignment="Stretch" Width="Auto">
                 <controls:DataGrid.Columns>
                     <controls:DataGridTextColumn Header="Doctor ID" Binding="{Binding DoctorID}" Width="*" IsReadOnly="True"/>
-                    <controls:DataGridTextColumn Header="User ID" Binding="{Binding UserID}" Width="*" IsReadOnly="True"/>
-                    <controls:DataGridTextColumn Header="Department ID" Binding="{Binding DepartmentID}" Width="*" IsReadOnly="True"/>
+                    <controls:DataGridTextColumn Header="User ID" Binding="{Binding UserID, UpdateSourceTrigger=PropertyChanged}" Width="*"/>
+                    <controls:DataGridTextColumn Header="Department ID" Binding="{Binding DepartmentID, UpdateSourceTrigger=PropertyChanged}" Width="*"/>
                     <controls:DataGridTextColumn Header="Experience" Binding="{Binding Experience, UpdateSourceTrigger=PropertyChanged}" Width="*"/>
                     <controls:DataGridTextColumn Header="License Number" Binding="{Binding LicenseNumber,UpdateSourceTrigger=PropertyChanged}" Width="*"/>
                 </controls:DataGrid.Columns>

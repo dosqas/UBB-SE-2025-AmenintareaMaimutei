@@ -17,6 +17,7 @@ namespace Project.ViewModel
     class DoctorUpdateViewModel : INotifyPropertyChanged
     {
         private readonly DoctorModel _doctorModel = new DoctorModel();
+        private readonly UserModel _userModel = new UserModel();
         public ObservableCollection<Doctor> Doctors { get; set; } = new ObservableCollection<Doctor>();
 
 
@@ -52,27 +53,49 @@ namespace Project.ViewModel
 
         private void SaveChanges()
         {
+            bool hasErrors = false;
+            StringBuilder errorMessages = new StringBuilder();
+
             foreach (Doctor doctor in Doctors)
             {
-                if (ValidateDoctor(doctor))
+                if (!ValidateDoctor(doctor))
+                {
+                    hasErrors = true;
+                    errorMessages.AppendLine("Doctor " + doctor.DoctorID + ": " + ErrorMessage);
+                }
+                else
                 {
                     bool success = _doctorModel.UpdateDoctor(doctor);
-                    ErrorMessage = success ? "Changes saved successfully!" : "Failed to save changes.";
+                    if (!success)
+                    {
+                        errorMessages.AppendLine("Failed to save changes for doctor: " + doctor.DoctorID);
+                        hasErrors = true;
+                    }
                 }
+            }
+            if (hasErrors)
+            {
+                ErrorMessage = errorMessages.ToString();
+            }
+            else
+            {
+                ErrorMessage = "Changes saved successfully";
             }
         }
 
         private bool ValidateDoctor(Doctor doctor)
         {
-            //if (doctor.DoctorID == Guid.Empty) { ErrorMessage = "Invalid Doctor ID"; return false; }
-            //if (doctor.UserID == Guid.Empty) { ErrorMessage = "Invalid User ID"; return false; }
-            //if (doctor.DepartmentID == Guid.Empty) { ErrorMessage = "Invalid Department ID"; return false; }
-            //if (doctor.Experience < 0) { ErrorMessage = "Experience must be non-negative"; return false; }
-            if (doctor.DoctorID == 0) { ErrorMessage = "Invalid Doctor ID"; return false; }
-            if (doctor.UserID == 0) { ErrorMessage = "Invalid User ID"; return false; }
-            if (doctor.DepartmentID == 0) { ErrorMessage = "Invalid Department ID"; return false; }
-            if (doctor.Experience < 0) { ErrorMessage = "Experience must be non-negative"; return false; }
-            if (string.IsNullOrWhiteSpace(doctor.LicenseNumber)) { ErrorMessage = "License Number is required"; return false; }
+            bool userExistsAsDoctor = _userModel.UserExistsWithRole(doctor.UserID, "Doctor");
+            bool userIsDoctor = _doctorModel.UserExistsInDoctors(doctor.UserID);
+            if (!userExistsAsDoctor || userIsDoctor) { ErrorMessage = "UserID doesn’t exist or has already been approved"; return false; }
+
+            bool departmentExists = _doctorModel.DoesDepartmentExist(doctor.DepartmentID);
+            if (!departmentExists) { ErrorMessage = "DepartmentID doesn’t exist in the Departments Records"; return false; }
+
+            if (doctor.Experience < 0) { ErrorMessage = "The experience provided should be a positive number"; return false; }
+
+            if (!System.Text.RegularExpressions.Regex.IsMatch(doctor.LicenseNumber, @"^[a-zA-Z0-9 ]*$")) { ErrorMessage = "License Number should contain only alphanumeric characters"; return false; }
+
             return true;
         }
 

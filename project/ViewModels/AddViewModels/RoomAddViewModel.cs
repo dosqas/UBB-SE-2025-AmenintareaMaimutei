@@ -2,15 +2,16 @@ using Project.ClassModels;
 using Project.Models;
 using Project.Utils;
 using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Input;
-using RoomModel = Project.ClassModels.RoomModel;
 
 namespace Project.ViewModels.AddViewModels
 {
     internal class RoomAddViewModel : INotifyPropertyChanged
     {
         private readonly RoomModel _roomModel = new RoomModel();
+        public ObservableCollection<Room> Rooms { get; set; } = new ObservableCollection<Room>();
 
         private int _capacity;
         public int Capacity
@@ -61,13 +62,22 @@ namespace Project.ViewModels.AddViewModels
         public RoomAddViewModel()
         {
             SaveRoomCommand = new RelayCommand(SaveRoom);
+            LoadRooms();
+        }
+
+        private void LoadRooms()
+        {
+            Rooms.Clear();
+            foreach (Room room in _roomModel.GetRooms())
+            {
+                Rooms.Add(room);
+            }
         }
 
         private void SaveRoom()
         {
             var room = new Room
             {
-                //RoomID = Guid.NewGuid(),
                 RoomID = 0,
                 Capacity = Capacity,
                 DepartmentID = DepartmentID,
@@ -78,6 +88,10 @@ namespace Project.ViewModels.AddViewModels
             {
                 bool success = _roomModel.AddRoom(room);
                 ErrorMessage = success ? "Room added successfully" : "Failed to add room";
+                if (success)
+                {
+                    LoadRooms();
+                }
             }
         }
 
@@ -89,14 +103,12 @@ namespace Project.ViewModels.AddViewModels
                 return false;
             }
 
-            //if (room.DepartmentID == Guid.Empty && !_roomModel.DoesDepartmentExist(room.DepartmentID))
             if (!_roomModel.DoesDepartmentExist(room.DepartmentID))
             {
                 ErrorMessage = "DepartmentID doesn’t exist in the Departments Records.";
                 return false;
             }
 
-            //if (room.EquipmentID != Guid.Empty && !_roomModel.DoesEquipmentExist(room.EquipmentID))
             if (!_roomModel.DoesEquipmentExist(room.EquipmentID))
             {
                 ErrorMessage = "EquipmentID doesn’t exist in the Equipments Records.";
@@ -113,3 +125,4 @@ namespace Project.ViewModels.AddViewModels
         }
     }
 }
+
