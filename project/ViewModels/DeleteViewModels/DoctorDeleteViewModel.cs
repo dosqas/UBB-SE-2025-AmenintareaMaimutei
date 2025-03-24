@@ -51,7 +51,7 @@ namespace Project.ViewModels.DeleteViewModels
             // Load doctors for the DataGrid
             Doctors = new ObservableCollection<Doctor>(_doctorModel.GetDoctors());
 
-            DeleteDoctorCommand = new RelayCommand(RemoveDoctor, CanExecuteDeleteDoctor);
+            DeleteDoctorCommand = new RelayCommand(RemoveDoctor);
         }
 
         private bool CanExecuteDeleteDoctor()
@@ -75,6 +75,11 @@ namespace Project.ViewModels.DeleteViewModels
 
             bool success = _doctorModel.DeleteDoctor(DoctorID);
             ErrorMessage = success ? "Doctor deleted successfully" : "Failed to delete doctor";
+
+            if (success)
+            {
+                Doctors = new ObservableCollection<Doctor>(_doctorModel.GetDoctors());
+            }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

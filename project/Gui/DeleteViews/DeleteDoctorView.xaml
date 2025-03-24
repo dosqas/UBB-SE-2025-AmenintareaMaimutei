@@ -28,7 +28,7 @@
                 </controls:DataGrid.Columns>
             </controls:DataGrid>
             <TextBox 
-                Text="{Binding DoctorID, UpdateSourceTrigger=PropertyChanged}" 
+                Text="{Binding DoctorID, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
                 Margin="0,10" 
                 PlaceholderText="Enter Doctor ID to delete" 
                 HorizontalAlignment="Stretch"/>
@@ -36,8 +36,7 @@
                 Content="Delete Doctor" 
                 Command="{Binding DeleteDoctorCommand}" 
                 HorizontalAlignment="Center" 
-                Margin="10"
-                IsEnabled="{Binding CanDeleteDoctor}"/>
+                Margin="10"/>
             <TextBlock Text="{Binding ErrorMessage}" Foreground="Red" HorizontalAlignment="Center"/>
         </StackPanel>
     </Grid>
