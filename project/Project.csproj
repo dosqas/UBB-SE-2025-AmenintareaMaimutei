@@ -71,7 +71,6 @@
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="9.0.3" />
   </ItemGroup>
   <ItemGroup>
-
     <Page Update="Gui\DeleteViews\DeleteRoomView.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -88,6 +87,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Update="Gui\DeleteViews\DeleteScheduleView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
     <Page Update="Gui\ModifyViews\ModifyPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
