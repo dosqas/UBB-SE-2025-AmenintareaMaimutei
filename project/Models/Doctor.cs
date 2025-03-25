@@ -16,7 +16,7 @@ namespace Project.Models
         public float Rating { get; set; }
         public string LicenseNumber { get; set; }
 
-        public Doctor() { LicenseNumber = "0"; }
+        public Doctor() { LicenseNumber = "0"; Rating = 0; }
         public Doctor(int doctorID, int userID, int departmentID, float experience, float rating, string licenseNumber)
         {
             DoctorID = doctorID;

@@ -21,13 +21,12 @@ namespace Project.ClassModels
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
-                //string query = "INSERT INTO Doctors (DoctorID, UserID, DepartmentID, Experience, LicenseNumber) VALUES (@DoctorID, @UserID, @DepartmentID, @Experience, @LicenseNumber)";
-                string query = "INSERT INTO Doctors (DepartmentID, Experience, LicenseNumber) VALUES (@DepartmentID, @Experience, @LicenseNumber)";
+                string query = "INSERT INTO Doctors (UserID, DepartmentID, Experience, Rating, LicenseNumber) VALUES (@UserID, @DepartmentID, @Experience, @Rating, @LicenseNumber)";
                 SqlCommand command = new SqlCommand(query, connection);
-                //command.Parameters.AddWithValue("@DoctorID", doctor.DoctorID);
                 command.Parameters.AddWithValue("@UserID", doctor.UserID);
                 command.Parameters.AddWithValue("@DepartmentID", doctor.DepartmentID);
                 command.Parameters.AddWithValue("@Experience", doctor.Experience);
+                command.Parameters.AddWithValue("@Rating", doctor.Rating);
                 command.Parameters.AddWithValue("@LicenseNumber", doctor.LicenseNumber);
 
                 connection.Open();
@@ -157,16 +156,17 @@ namespace Project.ClassModels
             }
         }
 
-        public bool UserExistsInDoctors(int userID)
+        public bool UserExistsInDoctors(int userID, int doctorID)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
-                string query = "SELECT COUNT(*) FROM Doctors WHERE UserID = @UserID";
+                string query = "SELECT COUNT(*) FROM Doctors WHERE UserID = @UserID AND DoctorID != @DoctorID";
                 SqlCommand command = new SqlCommand(query, connection);
                 command.Parameters.AddWithValue("@UserID", userID);
+                command.Parameters.AddWithValue("@DoctorID", doctorID);
                 connection.Open();
                 int count = (int)command.ExecuteScalar();
-                return count > 1;
+                return count > 0;
             }
         }
 

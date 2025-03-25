@@ -129,7 +129,7 @@ namespace Project.ViewModels.AddViewModels
 
             if (equipment.Stock <= 0)
             {
-                ErrorMessage = "Please enter a number >0.";
+                ErrorMessage = "Please enter a number >0 for the stock.";
                 return false;
             }
 

@@ -86,7 +86,7 @@ namespace Project.ViewModel
         private bool ValidateDoctor(Doctor doctor)
         {
             bool userExistsAsDoctor = _userModel.UserExistsWithRole(doctor.UserID, "Doctor");
-            bool userIsDoctor = _doctorModel.UserExistsInDoctors(doctor.UserID);
+            bool userIsDoctor = _doctorModel.UserExistsInDoctors(doctor.UserID, doctor.DoctorID);
             if (!userExistsAsDoctor || userIsDoctor) { ErrorMessage = "UserID doesn’t exist or has already been approved"; return false; }
 
             bool departmentExists = _doctorModel.DoesDepartmentExist(doctor.DepartmentID);

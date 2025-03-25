@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="Project.Gui.DeleteViews.DeleteEquipmentView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Project.Gui.ModifyViews"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="using:CommunityToolkit.WinUI.UI.Controls"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid>
+        <StackPanel Margin="20">
+            <TextBlock Text="Delete Equipment" FontSize="20" FontWeight="Bold" Margin="0,0,0,10" HorizontalAlignment="Center"/>
+            <controls:DataGrid 
+                ItemsSource="{Binding Equipments}" 
+                AutoGenerateColumns="False" 
+                IsReadOnly="True" 
+                HorizontalAlignment="Stretch" 
+                Width="Auto" 
+                SelectionMode="Single"
+                SelectedItem="{Binding SelectedEquipment}">
+
+                <controls:DataGrid.Columns>
+                    <controls:DataGridTextColumn Header="Equipment ID" Binding="{Binding EquipmentID}" Width="*" />
+                    <controls:DataGridTextColumn Header="Equipment Name" Binding="{Binding Name}" Width="*" />
+                </controls:DataGrid.Columns>
+            </controls:DataGrid>
+            <TextBox 
+                Text="{Binding EquipmentID, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
+                Margin="0,10" 
+                PlaceholderText="Enter Equipment ID to delete" 
+                HorizontalAlignment="Stretch"/>
+            <Button 
+                Content="Delete Equipment" 
+                Command="{Binding DeleteEquipmentCommand}" 
+                HorizontalAlignment="Center" 
+                Margin="10"/>
+            <TextBlock Text="{Binding ErrorMessage}" Foreground="{Binding MessageColor}" HorizontalAlignment="Center"/>
+        </StackPanel>
+    </Grid>
+</Page>

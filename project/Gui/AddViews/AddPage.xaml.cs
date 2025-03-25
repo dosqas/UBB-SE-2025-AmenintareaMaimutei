@@ -28,8 +28,7 @@ namespace Project.Gui
         public AddPage()
         {
             this.InitializeComponent();
-            ContentFrame.Navigate(typeof(AddDepartmentView));
-            NavigationView.SelectedItem = NavigationView.MenuItems[0];
+            ContentFrame.Navigate(typeof(AddDoctorView));
         }
 
         private void NavigationView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)

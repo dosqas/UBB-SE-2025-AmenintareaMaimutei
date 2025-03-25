@@ -135,7 +135,7 @@ namespace Project.ViewModels.AddViewModels
 
             if (doctor.Experience < 0)
             {
-                ErrorMessage = "The information provided should be a positive number.";
+                ErrorMessage = "Experience should be a positive number.";
                 return false;
             }
 

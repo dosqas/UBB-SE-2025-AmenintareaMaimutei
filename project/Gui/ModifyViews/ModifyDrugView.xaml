@@ -10,21 +10,21 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
-        <StackPanel Margin="20">
-            <TextBlock Text="Modify Drugs" FontSize="20" FontWeight="Bold" Margin="0,0,0,10" HorizontalAlignment="Center" />
-
-            <controls:DataGrid ItemsSource="{Binding Drugs}" AutoGenerateColumns="False" IsReadOnly="False" HorizontalAlignment="Stretch" Width="Auto">
-                <controls:DataGrid.Columns>
-                    <controls:DataGridTextColumn Header="Drug ID" Binding="{Binding DrugID}" Width="*" IsReadOnly="True"/>
-                    <controls:DataGridTextColumn Header="Name" Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Width="*"/>
-                    <controls:DataGridTextColumn Header="Administration" Binding="{Binding Administration, UpdateSourceTrigger=PropertyChanged}" Width="*"/>
-                    <controls:DataGridTextColumn Header="Supply" Binding="{Binding Supply, UpdateSourceTrigger=PropertyChanged}" Width="*"/>
-                    <controls:DataGridTextColumn Header="Specification" Binding="{Binding Specification, UpdateSourceTrigger=PropertyChanged}" Width="*"/>
-                </controls:DataGrid.Columns>
-            </controls:DataGrid>
-
-            <Button Content="Save Changes" Command="{Binding SaveChangesCommand}" HorizontalAlignment="Center" Margin="10"/>
-            <TextBlock Text="{Binding ErrorMessage}" Foreground="Red" HorizontalAlignment="Center"/>
-        </StackPanel>
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <StackPanel Margin="20">
+                <TextBlock Text="Modify Drugs" FontSize="20" FontWeight="Bold" Margin="0,0,0,10" HorizontalAlignment="Center" />
+                <controls:DataGrid ItemsSource="{Binding Drugs}" AutoGenerateColumns="False" IsReadOnly="False" HorizontalAlignment="Stretch" Width="Auto" Height="400">
+                    <controls:DataGrid.Columns>
+                        <controls:DataGridTextColumn Header="Drug ID" Binding="{Binding DrugID}" Width="*" IsReadOnly="True"/>
+                        <controls:DataGridTextColumn Header="Name" Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Width="*"/>
+                        <controls:DataGridTextColumn Header="Administration" Binding="{Binding Administration, UpdateSourceTrigger=PropertyChanged}" Width="*"/>
+                        <controls:DataGridTextColumn Header="Supply" Binding="{Binding Supply, UpdateSourceTrigger=PropertyChanged}" Width="*"/>
+                        <controls:DataGridTextColumn Header="Specification" Binding="{Binding Specification, UpdateSourceTrigger=PropertyChanged}" Width="*"/>
+                    </controls:DataGrid.Columns>
+                </controls:DataGrid>
+                <Button Content="Save Changes" Command="{Binding SaveChangesCommand}" HorizontalAlignment="Center" Margin="10"/>
+                <TextBlock Text="{Binding ErrorMessage}" Foreground="Red" HorizontalAlignment="Center"/>
+            </StackPanel>
+        </ScrollViewer>
     </Grid>
 </Page>

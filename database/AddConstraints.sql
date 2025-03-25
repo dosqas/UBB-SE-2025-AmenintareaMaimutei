@@ -134,13 +134,17 @@ ALTER TABLE Reviews
 ADD CONSTRAINT CK_NrStars CHECK (NrStars >= 1 AND NrStars <= 5);
 
 
-
 -- SHIFTS
--- IF EXISTS (SELECT * FROM sys.check_constraints WHERE name = 'CK_Time')
--- BEGIN
-	-- ALTER TABLE Shifts DROP CONSTRAINT CK_Date;
--- END
--- ALTER TABLE Shifts
--- ADD CONSTRAINT CK_Time CHECK (StartTime >= EndTime);
+IF EXISTS (SELECT * FROM sys.check_constraints WHERE name = 'CK_ShiftTime')
+BEGIN
+    ALTER TABLE Shifts DROP CONSTRAINT CK_ShiftTime;
+END
+ALTER TABLE Shifts
+ADD CONSTRAINT CK_ShiftTime CHECK (
+    (DATEPART(HOUR, StartTime) = 8 OR DATEPART(HOUR, StartTime) = 20) AND
+    (DATEPART(HOUR, EndTime) = 8 OR DATEPART(HOUR, EndTime) = 20) AND
+    (DATEPART(MINUTE, StartTime) = 0) AND
+    (DATEPART(MINUTE, EndTime) = 0)
+);
 
 END;

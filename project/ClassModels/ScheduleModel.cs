@@ -125,19 +125,17 @@ namespace Project.ClassModels
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 string query = "SELECT ScheduleID, DoctorID, ShiftID FROM Schedules";
-              
                 SqlCommand command = new SqlCommand(query, connection);
                 connection.Open();
                 SqlDataReader reader = command.ExecuteReader();
                 while (reader.Read())
                 {
-                    Schedule schedule = new Schedule
+                    schedules.Add(new Schedule
                     {
-                        ScheduleID = reader.GetInt32(0),
-                        DoctorID = reader.GetInt32(1),
-                        ShiftID = reader.GetInt32(2)
-                    };
-                    schedules.Add(schedule);
+                        ScheduleID = reader.GetInt32(reader.GetOrdinal("ScheduleID")),
+                        DoctorID = reader.GetInt32(reader.GetOrdinal("DoctorID")),
+                        ShiftID = reader.GetInt32(reader.GetOrdinal("ShiftID"))
+                    });
                 }
             }
             return schedules;

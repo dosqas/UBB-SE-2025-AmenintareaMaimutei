@@ -129,7 +129,7 @@ namespace Project.ViewModels.AddViewModels
 
             if (drug.Supply <= 0)
             {
-                ErrorMessage = "Please enter a number >0.";
+                ErrorMessage = "Please enter a number >0 for the supply.";
                 return false;
             }
 

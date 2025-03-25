@@ -1,0 +1,35 @@
+<Page
+    x:Class="Project.Gui.DeleteViews.DeleteMainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Project.Gui.DeleteViews"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <NavigationView x:Name="NavigationView" PaneDisplayMode="Left"
+                        SelectionChanged="NavigationView_SelectionChanged"
+                        IsSettingsVisible="False"
+                        IsBackButtonVisible="Collapsed"
+                        OpenPaneLength="200"
+                        CompactPaneLength="60">
+            <NavigationView.MenuItems>
+                <NavigationViewItem Content="Doctors" Tag="DeleteDoctors"/>
+                <NavigationViewItem Content="Equipments" Tag="DeleteEquipments"/>
+                <NavigationViewItem Content="Drugs" Tag="DeleteDrugs"/>
+                <NavigationViewItem Content="Schedules" Tag="DeleteSchedules"/>
+                <NavigationViewItem Content="Departments" Tag="DeleteDepartments"/>
+                <NavigationViewItem Content="Rooms" Tag="DeleteRooms"/>
+            </NavigationView.MenuItems>
+        </NavigationView>
+
+        <Frame x:Name="ContentFrame" Grid.Column="1"/>
+    </Grid>
+</Page>
