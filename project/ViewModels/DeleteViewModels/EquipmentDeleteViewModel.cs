@@ -14,6 +14,7 @@ namespace Project.ViewModels.DeleteViewModels
         private ObservableCollection<Equipment> _equipments;
         private int _equipmentID;
         private string _errorMessage;
+        private string _messageColor = "Red";
 
         public ObservableCollection<Equipment> Equipments
         {
@@ -38,7 +39,19 @@ namespace Project.ViewModels.DeleteViewModels
             set
             {
                 _errorMessage = value;
+                MessageColor = string.IsNullOrEmpty(value) ? "Red" : value.Contains("successfully") ? "Green" : "Red";
                 OnPropertyChanged(nameof(ErrorMessage));
+                OnPropertyChanged(nameof(MessageColor));
+            }
+        }
+
+        public string MessageColor
+        {
+            get => _messageColor;
+            set
+            {
+                _messageColor = value;
+                OnPropertyChanged(nameof(MessageColor));
             }
         }
 
@@ -51,7 +64,7 @@ namespace Project.ViewModels.DeleteViewModels
             // Load equipments for the DataGrid
             Equipments = new ObservableCollection<Equipment>(_equipmentModel.GetEquipments());
 
-            DeleteEquipmentCommand = new RelayCommand(RemoveEquipment, CanExecuteDeleteEquipment);
+            DeleteEquipmentCommand = new RelayCommand(RemoveEquipment);
         }
 
         private bool CanExecuteDeleteEquipment()
@@ -75,6 +88,11 @@ namespace Project.ViewModels.DeleteViewModels
 
             bool success = _equipmentModel.DeleteEquipment(EquipmentID);
             ErrorMessage = success ? "Equipment deleted successfully" : "Failed to delete equipment";
+
+            if (success)
+            {
+                Equipments = new ObservableCollection<Equipment>(_equipmentModel.GetEquipments());
+            }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

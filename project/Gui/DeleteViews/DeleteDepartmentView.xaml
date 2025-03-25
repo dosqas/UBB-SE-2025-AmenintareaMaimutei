@@ -24,11 +24,11 @@
 
                 <controls:DataGrid.Columns>
                     <controls:DataGridTextColumn Header="Department ID" Binding="{Binding DepartmentID}" Width="*" />
-                    <controls:DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*" />
+                    <controls:DataGridTextColumn Header="Department Name" Binding="{Binding Name}" Width="*" />
                 </controls:DataGrid.Columns>
             </controls:DataGrid>
             <TextBox 
-                Text="{Binding DepartmentID, UpdateSourceTrigger=PropertyChanged}" 
+                Text="{Binding DepartmentID, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
                 Margin="0,10" 
                 PlaceholderText="Enter Department ID to delete" 
                 HorizontalAlignment="Stretch"/>
@@ -36,9 +36,8 @@
                 Content="Delete Department" 
                 Command="{Binding DeleteDepartmentCommand}" 
                 HorizontalAlignment="Center" 
-                Margin="10"
-                IsEnabled="{Binding CanDeleteDepartment}"/>
-            <TextBlock Text="{Binding ErrorMessage}" Foreground="Red" HorizontalAlignment="Center"/>
+                Margin="10"/>
+            <TextBlock Text="{Binding ErrorMessage}" Foreground="{Binding MessageColor}" HorizontalAlignment="Center"/>
         </StackPanel>
     </Grid>
 </Page>

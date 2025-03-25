@@ -37,7 +37,7 @@
                 Command="{Binding DeleteDoctorCommand}" 
                 HorizontalAlignment="Center" 
                 Margin="10"/>
-            <TextBlock Text="{Binding ErrorMessage}" Foreground="Red" HorizontalAlignment="Center"/>
+            <TextBlock Text="{Binding ErrorMessage}" Foreground="{Binding MessageColor}" HorizontalAlignment="Center"/>
         </StackPanel>
     </Grid>
 </Page>

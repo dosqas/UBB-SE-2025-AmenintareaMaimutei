@@ -14,6 +14,7 @@ namespace Project.ViewModels.DeleteViewModels
         private ObservableCollection<Room> _rooms;
         private int _roomID;
         private string _errorMessage;
+        private string _messageColor = "Red";
 
         public ObservableCollection<Room> Rooms
         {
@@ -38,7 +39,19 @@ namespace Project.ViewModels.DeleteViewModels
             set
             {
                 _errorMessage = value;
+                MessageColor = string.IsNullOrEmpty(value) ? "Red" : value.Contains("successfully") ? "Green" : "Red";
                 OnPropertyChanged(nameof(ErrorMessage));
+                OnPropertyChanged(nameof(MessageColor));
+            }
+        }
+
+        public string MessageColor
+        {
+            get => _messageColor;
+            set
+            {
+                _messageColor = value;
+                OnPropertyChanged(nameof(MessageColor));
             }
         }
 
@@ -48,10 +61,10 @@ namespace Project.ViewModels.DeleteViewModels
 
         public RoomDeleteViewModel()
         {
-            // Load rooms for the DataGrid
-            Rooms = new ObservableCollection<Room>(_roomModel.GetRooms());
+            var rooms = _roomModel.GetRooms();
+            Rooms = rooms != null ? new ObservableCollection<Room>(rooms) : new ObservableCollection<Room>();
 
-            DeleteRoomCommand = new RelayCommand(RemoveRoom, CanExecuteDeleteRoom);
+            DeleteRoomCommand = new RelayCommand(RemoveRoom);
         }
 
         private bool CanExecuteDeleteRoom()
@@ -75,6 +88,11 @@ namespace Project.ViewModels.DeleteViewModels
 
             bool success = _roomModel.DeleteRoom(RoomID);
             ErrorMessage = success ? "Room deleted successfully" : "Failed to delete room";
+
+            if (success)
+            {
+                Rooms = new ObservableCollection<Room>(_roomModel.GetRooms());
+            }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
