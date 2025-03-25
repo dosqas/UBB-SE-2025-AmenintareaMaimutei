@@ -58,5 +58,47 @@ namespace Project.ClassModels
 
             return doctorInformation;
         }
+
+        public decimal ComputeSalary(int doctorId)
+        {
+            decimal salary = 0;
+
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+                string query = @"
+                    SELECT StartTime, EndTime
+                    FROM GetCurrentMonthShiftsForDoctor(@DoctorID)";
+
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@DoctorID", doctorId);
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            TimeSpan startTime = reader.GetTimeSpan(reader.GetOrdinal("StartTime"));
+                            TimeSpan endTime = reader.GetTimeSpan(reader.GetOrdinal("EndTime"));
+
+                            if (startTime == new TimeSpan(8, 0, 0) && endTime == new TimeSpan(20, 0, 0))
+                            {
+                                salary += 100 * 12;
+                            }
+                            else if (startTime == new TimeSpan(20, 0, 0) && endTime == new TimeSpan(8, 0, 0))
+                            {
+                                salary += 100 * 1.2m * 12;
+                            }
+                            else if (startTime == new TimeSpan(8, 0, 0) && endTime == new TimeSpan(8, 0, 0))
+                            {
+                                salary += 100 * 1.5m * 24;
+                            }
+                        }
+                    }
+                }
+            }
+
+            return salary;
+        }
     }
 }

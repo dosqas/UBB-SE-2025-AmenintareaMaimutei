@@ -175,6 +175,17 @@ namespace Project.ViewModels
             }
         }
 
+        private decimal _salary;
+        public decimal Salary
+        {
+            get => _salary;
+            set
+            {
+                _salary = value;
+                OnPropertyChanged(nameof(Salary));
+            }
+        }
+
         public void LoadDoctorInformation(int doctorID)
         {
             var doctorInfo = _doctorModel.GetDoctorInformation(doctorID);
@@ -195,6 +206,7 @@ namespace Project.ViewModels
                 Rating = doctorInfo.Rating;
                 DepartmentID = doctorInfo.DepartmentID;
                 DepartmentName = doctorInfo.DepartmentName;
+                Salary = _doctorModel.ComputeSalary(doctorID);
             }
             else throw new Exception("Doctor not found");
         }
