@@ -41,11 +41,19 @@ namespace Project.Gui
                 }
                 else if (selectedTag == "Equipment")
                 {
-                    HomePageFrame.Navigate(typeof(EquipmentPage)); 
+                    HomePageFrame.Navigate(typeof(EquipmentPage));
                 }
                 else if (selectedTag == "Rooms")
                 {
-                    HomePageFrame.Navigate(typeof(RoomAndDepartments)); 
+                    HomePageFrame.Navigate(typeof(RoomAndDepartments));
+                }
+                else if (selectedTag == "Schedule")
+                {
+                    HomePageFrame.Navigate(typeof(ScheduleAndShifts));
+                }
+                else if (selectedTag == "DrugPage")
+                {
+                    HomePageFrame.Navigate(typeof(Drugs));
                 }
             }
         }

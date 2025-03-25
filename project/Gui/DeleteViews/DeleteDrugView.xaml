@@ -36,6 +36,7 @@
                 </controls:DataGrid>
                 <TextBox 
                 Text="{Binding DrugID, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay,  Converter={StaticResource ZeroToEmptyStringConverter}}" 
+
                 Margin="0,10" 
                 PlaceholderText="Enter Drug ID to delete" 
                 HorizontalAlignment="Stretch"/>

@@ -47,5 +47,6 @@
                 <TextBlock Text="{Binding ErrorMessage}" Foreground="{Binding MessageColor}" HorizontalAlignment="Center"/>
             </StackPanel>
         </ScrollViewer>
+]
     </Grid>
 </Page>

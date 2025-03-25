@@ -14,8 +14,10 @@
                         SelectionChanged="NavigationView_SelectionChanged" IsSettingsVisible="False" IsBackButtonVisible="Collapsed">
             <NavigationView.MenuItems>
                 <NavigationViewItem Content="Doctors" Tag="Doctors" />
-                <NavigationViewItem Content="Equipment and Consumables" Tag="Equipment" />
+                <NavigationViewItem Content="Equipment" Tag="Equipment" />
                 <NavigationViewItem Content="Rooms and Departments" Tag="Rooms" />
+                <NavigationViewItem Content="Schedule and Shifts" Tag="Schedule" />
+                <NavigationViewItem Content="Drugs" Tag="DrugPage" />
             </NavigationView.MenuItems>
 
             <Frame x:Name="HomePageFrame" Grid.Column="1"/>

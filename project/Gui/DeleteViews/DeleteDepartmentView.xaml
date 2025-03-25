@@ -28,6 +28,7 @@
                 </controls:DataGrid>
                 <TextBox 
                 Text="{Binding DepartmentID, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Converter={StaticResource ZeroToEmptyStringConverter}}" 
+
                 Margin="0,10" 
                 PlaceholderText="Enter Department ID to delete" 
                 HorizontalAlignment="Stretch"/>
