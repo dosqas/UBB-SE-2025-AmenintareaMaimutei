@@ -33,23 +33,21 @@
                     <controls:DataGrid.Columns>
                         <controls:DataGridTextColumn Header="Schedule ID" Binding="{Binding ScheduleID}" Width="*" />
                         <controls:DataGridTextColumn Header="Doctor ID" Binding="{Binding DoctorID}" Width="*" />
+                        <controls:DataGridTextColumn Header="Shift ID" Binding="{Binding ShiftID}" Width="*" />
                     </controls:DataGrid.Columns>
                 </controls:DataGrid>
                 <TextBox 
-                Text="{Binding ScheduleID, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Converter= {StaticResource ZeroToEmptyStringConverter}}" 
+                Text="{Binding ScheduleID, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Converter={StaticResource ZeroToEmptyStringConverter}}" 
                 Margin="0,10" 
                 PlaceholderText="Enter Schedule ID to delete" 
                 HorizontalAlignment="Stretch"/>
                 <Button 
-
                 Content="Delete Schedule" 
                 Command="{Binding DeleteScheduleCommand}" 
                 HorizontalAlignment="Center" 
                 Margin="10"/>
-
                 <TextBlock Text="{Binding ErrorMessage}" Foreground="{Binding MessageColor}" HorizontalAlignment="Center"/>
             </StackPanel>
         </ScrollViewer>
-
     </Grid>
 </Page>

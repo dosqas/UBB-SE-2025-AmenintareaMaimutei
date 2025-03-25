@@ -14,7 +14,7 @@
         <local:MessageToColorConverter x:Key="MessageToColorConverter"/>
         <local:ZeroToEmptyStringConverter x:Key="ZeroToEmptyStringConverter"/>
     </Page.Resources>
-    
+
     <Grid>
         <ScrollViewer VerticalScrollBarVisibility="Auto">
             <StackPanel Margin="20">
@@ -32,10 +32,13 @@
                     <controls:DataGrid.Columns>
                         <controls:DataGridTextColumn Header="Drug ID" Binding="{Binding DrugID}" Width="*" />
                         <controls:DataGridTextColumn Header="Drug Name" Binding="{Binding Name}" Width="*" />
+                        <controls:DataGridTextColumn Header="Administration" Binding="{Binding Administration}" Width="*" />
+                        <controls:DataGridTextColumn Header="Specification" Binding="{Binding Specification}" Width="*" />
+                        <controls:DataGridTextColumn Header="Supply" Binding="{Binding Supply}" Width="*" />
                     </controls:DataGrid.Columns>
                 </controls:DataGrid>
                 <TextBox 
-                Text="{Binding DrugID, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay,  Converter={StaticResource ZeroToEmptyStringConverter}}" 
+                Text="{Binding DrugID, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Converter={StaticResource ZeroToEmptyStringConverter}}" 
 
                 Margin="0,10" 
                 PlaceholderText="Enter Drug ID to delete" 

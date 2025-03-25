@@ -25,6 +25,7 @@
                 <NavigationViewItem Content="Equipments" Tag="DeleteEquipments"/>
                 <NavigationViewItem Content="Drugs" Tag="DeleteDrugs"/>
                 <NavigationViewItem Content="Schedules" Tag="DeleteSchedules"/>
+                <NavigationViewItem Content="Shifts" Tag="DeleteShifts"/>
                 <NavigationViewItem Content="Departments" Tag="DeleteDepartments"/>
                 <NavigationViewItem Content="Rooms" Tag="DeleteRooms"/>
             </NavigationView.MenuItems>

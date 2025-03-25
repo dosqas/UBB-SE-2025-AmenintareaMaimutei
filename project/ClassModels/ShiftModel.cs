@@ -103,5 +103,32 @@ namespace Project.ClassModels
             }
             return shifts;
         }
+
+        public bool DoesShiftExist(int shiftID)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                string query = "SELECT COUNT(*) FROM Shifts WHERE ShiftID = @ShiftID";
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@ShiftID", shiftID);
+                connection.Open();
+                int count = (int)command.ExecuteScalar();
+                return count > 0;
+            }
+        }
+
+        public bool DeleteShift(int shiftID)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                string query = "DELETE FROM Shifts WHERE ShiftID = @ShiftID";
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@ShiftID", shiftID);
+
+                connection.Open();
+                int rowsAffected = command.ExecuteNonQuery();
+                return rowsAffected > 0;
+            }
+        }
     }
 }
