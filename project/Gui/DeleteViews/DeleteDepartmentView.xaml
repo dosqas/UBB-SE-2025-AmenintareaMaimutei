@@ -3,41 +3,41 @@
     x:Class="Project.Gui.DeleteViews.DeleteDepartmentView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:Project.Gui.ModifyViews"
+    xmlns:local="using:Project.Utils"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:controls="using:CommunityToolkit.WinUI.UI.Controls"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Grid>
-        <StackPanel Margin="20">
-            <TextBlock Text="Delete Department" FontSize="20" FontWeight="Bold" Margin="0,0,0,10" HorizontalAlignment="Center"/>
-            <controls:DataGrid 
-                ItemsSource="{Binding Departments}" 
-                AutoGenerateColumns="False" 
-                IsReadOnly="True" 
-                HorizontalAlignment="Stretch" 
-                Width="Auto" 
-                SelectionMode="Single"
-                SelectedItem="{Binding SelectedDepartment}">
+    <Page.Resources>
+        <local:MessageToColorConverter x:Key="MessageToColorConverter"/>
+        <local:ZeroToEmptyStringConverter x:Key="ZeroToEmptyStringConverter"/>
+    </Page.Resources>
 
-                <controls:DataGrid.Columns>
-                    <controls:DataGridTextColumn Header="Department ID" Binding="{Binding DepartmentID}" Width="*" />
-                    <controls:DataGridTextColumn Header="Department Name" Binding="{Binding Name}" Width="*" />
-                </controls:DataGrid.Columns>
-            </controls:DataGrid>
-            <TextBox 
-                Text="{Binding DepartmentID, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
+    <Grid>
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <StackPanel Margin="20">
+                <TextBlock Text="Delete Department" FontSize="20" FontWeight="Bold" Margin="0,0,0,10" HorizontalAlignment="Center"/>
+                <controls:DataGrid ItemsSource="{Binding Departments}" AutoGenerateColumns="False" IsReadOnly="True"  HorizontalAlignment="Stretch"  Width="Auto" SelectionMode="Single" Height="400" SelectedItem="{Binding SelectedDepartment}">
+
+                    <controls:DataGrid.Columns>
+                        <controls:DataGridTextColumn Header="Department ID" Binding="{Binding DepartmentID}" Width="*" />
+                        <controls:DataGridTextColumn Header="Department Name" Binding="{Binding Name}" Width="*" />
+                    </controls:DataGrid.Columns>
+                </controls:DataGrid>
+                <TextBox 
+                Text="{Binding DepartmentID, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Converter={StaticResource ZeroToEmptyStringConverter}}" 
                 Margin="0,10" 
                 PlaceholderText="Enter Department ID to delete" 
                 HorizontalAlignment="Stretch"/>
-            <Button 
+                <Button 
                 Content="Delete Department" 
                 Command="{Binding DeleteDepartmentCommand}" 
                 HorizontalAlignment="Center" 
                 Margin="10"/>
-            <TextBlock Text="{Binding ErrorMessage}" Foreground="{Binding MessageColor}" HorizontalAlignment="Center"/>
-        </StackPanel>
+                <TextBlock Text="{Binding ErrorMessage}" Foreground="{Binding MessageColor}" HorizontalAlignment="Center"/>
+            </StackPanel>
+        </ScrollViewer>
     </Grid>
 </Page>

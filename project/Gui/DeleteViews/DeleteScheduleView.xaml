@@ -3,41 +3,49 @@
     x:Class="Project.Gui.DeleteViews.DeleteScheduleView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:Project.Gui.ModifyViews"
+    xmlns:local="using:Project.Utils"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:controls="using:CommunityToolkit.WinUI.UI.Controls"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
+    <Page.Resources>
+        <local:MessageToColorConverter x:Key="MessageToColorConverter"/>
+        <local:ZeroToEmptyStringConverter x:Key="ZeroToEmptyStringConverter"/>
+    </Page.Resources>
+
     <Grid>
-        <StackPanel Margin="20">
-            <TextBlock Text="Delete Schedule" FontSize="20" FontWeight="Bold" Margin="0,0,0,10" HorizontalAlignment="Center"/>
-            <controls:DataGrid 
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <StackPanel Margin="20">
+                <TextBlock Text="Delete Schedule" FontSize="20" FontWeight="Bold" Margin="0,0,0,10" HorizontalAlignment="Center"/>
+                <controls:DataGrid 
                 ItemsSource="{Binding Schedules}" 
                 AutoGenerateColumns="False" 
                 IsReadOnly="True" 
                 HorizontalAlignment="Stretch" 
                 Width="Auto" 
+                Height="400"
                 SelectionMode="Single"
                 SelectedItem="{Binding SelectedSchedule}">
 
-                <controls:DataGrid.Columns>
-                    <controls:DataGridTextColumn Header="Schedule ID" Binding="{Binding ScheduleID}" Width="*" />
-                    <controls:DataGridTextColumn Header="Doctor ID" Binding="{Binding DoctorID}" Width="*" />
-                </controls:DataGrid.Columns>
-            </controls:DataGrid>
-            <TextBox 
-                Text="{Binding ScheduleID, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
+                    <controls:DataGrid.Columns>
+                        <controls:DataGridTextColumn Header="Schedule ID" Binding="{Binding ScheduleID}" Width="*" />
+                        <controls:DataGridTextColumn Header="Doctor ID" Binding="{Binding DoctorID}" Width="*" />
+                    </controls:DataGrid.Columns>
+                </controls:DataGrid>
+                <TextBox 
+                Text="{Binding ScheduleID, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Converter= {StaticResource ZeroToEmptyStringConverter}}" 
                 Margin="0,10" 
                 PlaceholderText="Enter Schedule ID to delete" 
                 HorizontalAlignment="Stretch"/>
-            <Button 
+                <Button 
                 Content="Delete Schedule" 
                 Command="{Binding DeleteScheduleCommand}" 
                 HorizontalAlignment="Center" 
                 Margin="10"/>
-            <TextBlock Text="{Binding ErrorMessage}" Foreground="{Binding MessageColor}" HorizontalAlignment="Center"/>
-        </StackPanel>
+                <TextBlock Text="{Binding ErrorMessage}" Foreground="{Binding MessageColor}" HorizontalAlignment="Center"/>
+            </StackPanel>
+        </ScrollViewer>
     </Grid>
 </Page>
