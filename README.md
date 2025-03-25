@@ -30,7 +30,7 @@ The part of the application we develop will enable **administrators** to manage 
 ## 🛠️ Tech Stack
 - **Frontend**: WinUI
 - **Backend**: .NET (C#)
-- **Database**: TBD
+- **Database**: SQL Server
 
 ---
 
