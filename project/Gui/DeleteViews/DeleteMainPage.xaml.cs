@@ -7,6 +7,7 @@ namespace Project.Gui.DeleteViews
         public DeleteMainPage()
         {
             this.InitializeComponent();
+            ContentFrame.Navigate(typeof(DeleteDoctorView));
         }
 
         private void NavigationView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
@@ -29,6 +30,9 @@ namespace Project.Gui.DeleteViews
                         break;
                     case "DeleteDrugs":
                         ContentFrame.Navigate(typeof(DeleteDrugView));
+                        break;
+                    case "DeleteShifts":
+                        ContentFrame.Navigate(typeof(DeleteShiftView));
                         break;
                     case "DeleteEquipments":
                         ContentFrame.Navigate(typeof(DeleteEquipmentView));

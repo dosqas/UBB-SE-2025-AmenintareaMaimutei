@@ -6,7 +6,7 @@
     xmlns:local="using:Project.Utils"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:controls="using:CommunityToolkit.WinUI.UI.Controls" xmlns:local1="using:Project.Utils"
+    xmlns:controls="using:CommunityToolkit.WinUI.UI.Controls" 
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
@@ -31,7 +31,11 @@
 
                     <controls:DataGrid.Columns>
                         <controls:DataGridTextColumn Header="Doctor ID" Binding="{Binding DoctorID}" Width="*" />
-                        <controls:DataGridTextColumn Header="Department ID" Binding="{Binding DepartmentID}" Width="*" />
+                        <controls:DataGridTextColumn Header="User ID" Binding="{Binding UserID}" Width="*" />
+                        <controls:DataGridTextColumn Header="'DepartmentID" Binding="{Binding DepartmentID}" Width="*" />
+                        <controls:DataGridTextColumn Header="Experience" Binding="{Binding Experience}" Width="*" />
+                        <controls:DataGridTextColumn Header="Rating" Binding="{Binding Rating}" Width="*" />
+                        <controls:DataGridTextColumn Header="License Number" Binding="{Binding LicenseNumber}" Width="*"/>
                     </controls:DataGrid.Columns>
                 </controls:DataGrid>
                 <TextBox 
@@ -47,6 +51,5 @@
                 <TextBlock Text="{Binding ErrorMessage}" Foreground="{Binding MessageColor}" HorizontalAlignment="Center"/>
             </StackPanel>
         </ScrollViewer>
-]
     </Grid>
 </Page>

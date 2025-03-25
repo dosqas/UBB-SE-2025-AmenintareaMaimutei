@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Page
-    x:Class="Project.Gui.DeleteViews.DeleteRoomView"
+    x:Class="Project.Gui.DeleteViews.DeleteShiftView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-
     xmlns:local="using:Project.Utils"
-
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:controls="using:CommunityToolkit.WinUI.UI.Controls"
@@ -20,41 +18,29 @@
     <Grid>
         <ScrollViewer VerticalScrollBarVisibility="Auto">
             <StackPanel Margin="20">
-                <TextBlock Text="Delete Room" FontSize="20" FontWeight="Bold" Margin="0,0,0,10" HorizontalAlignment="Center"/>
-                <controls:DataGrid 
-
-                ItemsSource="{Binding Rooms}" 
-                AutoGenerateColumns="False" 
-                IsReadOnly="True" 
-                HorizontalAlignment="Stretch" 
-                Width="Auto" 
-
-                Height="400"
-                SelectionMode="Single"
-                SelectedItem="{Binding SelectedRoom}">
+                <TextBlock Text="Delete Shift" FontSize="20" FontWeight="Bold" Margin="0,0,0,10" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <controls:DataGrid ItemsSource="{Binding Shifts}" AutoGenerateColumns="False" IsReadOnly="True"  HorizontalAlignment="Stretch"  Width="Auto" SelectionMode="Single" Height="400" SelectedItem="{Binding SelectedShift}">
 
                     <controls:DataGrid.Columns>
-                        <controls:DataGridTextColumn Header="Room ID" Binding="{Binding RoomID}" Width="*" />
-                        <controls:DataGridTextColumn Header="Capacity" Binding="{Binding Capacity}" Width="*" />
-                        <controls:DataGridTextColumn Header="DepartmentID" Binding="{Binding DepartmentID}" Width="*" />
-                        <controls:DataGridTextColumn Header="EquipmentID" Binding="{Binding EquipmentID}" Width="*" />
+                        <controls:DataGridTextColumn Header="Shift ID" Binding="{Binding ShiftID}" Width="*" />
+                        <controls:DataGridTextColumn Header="Date" Binding="{Binding Date}" Width="*" />
+                        <controls:DataGridTextColumn Header="Start Time" Binding="{Binding StartTime}" Width="*" />
+                        <controls:DataGridTextColumn Header="End Time" Binding="{Binding EndTime}" Width="*" />
                     </controls:DataGrid.Columns>
                 </controls:DataGrid>
                 <TextBox 
-                Text="{Binding RoomID, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Converter={StaticResource ZeroToEmptyStringConverter}}" 
+                Text="{Binding ShiftID, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Converter={StaticResource ZeroToEmptyStringConverter}}" 
+
                 Margin="0,10" 
-                PlaceholderText="Enter Room ID to delete" 
+                PlaceholderText="Enter Shift ID to delete" 
                 HorizontalAlignment="Stretch"/>
                 <Button 
-
-                Content="Delete Room" 
-                Command="{Binding DeleteRoomCommand}" 
+                Content="Delete Shift" 
+                Command="{Binding DeleteShiftCommand}" 
                 HorizontalAlignment="Center" 
                 Margin="10"/>
-
                 <TextBlock Text="{Binding ErrorMessage}" Foreground="{Binding MessageColor}" HorizontalAlignment="Center"/>
             </StackPanel>
         </ScrollViewer>
-
     </Grid>
 </Page>
