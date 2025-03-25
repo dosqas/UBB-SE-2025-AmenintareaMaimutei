@@ -97,18 +97,16 @@ namespace Project.ViewModels.AddViewModels
 
         private bool ValidateShift(Shift shift)
         {
-            if (shift.Date == default)
+            if (shift.StartTime != new TimeSpan(8, 0, 0) && shift.StartTime != new TimeSpan(20, 0, 0))
             {
-                ErrorMessage = "Please enter a valid date.";
+                ErrorMessage = "Start time should be either 8:00 AM or 8:00 PM";
                 return false;
             }
-
-            if (shift.StartTime >= shift.EndTime)
+            if (shift.EndTime != new TimeSpan(8, 0, 0) && shift.EndTime != new TimeSpan(20, 0, 0))
             {
-                ErrorMessage = "Start time must be before end time.";
+                ErrorMessage = "End time should be either 8:00 AM or 8:00 PM";
                 return false;
             }
-
             return true;
         }
 
