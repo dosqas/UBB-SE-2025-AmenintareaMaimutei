@@ -30,6 +30,7 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
                     <TextBlock Text="Doctor ID:" FontWeight="Bold" FontSize="16" Grid.Row="0" Grid.Column="0" />
@@ -73,6 +74,11 @@
 
                     <TextBlock Text="Registration Date:" FontWeight="Bold" FontSize="16" Grid.Row="13" Grid.Column="0" />
                     <TextBlock Text="{Binding RegistrationDate}" FontSize="16" Grid.Row="13" Grid.Column="1" />
+                
+                    <TextBlock Text="Salary:" FontWeight="Bold" FontSize="16" Grid.Row="14" Grid.Column="0" />
+                    <TextBlock Text="{Binding Salary}" FontSize="16" Grid.Row="14" Grid.Column="1" />
+                
+
                 </Grid>
             </StackPanel>
         </ScrollViewer>
