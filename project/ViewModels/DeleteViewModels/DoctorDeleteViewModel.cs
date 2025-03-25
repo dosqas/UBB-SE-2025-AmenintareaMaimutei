@@ -14,6 +14,7 @@ namespace Project.ViewModels.DeleteViewModels
         private ObservableCollection<Doctor> _doctors;
         private int _doctorID;
         private string _errorMessage;
+        private string _messageColor = "Red";
 
         public ObservableCollection<Doctor> Doctors
         {
@@ -38,7 +39,19 @@ namespace Project.ViewModels.DeleteViewModels
             set
             {
                 _errorMessage = value;
+                MessageColor = string.IsNullOrEmpty(value) ? "Red" : value.Contains("successfully") ? "Green" : "Red";
                 OnPropertyChanged(nameof(ErrorMessage));
+                OnPropertyChanged(nameof(MessageColor));
+            }
+        }
+
+        public string MessageColor
+        {
+            get => _messageColor;
+            set
+            {
+                _messageColor = value;
+                OnPropertyChanged(nameof(MessageColor));
             }
         }
 

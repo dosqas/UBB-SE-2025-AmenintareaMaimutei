@@ -1,34 +1,27 @@
-using Project.ClassModels;
-using Project.Models;
-using Project.Utils;
-using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Input;
-using Microsoft.UI.Xaml.Controls; // Ensure you're using WinUI for ContentDialog
+using Project.ClassModels;
+using Project.Models;
+using Project.Utils;
 
 namespace Project.ViewModels.DeleteViewModels
 {
     class ScheduleDeleteViewModel : INotifyPropertyChanged
     {
         private readonly ScheduleModel _scheduleModel = new ScheduleModel();
+        private ObservableCollection<Schedule> _schedules;
+        private int _scheduleID;
+        private string _errorMessage;
+        private string _messageColor = "Red"; 
 
-        public ObservableCollection<Schedule> Schedules { get; } = new ObservableCollection<Schedule>();
-
-        private Schedule? _selectedSchedule;
-        public Schedule? SelectedSchedule
+        public ObservableCollection<Schedule> Schedules
         {
-            get => _selectedSchedule;
-            set
-            {
-                _selectedSchedule = value;
-                ScheduleID = value?.ScheduleID ?? 0;
-                OnPropertyChanged(nameof(SelectedSchedule));
-                OnPropertyChanged(nameof(CanDeleteSchedule));
-            }
+            get { return _schedules; }
+            set { SetProperty(ref _schedules, value); }
         }
 
-        private int _scheduleID;
         public int ScheduleID
         {
             get => _scheduleID;
@@ -40,82 +33,78 @@ namespace Project.ViewModels.DeleteViewModels
             }
         }
 
-        private string _errorMessage = "";
         public string ErrorMessage
         {
-            get => _errorMessage;
+            get => _errorMessage ?? string.Empty;
             set
             {
                 _errorMessage = value;
+                // Set MessageColor based on success or error
+                MessageColor = string.IsNullOrEmpty(value) ? "Red" : value.Contains("successfully") ? "Green" : "Red";
                 OnPropertyChanged(nameof(ErrorMessage));
+                OnPropertyChanged(nameof(MessageColor));
             }
         }
 
-        public bool CanDeleteSchedule => ScheduleID != 0;
+        public string MessageColor
+        {
+            get => _messageColor;
+            set
+            {
+                _messageColor = value;
+                OnPropertyChanged(nameof(MessageColor));
+            }
+        }
 
         public ICommand DeleteScheduleCommand { get; }
 
+        public bool CanDeleteSchedule => ScheduleID > 0;
+
         public ScheduleDeleteViewModel()
         {
-            DeleteScheduleCommand = new RelayCommand(RemoveSchedule, () => CanDeleteSchedule);
-            LoadSchedules();
+            // Load schedules for the DataGrid
+            Schedules = new ObservableCollection<Schedule>(_scheduleModel.GetSchedules());
+
+            DeleteScheduleCommand = new RelayCommand(RemoveSchedule);
         }
 
-        private void LoadSchedules()
-        {
-            Schedules.Clear();
-            foreach (var schedule in _scheduleModel.GetSchedules())
-            {
-                Schedules.Add(schedule);
-            }
-        }
-
-        private async void RemoveSchedule()
+        private void RemoveSchedule()
         {
             if (ScheduleID == 0)
             {
-                ErrorMessage = "No schedule was selected.";
+                ErrorMessage = "No schedule was selected";
                 return;
             }
 
             if (!_scheduleModel.DoesScheduleExist(ScheduleID))
             {
-                ErrorMessage = "ScheduleID doesn't exist in the records.";
+                ErrorMessage = "ScheduleID doesn't exist in the records";
                 return;
             }
 
-            // Confirmation Dialog
-            var dialog = new ContentDialog
-            {
-                Title = "Confirm Deletion",
-                Content = $"Are you sure you want to delete schedule {ScheduleID}?",
-                PrimaryButtonText = "Yes",
-                CloseButtonText = "No",
-                DefaultButton = ContentDialogButton.Close,
-               // XamlRoot = App.MainWindow.Content.XamlRoot // Ensure App.xaml.cs has MainWindow reference
-            };
+            bool success = _scheduleModel.DeleteSchedule(ScheduleID);
+            ErrorMessage = success ? "Schedule deleted successfully" : "Failed to delete schedule";
 
-            var result = await dialog.ShowAsync();
-
-            if (result == ContentDialogResult.Primary)
+            if (success)
             {
-                bool success = _scheduleModel.DeleteSchedule(ScheduleID);
-                if (success)
-                {
-                    ErrorMessage = "Schedule deleted successfully.";
-                    LoadSchedules(); // Refresh list
-                }
-                else
-                {
-                    ErrorMessage = "Failed to delete schedule.";
-                }
+                Schedules = new ObservableCollection<Schedule>(_scheduleModel.GetSchedules());
             }
         }
 
-        public event PropertyChangedEventHandler? PropertyChanged;
+        public event PropertyChangedEventHandler PropertyChanged;
+
         protected void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private void SetProperty<T>(ref T field, T value, [System.Runtime.CompilerServices.CallerMemberName] string propertyName = null)
+        {
+            if (!EqualityComparer<T>.Default.Equals(field, value))
+            {
+                field = value;
+                OnPropertyChanged(propertyName);
+            }
         }
     }
 }

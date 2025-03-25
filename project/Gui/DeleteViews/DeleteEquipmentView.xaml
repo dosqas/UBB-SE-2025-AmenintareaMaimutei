@@ -24,11 +24,11 @@
 
                 <controls:DataGrid.Columns>
                     <controls:DataGridTextColumn Header="Equipment ID" Binding="{Binding EquipmentID}" Width="*" />
-                    <controls:DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*" />
+                    <controls:DataGridTextColumn Header="Equipment Name" Binding="{Binding Name}" Width="*" />
                 </controls:DataGrid.Columns>
             </controls:DataGrid>
             <TextBox 
-                Text="{Binding EquipmentID, UpdateSourceTrigger=PropertyChanged}" 
+                Text="{Binding EquipmentID, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
                 Margin="0,10" 
                 PlaceholderText="Enter Equipment ID to delete" 
                 HorizontalAlignment="Stretch"/>
@@ -36,9 +36,8 @@
                 Content="Delete Equipment" 
                 Command="{Binding DeleteEquipmentCommand}" 
                 HorizontalAlignment="Center" 
-                Margin="10"
-                IsEnabled="{Binding CanDeleteEquipment}"/>
-            <TextBlock Text="{Binding ErrorMessage}" Foreground="Red" HorizontalAlignment="Center"/>
+                Margin="10"/>
+            <TextBlock Text="{Binding ErrorMessage}" Foreground="{Binding MessageColor}" HorizontalAlignment="Center"/>
         </StackPanel>
     </Grid>
 </Page>

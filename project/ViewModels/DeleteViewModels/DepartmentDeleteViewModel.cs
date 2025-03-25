@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
 using System.Windows.Input;
 using Project.ClassModels;
 using Project.Models;
@@ -15,6 +14,8 @@ namespace Project.ViewModels.DeleteViewModels
         private ObservableCollection<Department> _departments;
         private int _departmentID;
         private string _errorMessage;
+        private string _messageColor = "Red";
+
 
         public ObservableCollection<Department> Departments
         {
@@ -29,7 +30,7 @@ namespace Project.ViewModels.DeleteViewModels
             {
                 _departmentID = value;
                 OnPropertyChanged(nameof(DepartmentID));
-                OnPropertyChanged(nameof(CanDeleteDepartment)); 
+                OnPropertyChanged(nameof(CanDeleteDepartment));
             }
         }
 
@@ -39,7 +40,19 @@ namespace Project.ViewModels.DeleteViewModels
             set
             {
                 _errorMessage = value;
+                MessageColor = string.IsNullOrEmpty(value) ? "Red" : value.Contains("successfully") ? "Green" : "Red";
                 OnPropertyChanged(nameof(ErrorMessage));
+                OnPropertyChanged(nameof(MessageColor));
+            }
+        }
+
+        public string MessageColor
+        {
+            get => _messageColor;
+            set
+            {
+                _messageColor = value;
+                OnPropertyChanged(nameof(MessageColor));
             }
         }
 
@@ -52,12 +65,12 @@ namespace Project.ViewModels.DeleteViewModels
             // Load departments for the DataGrid
             Departments = new ObservableCollection<Department>(_departmentModel.GetDepartments());
 
-            DeleteDepartmentCommand = new RelayCommand(RemoveDepartment, CanExecuteDeleteDepartment);
+            DeleteDepartmentCommand = new RelayCommand(RemoveDepartment);
         }
 
         private bool CanExecuteDeleteDepartment()
         {
-            return DepartmentID > 0; 
+            return DepartmentID > 0;
         }
 
         private void RemoveDepartment()
@@ -76,9 +89,15 @@ namespace Project.ViewModels.DeleteViewModels
 
             bool success = _departmentModel.DeleteDepartment(DepartmentID);
             ErrorMessage = success ? "Department deleted successfully" : "Failed to delete department";
+
+            if (success)
+            {
+                Departments = new ObservableCollection<Department>(_departmentModel.GetDepartments());
+            }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
+
         protected void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

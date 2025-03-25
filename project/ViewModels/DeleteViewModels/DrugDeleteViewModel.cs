@@ -14,6 +14,7 @@ namespace Project.ViewModels.DeleteViewModels
         private ObservableCollection<Drug> _drugs;
         private int _drugID;
         private string _errorMessage;
+        private string _messageColor = "Red";
 
         public ObservableCollection<Drug> Drugs
         {
@@ -38,7 +39,19 @@ namespace Project.ViewModels.DeleteViewModels
             set
             {
                 _errorMessage = value;
+                MessageColor = string.IsNullOrEmpty(value) ? "Red" : value.Contains("successfully") ? "Green" : "Red";
                 OnPropertyChanged(nameof(ErrorMessage));
+                OnPropertyChanged(nameof(MessageColor));
+            }
+        }
+
+        public string MessageColor
+        {
+            get => _messageColor;
+            set
+            {
+                _messageColor = value;
+                OnPropertyChanged(nameof(MessageColor));
             }
         }
 
@@ -51,7 +64,7 @@ namespace Project.ViewModels.DeleteViewModels
             // Load drugs for the DataGrid
             Drugs = new ObservableCollection<Drug>(_drugModel.GetDrugs());
 
-            DeleteDrugCommand = new RelayCommand(RemoveDrug, CanExecuteDeleteDrug);
+            DeleteDrugCommand = new RelayCommand(RemoveDrug);
         }
 
         private bool CanExecuteDeleteDrug()
@@ -75,6 +88,11 @@ namespace Project.ViewModels.DeleteViewModels
 
             bool success = _drugModel.DeleteDrug(DrugID);
             ErrorMessage = success ? "Drug deleted successfully" : "Failed to delete drug";
+
+            if (success)
+            {
+                Drugs = new ObservableCollection<Drug>(_drugModel.GetDrugs());
+            }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

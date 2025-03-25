@@ -22,11 +22,11 @@
                         CompactPaneLength="60">
             <NavigationView.MenuItems>
                 <NavigationViewItem Content="Doctors" Tag="DeleteDoctors"/>
-                <NavigationViewItem Content="Rooms" Tag="DeleteRooms"/>
-                <NavigationViewItem Content="Departments" Tag="DeleteDepartments"/>
-                <NavigationViewItem Content="Schedules" Tag="DeleteSchedules"/>
-                <NavigationViewItem Content="Drugs" Tag="DeleteDrugs"/>
                 <NavigationViewItem Content="Equipments" Tag="DeleteEquipments"/>
+                <NavigationViewItem Content="Drugs" Tag="DeleteDrugs"/>
+                <NavigationViewItem Content="Schedules" Tag="DeleteSchedules"/>
+                <NavigationViewItem Content="Departments" Tag="DeleteDepartments"/>
+                <NavigationViewItem Content="Rooms" Tag="DeleteRooms"/>
             </NavigationView.MenuItems>
         </NavigationView>
 
