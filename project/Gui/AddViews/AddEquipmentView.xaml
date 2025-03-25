@@ -38,7 +38,7 @@
         <TextBox Text="{Binding Specification, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                  PlaceholderText="Enter specification" Margin="0,0,0,10" Grid.Row="3"/>
 
-        <TextBox Text="{Binding Supply, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource ZeroToEmptyStringConverter}}"
+        <TextBox Text="{Binding Stock, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource ZeroToEmptyStringConverter}}"
                  PlaceholderText="Enter stock" Margin="0,0,0,10" Grid.Row="4"/>
 
         <Button Content="Add Equipment" Command="{Binding SaveEquipmentCommand}" HorizontalAlignment="Center" Margin="0,0,0,10" Grid.Row="5"/>

@@ -27,15 +27,15 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Text="Add Equipment" FontSize="20" FontWeight="Bold" Margin="0,0,0,10" HorizontalAlignment="Center" Grid.Row="0"/>
+        <TextBlock Text="Add Room" FontSize="20" FontWeight="Bold" Margin="0,0,0,10" HorizontalAlignment="Center" Grid.Row="0"/>
 
-        <TextBox Text="{Binding Supply, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource ZeroToEmptyStringConverter}}"
+        <TextBox Text="{Binding Capacity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource ZeroToEmptyStringConverter}}"
                  PlaceholderText="Enter capacity" Margin="0,0,0,10" Grid.Row="1"/>
 
-        <TextBox Text="{Binding Supply, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource ZeroToEmptyStringConverter}}"
+        <TextBox Text="{Binding DepartmentID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource ZeroToEmptyStringConverter}}"
                  PlaceholderText="Enter department ID" Margin="0,0,0,10" Grid.Row="2"/>
 
-        <TextBox Text="{Binding Supply, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource ZeroToEmptyStringConverter}}"
+        <TextBox Text="{Binding EquipmentID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource ZeroToEmptyStringConverter}}"
                  PlaceholderText="Enter equipment ID" Margin="0,0,0,10" Grid.Row="3"/>
 
         <Button Content="Add Room" Command="{Binding SaveRoomCommand}" HorizontalAlignment="Center" Margin="0,0,0,10" Grid.Row="5"/>
