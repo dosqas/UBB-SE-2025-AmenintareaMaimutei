@@ -27,7 +27,7 @@
             <TextBlock Text="Name" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="1" Margin="-17,0,0,0" />
         </Grid>
 
-        <ListView ItemsSource="{x:Bind Departments, Mode=OneWay}" BorderThickness="1" BorderBrush="Gray" Grid.Row="2">
+        <ListView ItemsSource="{x:Bind Departments, Mode=OneWay}" BorderThickness="1" BorderBrush="Gray" Grid.Row="2" SelectionMode="None">
             <ListView.ItemTemplate>
                 <DataTemplate x:DataType="model:Department">
                     <Border BorderBrush="LightGray" BorderThickness="0,0,0,1" Padding="10">
@@ -48,7 +48,7 @@
             <TextBlock Text="Department ID" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="2" Margin="-28,0,0,0"/>
         </Grid>
 
-        <ListView ItemsSource="{x:Bind Rooms, Mode=OneWay}" BorderThickness="1" BorderBrush="Gray" Grid.Row="5">
+        <ListView ItemsSource="{x:Bind Rooms, Mode=OneWay}" BorderThickness="1" BorderBrush="Gray" Grid.Row="5" SelectionMode="None">
             <ListView.ItemTemplate>
                 <DataTemplate x:DataType="model:Room">
                     <Border BorderBrush="LightGray" BorderThickness="0,0,0,1" Padding="10">
