@@ -4,7 +4,7 @@
 Welcome to the **Amenintarea Maimutei** team repository! This project was developed as part of the **Software Engineering Course 2024-2025** at UBB, Group 927, Team #4. Our team built part of a **Hospital Management Application** using **C# + .NET with WinUI** for the frontend and **SQL Server** for the database.
 
 ### 🔄 **Project Continuation**
-The continuation of this project, including further development and enhancements, can be found in the linked repository here: [Continuation Repository](https://github.com/SDarius22/UBB-SE-2025-TeamBabes-From-AmenintareaMaimutei)
+The continuation of this project, including further development and enhancements, will be carried out by TeamBabes (Group 926). You can find the updated repository here: [Continuation Repository](https://github.com/SDarius22/UBB-SE-2025-TeamBabes-From-AmenintareaMaimutei)
 
 ---
 
@@ -13,7 +13,7 @@ Our team was responsible for implementing the **admin panel and patient feedback
 - **Admin Features**: Secure authentication, hospital data management (doctors, equipment, departments, rooms, schedules), shift assignments, salary calculations, and full CRUD operations.
 - **Patient Features**: A feedback system allowing patients to submit reviews and ratings with input validation.  
 
-Our work on this module is now complete, and the project will be further developed by another team.  
+Our work on this module is now complete, and the project will be further developed by the next team.  
 
 ---
 
