@@ -1,7 +1,10 @@
 # Amenintarea Maimutei - Software Engineering Team (UBB-SE-2025)
 
-## 🏥 Hospital Management System  
-Welcome to the **Amenintarea Maimutei** team repository! This project was developed as part of the **Software Engineering Course 2024-2025** at UBB, Group 927, Team #4. Our team built part of a **Hospital Management Application** using **C# + .NET with WinUI** for the frontend and **SQL Server** for the database.  
+## 🏥 Hospital Management System
+Welcome to the **Amenintarea Maimutei** team repository! This project was developed as part of the **Software Engineering Course 2024-2025** at UBB, Group 927, Team #4. Our team built part of a **Hospital Management Application** using **C# + .NET with WinUI** for the frontend and **SQL Server** for the database.
+
+### 🔄 **Project Continuation**
+The continuation of this project, including further development and enhancements, can be found in the linked repository here: [Continuation Repository](https://github.com/SDarius22/UBB-SE-2025-TeamBabes-From-AmenintareaMaimutei)
 
 ---
 
