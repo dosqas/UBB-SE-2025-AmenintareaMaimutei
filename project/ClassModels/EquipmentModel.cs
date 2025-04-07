@@ -1,27 +1,30 @@
-using Project.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Data.SqlClient;
-using Project.Utils;
-using WinRT;
-
 namespace Project.ClassModels
 {
+    using System;
+    using System.Collections.Generic;
+    using Microsoft.Data.SqlClient;
+    using Project.Models;
+    using Project.Utils;
+    using WinRT;
+
+    /// <summary>
+    /// EquipmentModel class handles database operations for equipment.
+    /// </summary>
     public class EquipmentModel
     {
-        private readonly string _connectionString = DatabaseHelper.GetConnectionString();
+        private readonly string connectionString = DatabaseHelper.GetConnectionString();
 
+        /// <summary>
+        /// Adds a new equipment to the database.
+        /// </summary>
+        /// <param name="equipment">The equipment to add.</param>
+        /// <returns>True if the equipment was added successfully, otherwise false.</returns>
         public bool AddEquipment(Equipment equipment)
         {
-            using (SqlConnection connection = new SqlConnection(_connectionString))
+            using (SqlConnection connection = new SqlConnection(this.connectionString))
             {
-                //string query = "INSERT INTO Equipments (EquipmentID, Name, Type, Specification, Stock) VALUES (@EquipmentID, @Name, @Type, @Specification, @Stock)";
                 string query = "INSERT INTO Equipments (Name, Type, Specification, Stock) VALUES (@Name, @Type, @Specification, @Stock)";
                 SqlCommand command = new SqlCommand(query, connection);
-                //command.Parameters.AddWithValue("@EquipmentID", equipment.EquipmentID);
                 command.Parameters.AddWithValue("@Name", equipment.Name);
                 command.Parameters.AddWithValue("@Type", equipment.Type);
                 command.Parameters.AddWithValue("@Specification", equipment.Specification);
@@ -33,11 +36,16 @@ namespace Project.ClassModels
             }
         }
 
+        /// <summary>
+        /// Updates an existing equipment in the database.
+        /// </summary>
+        /// <param name="equipment">The equipment to update.</param>
+        /// <returns>True if the equipment was updated successfully, otherwise false.</returns>
         public bool UpdateEquipment(Equipment equipment)
         {
             try
             {
-                using(SqlConnection connection = new SqlConnection(_connectionString))
+                using (SqlConnection connection = new SqlConnection(this.connectionString))
                 {
                     string query = "UPDATE Equipments SET Name = @Name, Specification = @Specification, Type = @Type, Stock = @Stock WHERE EquipmentID = @EquipmentID";
                     SqlCommand command = new SqlCommand(query, connection);
@@ -69,9 +77,14 @@ namespace Project.ClassModels
             }
         }
 
+        /// <summary>
+        /// Deletes an equipment from the database.
+        /// </summary>
+        /// <param name="equipmentID">The ID of the equipment to delete.</param>
+        /// <returns>True if the equipment was deleted successfully, otherwise false.</returns>
         public bool DeleteEquipment(int equipmentID)
         {
-            using (SqlConnection connection = new SqlConnection(_connectionString))
+            using (SqlConnection connection = new SqlConnection(this.connectionString))
             {
                 string query = "DELETE FROM Equipments WHERE EquipmentID = @EquipmentID";
                 SqlCommand command = new SqlCommand(query, connection);
@@ -83,9 +96,14 @@ namespace Project.ClassModels
             }
         }
 
+        /// <summary>
+        /// Checks if an equipment exists in the database.
+        /// </summary>
+        /// <param name="equipmentID">The ID of the equipment to check.</param>
+        /// <returns>True if the equipment exists, otherwise false.</returns>
         public bool DoesEquipmentExist(int equipmentID)
         {
-            using (SqlConnection connection = new SqlConnection(_connectionString))
+            using (SqlConnection connection = new SqlConnection(this.connectionString))
             {
                 string query = "SELECT COUNT(*) FROM Equipments WHERE EquipmentID = @EquipmentID";
                 SqlCommand command = new SqlCommand(query, connection);
@@ -97,10 +115,14 @@ namespace Project.ClassModels
             }
         }
 
+        /// <summary>
+        /// Retrieves all equipment from the database.
+        /// </summary>
+        /// <returns>A list of equipment.</returns>
         public List<Equipment> GetEquipments()
         {
             List<Equipment> equipments = new List<Equipment>();
-            using (SqlConnection connection = new SqlConnection(_connectionString))
+            using (SqlConnection connection = new SqlConnection(this.connectionString))
             {
                 string query = "SELECT * FROM Equipments";
                 SqlCommand command = new SqlCommand(query, connection);
@@ -114,11 +136,12 @@ namespace Project.ClassModels
                         Name = reader.GetString(1),
                         Specification = reader.GetString(2),
                         Type = reader.GetString(3),
-                        Stock = reader.GetInt32(4)
+                        Stock = reader.GetInt32(4),
                     };
                     equipments.Add(equipment);
                 }
             }
+
             return equipments;
         }
     }

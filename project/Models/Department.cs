@@ -1,21 +1,37 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Project.Models
+﻿namespace Project.Models
 {
+    /// <summary>
+    /// Department class represents a department in a hospital or clinic.
+    /// </summary>
     public class Department
     {
-        public int DepartmentID { get; set; }
-        public string Name { get; set; }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Department"/> class.
+        /// </summary>
+        public Department()
+        {
+            this.Name = "Unspecified";
+        }
 
-        public Department() { Name = "Unspecified"; }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Department"/> class with specified department ID and name.
+        /// </summary>
+        /// <param name="departmentID">The unique identifier for the department.</param>
+        /// <param name="name">The name of the department.</param>
         public Department(int departmentID, string name)
         {
-            DepartmentID = departmentID;
-            Name = name;
+            this.DepartmentID = departmentID;
+            this.Name = name;
         }
+
+        /// <summary>
+        /// Gets or Sets the department ID.
+        /// </summary>
+        public int DepartmentID { get; set; }
+
+        /// <summary>
+        /// Gets or Sets the name of the department.
+        /// </summary>
+        public string Name { get; set; }
     }
 }

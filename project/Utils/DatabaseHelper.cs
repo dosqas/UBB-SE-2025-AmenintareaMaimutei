@@ -1,14 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Configuration;
-
-namespace Project.Utils
+﻿namespace Project.Utils
 {
-    class DatabaseHelper
+    using System.Configuration;
+
+    /// <summary>
+    /// Provides utility methods for database operations.
+    /// </summary>
+    public class DatabaseHelper
     {
+        /// <summary>
+        /// Gets the connection string for the HospitalManagement database.
+        /// </summary>
+        /// <returns>The connection string.</returns>
         public static string GetConnectionString()
         {
             return ConfigurationManager.ConnectionStrings["HospitalManagement"].ConnectionString;
