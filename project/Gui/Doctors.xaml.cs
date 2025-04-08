@@ -1,28 +1,52 @@
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="Doctors.xaml.cs" company="YourCompany">
+//   Copyright (c) YourCompany. All rights reserved.
+// </copyright>
+// <summary>
+//   This file contains the code-behind for the DoctorsPage in the GUI.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
+
 namespace Project.Gui
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Collections.ObjectModel;
-    using System.ComponentModel;
+    using System.IO;
     using System.Linq;
+    using System.Runtime.InteropServices.WindowsRuntime;
     using Microsoft.UI.Xaml;
     using Microsoft.UI.Xaml.Controls;
+    using Microsoft.UI.Xaml.Controls.Primitives;
+    using Microsoft.UI.Xaml.Data;
+    using Microsoft.UI.Xaml.Input;
+    using Microsoft.UI.Xaml.Media;
+    using Microsoft.UI.Xaml.Navigation;
     using Project.ClassModels;
     using Project.Models;
+    using Windows.Foundation;
+    using Windows.Foundation.Collections;
 
     /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
+    /// A page that displays a list of doctors with sorting and search functionality.
     /// </summary>
     public sealed partial class DoctorsPage : Page
     {
-        private readonly DoctorModel doctorModel = new ();
+        /// <summary>
+        /// Gets or sets the list of doctors.
+        /// </summary>
+        public ObservableCollection<Doctor> Doctors { get; set; } = new ();
 
-        private Dictionary<string, ListSortDirection> sortingStates = new Dictionary<string, ListSortDirection>
+        private DoctorModel doctorModel = new ();
+
+        private Dictionary<string, ListSortDirection> sortingStates = new ()
         {
             { "DoctorID", ListSortDirection.Ascending },
             { "Experience", ListSortDirection.Ascending },
             { "Rating", ListSortDirection.Ascending },
         };
+
+        /// <summary>
+        /// Gets or sets the doctor ID.
+        /// </summary>
+        public int DoctorID { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DoctorsPage"/> class.
@@ -35,33 +59,30 @@ namespace Project.Gui
         }
 
         /// <summary>
-        /// Gets or Sets the Doctors.
+        /// Loads and sorts the list of doctors.
         /// </summary>
-        public ObservableCollection<Doctor> Doctors { get; set; } = new ();
-
-        /// <summary>
-        /// Gets or Sets the doctorID.
-        /// </summary>
-        public int DoctorID { get; set; }
-
         private void LoadDoctors()
         {
             this.Doctors.Clear();
-            List<Doctor> doctors = this.doctorModel.GetDoctors();
-            foreach (Doctor doctor in doctors)
+            List<Doctor> doctorsList = this.doctorModel.GetDoctors();
+
+            foreach (Doctor doctor in doctorsList)
             {
                 this.Doctors.Add(doctor);
             }
 
-            ObservableCollection<Doctor> sorted = this.SortDoctors(this.Doctors, "DoctorId", ListSortDirection.Ascending);
+            var sorted = this.SortDoctors(this.Doctors, "DoctorID", ListSortDirection.Ascending);
             this.Doctors.Clear();
 
-            foreach (Doctor doctor in sorted)
+            foreach (var doctor in sorted)
             {
                 this.Doctors.Add(doctor);
             }
         }
 
+        /// <summary>
+        /// Handles the More Info button click event.
+        /// </summary>
         private void MoreInfoClick(object sender, RoutedEventArgs e)
         {
             if (sender is Button button && button.Tag is Doctor doctor)
@@ -70,16 +91,25 @@ namespace Project.Gui
             }
         }
 
+        /// <summary>
+        /// Handles sorting by doctor ID.
+        /// </summary>
         private void SortByDoctorID(object sender, RoutedEventArgs e)
         {
             this.ToggleSort("DoctorID");
         }
 
+        /// <summary>
+        /// Handles sorting by rating.
+        /// </summary>
         private void SortByRating(object sender, RoutedEventArgs e)
         {
             this.ToggleSort("Rating");
         }
 
+        /// <summary>
+        /// Toggles the sort direction and reorders the list.
+        /// </summary>
         private void ToggleSort(string field)
         {
             if (this.sortingStates[field] == ListSortDirection.Ascending)
@@ -99,35 +129,32 @@ namespace Project.Gui
             }
         }
 
+        /// <summary>
+        /// Sorts the doctor list based on a given field and direction.
+        /// </summary>
         private ObservableCollection<Doctor> SortDoctors(ObservableCollection<Doctor> doctors, string field, ListSortDirection direction)
         {
             List<Doctor> sortedDoctors = doctors.ToList();
+
             if (field == "DoctorID")
             {
-                if (direction == ListSortDirection.Ascending)
-                {
-                    sortedDoctors.Sort((x, y) => x.DoctorID.CompareTo(y.DoctorID));
-                }
-                else
-                {
-                    sortedDoctors.Sort((x, y) => y.DoctorID.CompareTo(x.DoctorID));
-                }
+                sortedDoctors = direction == ListSortDirection.Ascending
+                    ? sortedDoctors.OrderBy(x => x.DoctorID).ToList()
+                    : sortedDoctors.OrderByDescending(x => x.DoctorID).ToList();
             }
             else if (field == "Rating")
             {
-                if (direction == ListSortDirection.Ascending)
-                {
-                    sortedDoctors.Sort((x, y) => x.Rating.CompareTo(y.Rating));
-                }
-                else
-                {
-                    sortedDoctors.Sort((x, y) => y.Rating.CompareTo(x.Rating));
-                }
+                sortedDoctors = direction == ListSortDirection.Ascending
+                    ? sortedDoctors.OrderBy(x => x.Rating).ToList()
+                    : sortedDoctors.OrderByDescending(x => x.Rating).ToList();
             }
 
             return new ObservableCollection<Doctor>(sortedDoctors);
         }
 
+        /// <summary>
+        /// Handles the search box text change event.
+        /// </summary>
         private async void SearchBox_TextChange(object sender, RoutedEventArgs e)
         {
             string search = this.SearchTextBox.Text.Trim();
