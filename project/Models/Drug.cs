@@ -20,31 +20,6 @@ namespace Project.Models
     public class Drug
     {
         /// <summary>
-        /// Gets or sets the unique identifier for the drug.
-        /// </summary>
-        public int DrugID { get; set; }
-
-        /// <summary>
-        /// Gets or sets the name of the drug.
-        /// </summary>
-        public string Name { get; set; }
-
-        /// <summary>
-        /// Gets or sets the method of administration for the drug.
-        /// </summary>
-        public string Administration { get; set; }
-
-        /// <summary>
-        /// Gets or sets the specification of the drug.
-        /// </summary>
-        public string Specification { get; set; }
-
-        /// <summary>
-        /// Gets or sets the supply quantity of the drug.
-        /// </summary>
-        public int Supply { get; set; }
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="Drug"/> class with default values.
         /// </summary>
         public Drug()
@@ -70,5 +45,30 @@ namespace Project.Models
             this.Specification = specification;
             this.Supply = supply;
         }
+
+        /// <summary>
+        /// Gets or sets the unique identifier for the drug.
+        /// </summary>
+        public int DrugID { get; set; }
+
+        /// <summary>
+        /// Gets or sets the name of the drug.
+        /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
+        /// Gets or sets the method of administration for the drug.
+        /// </summary>
+        public string Administration { get; set; }
+
+        /// <summary>
+        /// Gets or sets the specification of the drug.
+        /// </summary>
+        public string Specification { get; set; }
+
+        /// <summary>
+        /// Gets or sets the supply quantity of the drug.
+        /// </summary>
+        public int Supply { get; set; }
     }
 }
