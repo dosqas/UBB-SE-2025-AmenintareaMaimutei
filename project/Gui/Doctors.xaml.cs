@@ -9,10 +9,6 @@
 
 namespace Project.Gui
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Collections.ObjectModel;
-    using System.ComponentModel;
     using System.IO;
     using System.Linq;
     using System.Runtime.InteropServices.WindowsRuntime;
@@ -126,9 +122,7 @@ namespace Project.Gui
             }
 
             var sortedDoctors = this.SortDoctors(this.Doctors, field, this.sortingStates[field]);
-
             this.Doctors.Clear();
-
             foreach (var doctor in sortedDoctors)
             {
                 this.Doctors.Add(doctor);
@@ -188,7 +182,6 @@ namespace Project.Gui
             }
 
             this.Doctors.Clear();
-
             foreach (var doctor in filteredDoctors)
             {
                 this.Doctors.Add(doctor);

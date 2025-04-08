@@ -36,7 +36,6 @@ namespace Project.Gui
         /// Gets the collection of drugs to be displayed.
         /// </summary>
         public ObservableCollection<Drug> DrugsList { get; set; } = new ();
-
         private readonly DrugModel drugModel = new ();
 
         /// <summary>
@@ -54,7 +53,6 @@ namespace Project.Gui
         private void Load()
         {
             this.DrugsList.Clear();
-
             foreach (Drug drug in this.drugModel.GetDrugs())
             {
                 this.DrugsList.Add(drug);

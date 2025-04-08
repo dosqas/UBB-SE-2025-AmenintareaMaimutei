@@ -1,52 +1,55 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Microsoft.UI.Xaml;
-using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Controls.Primitives;
-using Microsoft.UI.Xaml.Data;
-using Microsoft.UI.Xaml.Input;
-using Microsoft.UI.Xaml.Media;
-using Microsoft.UI.Xaml.Navigation;
-using Project.Models;
-using System.Collections.ObjectModel;
-using Project.ClassModels;
-// To learn more about WinUI, the WinUI project structure,
-// and more about our project templates, see: http://aka.ms/winui-project-info.
-
 namespace Project.Gui
 {
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using Microsoft.UI.Xaml.Controls;
+    using Project.ClassModels;
+    using Project.Models;
+
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
     public sealed partial class RoomAndDepartments : Page
     {
-        public ObservableCollection<Room> Rooms { get; set; } = new();
-        public ObservableCollection<Department> Departments { get; set; } = new();
+        private readonly RoomModel roomModel = new ();
+        private readonly DepartmentModel departmentModel = new ();
 
-        private readonly RoomModel _roomModel = new();
-        private readonly DepartmentModel _departmentModel = new();
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RoomAndDepartments"/> class.
+        /// </summary>
         public RoomAndDepartments()
         {
             this.InitializeComponent();
-            Load();
+            this.Load();
         }
+
+        /// <summary>
+        /// Gets or Sets Rooms.
+        /// </summary>
+        public ObservableCollection<Room> Rooms { get; set; } = new ();
+
+        /// <summary>
+        /// Gets or Sets Departments.
+        /// </summary>
+        public ObservableCollection<Department> Departments { get; set; } = new ();
 
         private void Load()
         {
-            Departments.Clear();
-            foreach(Department department in _departmentModel.GetDepartments())
+            this.Departments.Clear();
+            foreach (Department department in this.departmentModel.GetDepartments())
             {
-                Departments.Add(department);
+                this.Departments.Add(department);
             }
-            Rooms.Clear();
-            foreach (Room room in _roomModel.GetRooms())
+
+            this.Rooms.Clear();
+
+            List<Room>? rooms = this.roomModel.GetRooms();
+            if (rooms != null)
             {
-                Rooms.Add(room);
+                foreach (Room room in rooms)
+                {
+                    this.Rooms.Add(room);
+                }
             }
         }
     }
