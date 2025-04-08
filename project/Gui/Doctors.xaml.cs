@@ -1,97 +1,101 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Microsoft.UI.Xaml;
-using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Controls.Primitives;
-using Microsoft.UI.Xaml.Data;
-using Microsoft.UI.Xaml.Input;
-using Microsoft.UI.Xaml.Media;
-using Microsoft.UI.Xaml.Navigation;
-using Project.Models;
-using System.Collections.ObjectModel;
-using Project.ClassModels;
-using System.ComponentModel;
-
-// To learn more about WinUI, the WinUI project structure,
-// and more about our project templates, see: http://aka.ms/winui-project-info.
-
 namespace Project.Gui
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.ComponentModel;
+    using System.Linq;
+    using Microsoft.UI.Xaml;
+    using Microsoft.UI.Xaml.Controls;
+    using Project.ClassModels;
+    using Project.Models;
+
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
     public sealed partial class DoctorsPage : Page
     {
-        public ObservableCollection<Doctor> Doctors { get; set; } = new();
-        private readonly DoctorModel _doctorModel = new();
+        private readonly DoctorModel doctorModel = new ();
 
-        private Dictionary<string, ListSortDirection> _sortingStates = new Dictionary<string, ListSortDirection>
+        private Dictionary<string, ListSortDirection> sortingStates = new Dictionary<string, ListSortDirection>
         {
             { "DoctorID", ListSortDirection.Ascending },
             { "Experience", ListSortDirection.Ascending },
-            { "Rating", ListSortDirection.Ascending }
+            { "Rating", ListSortDirection.Ascending },
         };
 
-        public int DoctorID { get; set; }  
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DoctorsPage"/> class.
+        /// </summary>
         public DoctorsPage()
         {
             this.InitializeComponent();
-            loadDoctors();
-            DataContext = this;
+            this.LoadDoctors();
+            this.DataContext = this;
         }
 
-        private void loadDoctors()
+        /// <summary>
+        /// Gets or Sets the Doctors.
+        /// </summary>
+        public ObservableCollection<Doctor> Doctors { get; set; } = new ();
+
+        /// <summary>
+        /// Gets or Sets the doctorID.
+        /// </summary>
+        public int DoctorID { get; set; }
+
+        private void LoadDoctors()
         {
-            Doctors.Clear();
-            List<Doctor> doctors = _doctorModel.GetDoctors();
+            this.Doctors.Clear();
+            List<Doctor> doctors = this.doctorModel.GetDoctors();
             foreach (Doctor doctor in doctors)
             {
-                Doctors.Add(doctor);
+                this.Doctors.Add(doctor);
             }
-    
-            var Sorted = SortDoctors(Doctors, "DoctorId", ListSortDirection.Ascending);
-            Doctors.Clear();
 
-            foreach (var Doctor in Sorted)
+            ObservableCollection<Doctor> sorted = this.SortDoctors(this.Doctors, "DoctorId", ListSortDirection.Ascending);
+            this.Doctors.Clear();
+
+            foreach (Doctor doctor in sorted)
             {
-                Doctors.Add(Doctor);
+                this.Doctors.Add(doctor);
             }
         }
+
         private void MoreInfoClick(object sender, RoutedEventArgs e)
         {
             if (sender is Button button && button.Tag is Doctor doctor)
             {
-                Frame.Navigate(typeof(DoctorInfoPage), doctor);
+                this.Frame.Navigate(typeof(DoctorInfoPage), doctor);
             }
         }
+
         private void SortByDoctorID(object sender, RoutedEventArgs e)
         {
-            ToggleSort("DoctorID");
+            this.ToggleSort("DoctorID");
         }
+
         private void SortByRating(object sender, RoutedEventArgs e)
         {
-            ToggleSort("Rating");
+            this.ToggleSort("Rating");
         }
+
         private void ToggleSort(string field)
         {
-            if (_sortingStates[field] == ListSortDirection.Ascending)
+            if (this.sortingStates[field] == ListSortDirection.Ascending)
             {
-                _sortingStates[field] = ListSortDirection.Descending;
+                this.sortingStates[field] = ListSortDirection.Descending;
             }
             else
             {
-                _sortingStates[field] = ListSortDirection.Ascending;
+                this.sortingStates[field] = ListSortDirection.Ascending;
             }
-            var sortedDoctors = SortDoctors(Doctors, field, _sortingStates[field]);
-            Doctors.Clear();
+
+            var sortedDoctors = this.SortDoctors(this.Doctors, field, this.sortingStates[field]);
+            this.Doctors.Clear();
             foreach (var doctor in sortedDoctors)
             {
-                Doctors.Add(doctor);
+                this.Doctors.Add(doctor);
             }
         }
 
@@ -120,19 +124,21 @@ namespace Project.Gui
                     sortedDoctors.Sort((x, y) => y.Rating.CompareTo(x.Rating));
                 }
             }
+
             return new ObservableCollection<Doctor>(sortedDoctors);
         }
+
         private async void SearchBox_TextChange(object sender, RoutedEventArgs e)
         {
-            string search = SearchTextBox.Text.Trim();
+            string search = this.SearchTextBox.Text.Trim();
 
             if (string.IsNullOrEmpty(search))
             {
-                loadDoctors();
+                this.LoadDoctors();
                 return;
             }
 
-            var filteredDoctors = Doctors.Where(doctor => doctor.UserID.ToString().Contains(search)).ToList();
+            var filteredDoctors = this.Doctors.Where(doctor => doctor.UserID.ToString().Contains(search)).ToList();
 
             if (filteredDoctors.Count == 0)
             {
@@ -141,19 +147,18 @@ namespace Project.Gui
                     Title = "No Results",
                     Content = "No doctors found with this id.",
                     CloseButtonText = "OK",
-                    XamlRoot = this.XamlRoot 
+                    XamlRoot = this.XamlRoot,
                 };
 
                 await dialog.ShowAsync();
                 return;
             }
 
-            Doctors.Clear();
+            this.Doctors.Clear();
             foreach (var doctor in filteredDoctors)
             {
-                Doctors.Add(doctor);
+                this.Doctors.Add(doctor);
             }
         }
-
     }
 }
