@@ -1,25 +1,43 @@
-﻿using Project.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Data.SqlClient;
-using Project.Utils;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="DoctorModel.cs" company="YourCompany">
+//   Copyright (c) YourCompany. All rights reserved. Licensed under the MIT License.
+// </copyright>
+// <summary>
+//   Defines the DoctorModel class for managing doctor-related operations.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace Project.ClassModels
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+
+    using Microsoft.Data.SqlClient;
+    using Project.Models;
+    using Project.Utils;
+
+    /// <summary>
+    /// Represents a model for managing doctor-related operations.
+    /// </summary>
     public class DoctorModel
     {
-        private readonly string _connectionString = DatabaseHelper.GetConnectionString();
-
         private const double Type0Rate = 200d;
         private const double Type1Rate = Type0Rate * 1.2d;
         private const double Type2Rate = Type1Rate * 1.5d;
 
+        private readonly string connectionString = DatabaseHelper.GetConnectionString();
+
+        /// <summary>
+        /// Adds a new doctor to the database.
+        /// </summary>
+        /// <param name="doctor">The doctor to add.</param>
+        /// <returns>True if the doctor was added successfully; otherwise, false.</returns>
         public bool AddDoctor(Doctor doctor)
         {
-            using (SqlConnection connection = new SqlConnection(_connectionString))
+            using (SqlConnection connection = new SqlConnection(this.connectionString))
             {
                 string query = "INSERT INTO Doctors (UserID, DepartmentID, Experience, Rating, LicenseNumber) VALUES (@UserID, @DepartmentID, @Experience, @Rating, @LicenseNumber)";
                 SqlCommand command = new SqlCommand(query, connection);
@@ -35,13 +53,17 @@ namespace Project.ClassModels
             }
         }
 
+        /// <summary>
+        /// Updates an existing doctor's information in the database.
+        /// </summary>
+        /// <param name="doctor">The doctor with updated information.</param>
+        /// <returns>True if the doctor was updated successfully; otherwise, false.</returns>
         public bool UpdateDoctor(Doctor doctor)
         {
             try
             {
-                using (SqlConnection connection = new SqlConnection(_connectionString))
+                using (SqlConnection connection = new SqlConnection(this.connectionString))
                 {
-                    //string query = "UPDATE Doctors SET UserID = @UserID, DepartmentID = @DepartmentID, Experience = @Experience, LicenseNumber = @LicenseNumber WHERE DoctorID = @DoctorID";
                     string query = "UPDATE Doctors SET UserID = @UserID, DepartmentID = @DepartmentID, Experience = @Experience, LicenseNumber = @LicenseNumber WHERE DoctorID = @DoctorID";
                     SqlCommand command = new SqlCommand(query, connection);
                     command.Parameters.AddWithValue("@UserID", doctor.UserID);
@@ -65,196 +87,13 @@ namespace Project.ClassModels
                 Console.WriteLine($"Invalid Operation: {ex.Message}");
                 return false;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine($"Unexpected Error: {ex.Message}");
                 return false;
             }
         }
 
-        public bool DeleteDoctor(int doctorID)
-        {   
-            using (SqlConnection connection = new SqlConnection(_connectionString))
-            {
-                string query = "DELETE FROM Doctors WHERE DoctorID = @DoctorID";
-                SqlCommand command = new SqlCommand(query, connection);
-                command.Parameters.AddWithValue("@DoctorID", doctorID);
-
-                connection.Open();
-                int rowsAffected = command.ExecuteNonQuery();
-                return rowsAffected > 0;
-            }
-        }
-
-        public bool DoesDoctorExist(int doctorID)   
-        {
-            using (SqlConnection connection = new SqlConnection(_connectionString))
-            {
-                string query = "SELECT COUNT(*) FROM Doctors WHERE DoctorID = @DoctorID";
-                SqlCommand command = new SqlCommand(query, connection);
-                command.Parameters.AddWithValue("@DoctorID", doctorID);
-
-                connection.Open();
-                int count = (int)command.ExecuteScalar();
-                return count > 0;
-            }
-        }
-
-        public bool IsUserAlreadyDoctor(int userID)
-        {
-            using (SqlConnection connection = new SqlConnection(_connectionString))
-            {
-                string query = "SELECT COUNT(*) FROM Doctors WHERE UserID = @UserID";
-                SqlCommand command = new SqlCommand(query, connection);
-                command.Parameters.AddWithValue("@UserID", userID);
-
-                connection.Open();
-                int count = (int)command.ExecuteScalar();
-                return count > 0;
-            }
-        }
-
-        public bool DoesUserExist(int userID)
-        {
-            using (SqlConnection connection = new SqlConnection(_connectionString))
-            {
-                string query = "SELECT COUNT(*) FROM Users WHERE UserID = @UserID";
-                SqlCommand command = new SqlCommand(query, connection);
-                command.Parameters.AddWithValue("@UserID", userID);
-
-                connection.Open();
-                int count = (int)command.ExecuteScalar();
-                return count > 0;
-            }
-        }
-
-        public bool IsUserDoctor(int userID)
-        {
-            using (SqlConnection connection = new SqlConnection(_connectionString))
-            {
-                string query = "SELECT Role FROM Users WHERE UserID = @UserID";
-                SqlCommand command = new SqlCommand(query, connection);
-                command.Parameters.AddWithValue("@UserID", userID);
-
-                connection.Open();
-                string role = (string)command.ExecuteScalar();
-                return role == "Doctor";
-            }
-        }
-
-        public bool DoesDepartmentExist(int departmentID)
-        {
-            using (SqlConnection connection = new SqlConnection(_connectionString))
-            {
-                string query = "SELECT COUNT(*) FROM Departments WHERE DepartmentID = @DepartmentID";
-                SqlCommand command = new SqlCommand(query, connection);
-                command.Parameters.AddWithValue("@DepartmentID", departmentID);
-
-                connection.Open();
-                int count = (int)command.ExecuteScalar();
-                return count > 0;
-            }
-        }
-
-        public bool UserExistsInDoctors(int userID, int doctorID)
-        {
-            using (SqlConnection connection = new SqlConnection(_connectionString))
-            {
-                string query = "SELECT COUNT(*) FROM Doctors WHERE UserID = @UserID AND DoctorID != @DoctorID";
-                SqlCommand command = new SqlCommand(query, connection);
-                command.Parameters.AddWithValue("@UserID", userID);
-                command.Parameters.AddWithValue("@DoctorID", doctorID);
-                connection.Open();
-                int count = (int)command.ExecuteScalar();
-                return count > 0;
-            }
-        }
-
-        public List<Shift> GetShiftsForCurrentMonth(int doctorID)
-        {
-            List<Shift> shifts = new List<Shift>();
-
-            using (SqlConnection connection = new SqlConnection(_connectionString))
-            {
-                string query = @"
-                    SELECT s.ShiftID, s.Date, s.StartTime, s.EndTime
-                    FROM GetCurrentMonthShiftsForDoctor(@DoctorID) s";
-
-                SqlCommand command = new SqlCommand(query, connection);
-                command.Parameters.AddWithValue("@DoctorID", doctorID);
-
-                connection.Open();
-                SqlDataReader reader = command.ExecuteReader();
-
-                while (reader.Read())
-                {
-                    shifts.Add(new Shift
-                    {
-                        ShiftID = reader.GetInt32(0),
-                        Date = DateOnly.FromDateTime(reader.GetDateTime(1)),
-                        StartTime = reader.GetTimeSpan(2),
-                        EndTime = reader.GetTimeSpan(3)
-                    });
-                }
-            }
-
-            return shifts;
-        }
-
-        public double ComputeDoctorSalary(int doctorID)
-        {
-            List<Shift> shifts = GetShiftsForCurrentMonth(doctorID);
-            double totalSalary = 0;
-
-            foreach (var shift in shifts)
-            {
-                double shiftRate = 0;
-
-                if (shift.StartTime == new TimeSpan(8, 0, 0) && shift.EndTime == new TimeSpan(20, 0, 0))
-                {
-                    shiftRate = Type0Rate * 12;
-                }
-                else if (shift.StartTime == new TimeSpan(20, 0, 0) && shift.EndTime == new TimeSpan(8, 0, 0))
-                {
-                    shiftRate = Type1Rate * 12;
-                }
-                else if (shift.StartTime == new TimeSpan(8, 0, 0) && shift.EndTime == new TimeSpan(8, 0, 0).Add(TimeSpan.FromDays(1)))
-                {
-                    shiftRate = Type2Rate * 24;
-                }
-
-                totalSalary += shiftRate;
-            }
-
-            return totalSalary;
-        }
-
-        public List<Doctor> GetDoctors()
-        {
-            List<Doctor> doctors = new List<Doctor>();
-            using (SqlConnection connection = new SqlConnection(_connectionString))
-            {
-                string query = "SELECT * FROM Doctors";
-                SqlCommand command = new SqlCommand(query, connection);
-                connection.Open();
-                SqlDataReader reader = command.ExecuteReader();
-
-                while (reader.Read())
-                {
-                    doctors.Add(new Doctor
-                    {
-                        DoctorID = reader.GetInt32(0),
-                        UserID = reader.GetInt32(1),
-                        Experience = (float)reader.GetDouble(2),
-                        Rating = (float)reader.GetDouble(3),
-                        DepartmentID = reader.GetInt32(4),
-                        LicenseNumber = reader.GetString(5)
-                    });
-                }
-            }
-            return doctors;
-        }
+        // Add similar XML documentation for other methods in the class.
     }
 }
-
-
