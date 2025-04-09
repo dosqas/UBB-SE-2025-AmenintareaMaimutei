@@ -1,93 +1,94 @@
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Windows.Input;
-using Project.ClassModels;
-using Project.Models;
-using Project.Utils;
-
 namespace Project.ViewModels.DeleteViewModels
 {
-    class ScheduleDeleteViewModel : INotifyPropertyChanged
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.ComponentModel;
+    using System.Windows.Input;
+    using Project.ClassModels;
+    using Project.Models;
+    using Project.Utils;
+
+    public class ScheduleDeleteViewModel : INotifyPropertyChanged
     {
-        private readonly ScheduleModel _scheduleModel = new ScheduleModel();
-        private ObservableCollection<Schedule> _schedules;
-        private int _scheduleID;
-        private string _errorMessage;
-        private string _messageColor = "Red"; 
+        private readonly ScheduleModel scheduleModel = new ();
+        private ObservableCollection<Schedule> schedules;
+        private int scheduleID;
+        private string errorMessage;
+        private string messageColor = "Red";
+
+        public ScheduleDeleteViewModel()
+        {
+            // Load schedules for the DataGrid
+            this.Schedules = new ObservableCollection<Schedule>(this.scheduleModel.GetSchedules());
+
+            this.DeleteScheduleCommand = new RelayCommand(this.RemoveSchedule);
+        }
 
         public ObservableCollection<Schedule> Schedules
         {
-            get { return _schedules; }
-            set { SetProperty(ref _schedules, value); }
+            get => this.schedules;
+            set => this.SetProperty(ref this.schedules, value);
         }
 
         public int ScheduleID
         {
-            get => _scheduleID;
+            get => this.scheduleID;
             set
             {
-                _scheduleID = value;
-                OnPropertyChanged(nameof(ScheduleID));
-                OnPropertyChanged(nameof(CanDeleteSchedule));
+                this.scheduleID = value;
+                this.OnPropertyChanged(nameof(this.ScheduleID));
+                this.OnPropertyChanged(nameof(this.CanDeleteSchedule));
             }
         }
 
         public string ErrorMessage
         {
-            get => _errorMessage ?? string.Empty;
+            get => this.errorMessage ?? string.Empty;
             set
             {
-                _errorMessage = value;
+                this.errorMessage = value;
+
                 // Set MessageColor based on success or error
-                MessageColor = string.IsNullOrEmpty(value) ? "Red" : value.Contains("successfully") ? "Green" : "Red";
-                OnPropertyChanged(nameof(ErrorMessage));
-                OnPropertyChanged(nameof(MessageColor));
+                this.MessageColor = string.IsNullOrEmpty(value) ? "Red" : value.Contains("successfully") ? "Green" : "Red";
+                this.OnPropertyChanged(nameof(this.ErrorMessage));
+                this.OnPropertyChanged(nameof(this.MessageColor));
             }
         }
 
         public string MessageColor
         {
-            get => _messageColor;
+            get => this.messageColor;
             set
             {
-                _messageColor = value;
-                OnPropertyChanged(nameof(MessageColor));
+                this.messageColor = value;
+                this.OnPropertyChanged(nameof(this.MessageColor));
             }
         }
 
         public ICommand DeleteScheduleCommand { get; }
 
-        public bool CanDeleteSchedule => ScheduleID > 0;
-
-        public ScheduleDeleteViewModel()
-        {
-            // Load schedules for the DataGrid
-            Schedules = new ObservableCollection<Schedule>(_scheduleModel.GetSchedules());
-
-            DeleteScheduleCommand = new RelayCommand(RemoveSchedule);
-        }
+        public bool CanDeleteSchedule => this.ScheduleID > 0;
 
         private void RemoveSchedule()
         {
-            if (ScheduleID == 0)
+            if (this.ScheduleID == 0)
             {
-                ErrorMessage = "No schedule was selected";
+                this.ErrorMessage = "No schedule was selected";
                 return;
             }
 
-            if (!_scheduleModel.DoesScheduleExist(ScheduleID))
+            if (!this.scheduleModel.DoesScheduleExist(this.ScheduleID))
             {
-                ErrorMessage = "ScheduleID doesn't exist in the records";
+                this.ErrorMessage = "ScheduleID doesn't exist in the records";
                 return;
             }
 
-            bool success = _scheduleModel.DeleteSchedule(ScheduleID);
-            ErrorMessage = success ? "Schedule deleted successfully" : "Failed to delete schedule";
+            bool success = this.scheduleModel.DeleteSchedule(this.ScheduleID);
+            this.ErrorMessage = success ? "Schedule deleted successfully" : "Failed to delete schedule";
 
             if (success)
             {
-                Schedules = new ObservableCollection<Schedule>(_scheduleModel.GetSchedules());
+                this.Schedules = new ObservableCollection<Schedule>(this.scheduleModel.GetSchedules());
             }
         }
 
@@ -95,7 +96,7 @@ namespace Project.ViewModels.DeleteViewModels
 
         protected void OnPropertyChanged(string propertyName)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         private void SetProperty<T>(ref T field, T value, [System.Runtime.CompilerServices.CallerMemberName] string propertyName = null)
@@ -103,7 +104,7 @@ namespace Project.ViewModels.DeleteViewModels
             if (!EqualityComparer<T>.Default.Equals(field, value))
             {
                 field = value;
-                OnPropertyChanged(propertyName);
+                this.OnPropertyChanged(propertyName);
             }
         }
     }

@@ -1,48 +1,58 @@
-﻿using Project.ClassModels;
-using Project.Models;
-using Project.Utils;
-using Project.ViewModel;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
-
-namespace Project.ViewModels.UpdateViewModels
+﻿namespace Project.ViewModels.UpdateViewModels
 {
-    class ScheduleUpdateViewModel : INotifyPropertyChanged
-    {
-        private readonly ScheduleModel _scheduleModel = new ScheduleModel();
-        public ObservableCollection<Schedule> Schedules { get; set; } = new ObservableCollection<Schedule>();
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.ComponentModel;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    using System.Windows.Input;
+    using Project.ClassModels;
+    using Project.Models;
+    using Project.Utils;
+    using Project.ViewModel;
 
-        private string _errorMessage;
+    public class ScheduleUpdateViewModel : INotifyPropertyChanged
+    {
+        private readonly ScheduleModel scheduleModel = new ();
+
+        private string errorMessage;
+
+        public ScheduleUpdateViewModel()
+        {
+            this.errorMessage = string.Empty;
+            this.SaveChangesCommand = new RelayCommand(this.SaveChanges);
+            this.LoadSchedules();
+        }
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+
         public string ErrorMessage
         {
-            get => _errorMessage;
+            get => this.errorMessage;
             set
             {
-                _errorMessage = value;
-                OnPropertyChanged(nameof(ErrorMessage));
+                this.errorMessage = value;
+                this.OnPropertyChanged(nameof(this.ErrorMessage));
             }
         }
 
         public ICommand SaveChangesCommand { get; }
-        public ScheduleUpdateViewModel()
+
+        public ObservableCollection<Schedule> Schedules { get; set; } = new ();
+
+        protected void OnPropertyChanged(string propertyName)
         {
-            _errorMessage = string.Empty;
-            SaveChangesCommand = new RelayCommand(SaveChanges);
-            LoadSchedules();
+            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         private void LoadSchedules()
         {
-            Schedules.Clear();
-            foreach (Schedule schedule in _scheduleModel.GetSchedules())
+            this.Schedules.Clear();
+            foreach (Schedule schedule in this.scheduleModel.GetSchedules())
             {
-                Schedules.Add(schedule);
+                this.Schedules.Add(schedule);
             }
         }
 
@@ -51,16 +61,17 @@ namespace Project.ViewModels.UpdateViewModels
             bool hasErrors = false;
             StringBuilder errorMessages = new StringBuilder();
 
-            foreach (Schedule schedule in Schedules)
+            foreach (Schedule schedule in this.Schedules)
             {
-                if (!ValidateSchedule(schedule))
+                if (!this.ValidateSchedule(schedule))
                 {
                     hasErrors = true;
-                    errorMessages.AppendLine("Schedule " + schedule.ScheduleID + ": " + ErrorMessage);
+                    errorMessages.AppendLine("Schedule " + schedule.ScheduleID + ": " + this.ErrorMessage);
                 }
                 else
                 {
-                    bool success = _scheduleModel.UpdateSchedule(schedule);
+                    bool success = this.scheduleModel.UpdateSchedule(schedule);
+
                     if (!success)
                     {
                         errorMessages.AppendLine("Failed to save changes for schedule: " + schedule.DoctorID);
@@ -68,39 +79,36 @@ namespace Project.ViewModels.UpdateViewModels
                     }
                 }
             }
+
             if (hasErrors)
             {
-                ErrorMessage = errorMessages.ToString();
+                this.ErrorMessage = errorMessages.ToString();
             }
             else
             {
-                ErrorMessage = "Changes saved successfully";
+                this.ErrorMessage = "Changes saved successfully";
             }
         }
 
         private bool ValidateSchedule(Schedule schedule)
         {
-            bool doctorExists = _scheduleModel.DoesDoctorExist(schedule.DoctorID);
+            bool doctorExists = this.scheduleModel.DoesDoctorExist(schedule.DoctorID);
+
             if (!doctorExists)
             {
-                ErrorMessage = "DoctorID doesn’t exist in the Doctors Records";
+                this.ErrorMessage = "DoctorID doesn’t exist in the Doctors Records";
                 return false;
             }
 
-            bool shiftExists = _scheduleModel.DoesShiftExist(schedule.ShiftID);
+            bool shiftExists = this.scheduleModel.DoesShiftExist(schedule.ShiftID);
+
             if (!shiftExists)
             {
-                ErrorMessage = "ShiftID doesn’t exist in the Shifts Records";
+                this.ErrorMessage = "ShiftID doesn’t exist in the Shifts Records";
                 return false;
             }
 
             return true;
-        }
-
-        public event PropertyChangedEventHandler? PropertyChanged;
-        protected void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

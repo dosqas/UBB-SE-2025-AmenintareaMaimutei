@@ -1,91 +1,93 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Windows.Input;
-using Project.ClassModels;
-using Project.Models;
-using Project.Utils;
-
-namespace Project.ViewModels.DeleteViewModels
+﻿namespace Project.ViewModels.DeleteViewModels
 {
-    class ShiftDeleteViewModel : INotifyPropertyChanged
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.ComponentModel;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    using System.Windows.Input;
+    using Project.ClassModels;
+    using Project.Models;
+    using Project.Utils;
+
+    public class ShiftDeleteViewModel : INotifyPropertyChanged
     {
-        private readonly ShiftModel _shiftModel = new ShiftModel();
-        private ObservableCollection<Shift> _shifts;
-        private int _shiftID;
-        private string _errorMessage;
-        private string _messageColor = "Red";
+        private readonly ShiftModel shiftModel = new ShiftModel();
+        private ObservableCollection<Shift> shifts;
+        private int shiftID;
+        private string errorMessage;
+        private string messageColor = "Red";
+
+        public ShiftDeleteViewModel()
+        {
+            this.Shifts = new ObservableCollection<Shift>(this.shiftModel.GetShifts());
+            this.DeleteShiftCommand = new RelayCommand(this.RemoveShift);
+        }
 
         public ObservableCollection<Shift> Shifts
         {
-            get { return _shifts; }
-            set { SetProperty(ref _shifts, value); }
+            get => this.shifts;
+            set => this.SetProperty(ref this.shifts, value);
         }
 
         public int ShiftID
         {
-            get => _shiftID;
+            get => this.shiftID;
             set
             {
-                _shiftID = value;
-                OnPropertyChanged(nameof(ShiftID));
-                OnPropertyChanged(nameof(CanDeleteShift));
+                this.shiftID = value;
+                this.OnPropertyChanged(nameof(this.ShiftID));
+                this.OnPropertyChanged(nameof(this.CanDeleteShift));
             }
         }
 
         public string ErrorMessage
         {
-            get => _errorMessage ?? string.Empty;
+            get => this.errorMessage ?? string.Empty;
             set
             {
-                _errorMessage = value;
-                MessageColor = string.IsNullOrEmpty(value) ? "Red" : value.Contains("successfully") ? "Green" : "Red";
-                OnPropertyChanged(nameof(ErrorMessage));
-                OnPropertyChanged(nameof(MessageColor));
+                this.errorMessage = value;
+                this.MessageColor = string.IsNullOrEmpty(value) ? "Red" : value.Contains("successfully") ? "Green" : "Red";
+                this.OnPropertyChanged(nameof(this.ErrorMessage));
+                this.OnPropertyChanged(nameof(this.MessageColor));
             }
         }
 
         public string MessageColor
         {
-            get => _messageColor;
+            get => this.messageColor;
             set
             {
-                _messageColor = value;
-                OnPropertyChanged(nameof(MessageColor));
+                this.messageColor = value;
+                this.OnPropertyChanged(nameof(this.MessageColor));
             }
         }
 
         public ICommand DeleteShiftCommand { get; }
 
-        public bool CanDeleteShift => ShiftID > 0;
-
-        public ShiftDeleteViewModel()
-        {
-            Shifts = new ObservableCollection<Shift>(_shiftModel.GetShifts());
-            DeleteShiftCommand = new RelayCommand(RemoveShift);
-        }
+        public bool CanDeleteShift => this.ShiftID > 0;
 
         private void RemoveShift()
         {
-            if (ShiftID == 0)
+            if (this.ShiftID == 0)
             {
-                ErrorMessage = "No shift was selected";
+                this.ErrorMessage = "No shift was selected";
                 return;
             }
-            if (!_shiftModel.DoesShiftExist(ShiftID))
+
+            if (!this.shiftModel.DoesShiftExist(this.ShiftID))
             {
-                ErrorMessage = "ShiftID doesn't exist in the records";
+                this.ErrorMessage = "ShiftID doesn't exist in the records";
                 return;
             }
-            bool succes = _shiftModel.DeleteShift(ShiftID);
-            ErrorMessage = succes ? "Shift was successfully deleted" : "Shift was not deleted";
+
+            bool succes = this.shiftModel.DeleteShift(this.ShiftID);
+            this.ErrorMessage = succes ? "Shift was successfully deleted" : "Shift was not deleted";
             if (succes)
             {
-                Shifts = new ObservableCollection<Shift>(_shiftModel.GetShifts());
+                this.Shifts = new ObservableCollection<Shift>(this.shiftModel.GetShifts());
             }
         }
 
@@ -93,7 +95,7 @@ namespace Project.ViewModels.DeleteViewModels
 
         protected void OnPropertyChanged(string propertyName)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         private void SetProperty<T>(ref T field, T value, [System.Runtime.CompilerServices.CallerMemberName] string propertyName = null)
@@ -101,7 +103,7 @@ namespace Project.ViewModels.DeleteViewModels
             if (!EqualityComparer<T>.Default.Equals(field, value))
             {
                 field = value;
-                OnPropertyChanged(propertyName);
+                this.OnPropertyChanged(propertyName);
             }
         }
     }
