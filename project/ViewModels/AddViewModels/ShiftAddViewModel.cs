@@ -1,76 +1,77 @@
-using Project.ClassModels;
-using Project.Models;
-using Project.Utils;
-using System;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Windows.Input;
-
 namespace Project.ViewModels.AddViewModels
 {
+    using System;
+    using System.Collections.ObjectModel;
+    using System.ComponentModel;
+    using System.Windows.Input;
+    using Project.ClassModels;
+    using Project.Models;
+    using Project.Utils;
+
     internal class ShiftAddViewModel : INotifyPropertyChanged
     {
-        private readonly ShiftModel _shiftModel = new ShiftModel();
-        public ObservableCollection<Shift> Shifts { get; set; } = new ObservableCollection<Shift>();
+        public ShiftAddViewModel()
+        {
+            this.SaveShiftCommand = new RelayCommand(this.SaveShift);
+            this.LoadShifts();
+        }
 
-        private DateOnly _date;
+        public ObservableCollection<Shift> Shifts { get; set; } = new ();
+
         public DateOnly Date
         {
-            get => _date;
+            get => this.date;
             set
             {
-                _date = value;
-                OnPropertyChanged(nameof(Date));
+                this.date = value;
+                this.OnPropertyChanged(nameof(this.Date));
             }
         }
-
-        private TimeSpan _startTime;
+        
         public TimeSpan StartTime
         {
-            get => _startTime;
+            get => this.startTime;
             set
             {
-                _startTime = value;
-                OnPropertyChanged(nameof(StartTime));
+                this.startTime = value;
+                this.OnPropertyChanged(nameof(this.StartTime));
             }
         }
-
-        private TimeSpan _endTime;
+        
         public TimeSpan EndTime
         {
-            get => _endTime;
+            get => this.endTime;
             set
             {
-                _endTime = value;
-                OnPropertyChanged(nameof(EndTime));
+                this.endTime = value;
+                this.OnPropertyChanged(nameof(this.EndTime));
             }
         }
-
-        private string _errorMessage = "";
+        
         public string ErrorMessage
         {
-            get => _errorMessage;
+            get => this.errorMessage;
             set
             {
-                _errorMessage = value;
-                OnPropertyChanged(nameof(ErrorMessage));
+                this.errorMessage = value;
+                this.OnPropertyChanged(nameof(this.ErrorMessage));
             }
         }
 
         public ICommand SaveShiftCommand { get; }
 
-        public ShiftAddViewModel()
-        {
-            SaveShiftCommand = new RelayCommand(SaveShift);
-            LoadShifts();
-        }
+        private readonly ShiftModel shiftModel = new ();
+        private DateOnly date;
+        private TimeSpan startTime;
+        private TimeSpan endTime;
+        private string errorMessage = string.Empty;
 
         private void LoadShifts()
         {
-            Shifts.Clear();
-            foreach (Shift shift in _shiftModel.GetShifts())
+            this.Shifts.Clear();
+            foreach (Shift shift in this.shiftModel.GetShifts())
             {
-                Shifts.Add(shift);
+                this.Shifts.Add(shift);
             }
         }
 
@@ -79,18 +80,18 @@ namespace Project.ViewModels.AddViewModels
             var shift = new Shift
             {
                 ShiftID = 0,
-                Date = Date,
-                StartTime = StartTime,
-                EndTime = EndTime
+                Date = this.Date,
+                StartTime = this.StartTime,
+                EndTime = this.EndTime,
             };
 
-            if (ValidateShift(shift))
+            if (this.ValidateShift(shift))
             {
-                bool success = _shiftModel.AddShift(shift);
-                ErrorMessage = success ? "Shift added successfully" : "Failed to add shift";
+                bool success = this.shiftModel.AddShift(shift);
+                this.ErrorMessage = success ? "Shift added successfully" : "Failed to add shift";
                 if (success)
                 {
-                    LoadShifts();
+                    this.LoadShifts();
                 }
             }
         }
@@ -99,23 +100,24 @@ namespace Project.ViewModels.AddViewModels
         {
             if (shift.StartTime != new TimeSpan(8, 0, 0) && shift.StartTime != new TimeSpan(20, 0, 0))
             {
-                ErrorMessage = "Start time should be either 8:00 AM or 8:00 PM";
+                this.ErrorMessage = "Start time should be either 8:00 AM or 8:00 PM";
                 return false;
             }
+
             if (shift.EndTime != new TimeSpan(8, 0, 0) && shift.EndTime != new TimeSpan(20, 0, 0))
             {
-                ErrorMessage = "End time should be either 8:00 AM or 8:00 PM";
+                this.ErrorMessage = "End time should be either 8:00 AM or 8:00 PM";
                 return false;
             }
+
             return true;
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
+
         protected void OnPropertyChanged(string propertyName)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
-
-
