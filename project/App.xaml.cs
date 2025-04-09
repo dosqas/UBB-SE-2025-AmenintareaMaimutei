@@ -5,6 +5,8 @@
 
     public partial class App : Application
     {
+        private AdminMainPage? adminMainPage;
+
         public App()
         {
             this.InitializeComponent();
@@ -14,12 +16,12 @@
         /// Invoked when the application is launched.
         /// </summary>
         /// <param name="args">Details about the launch request and process.</param>
-        protected override void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args)
+        protected override void OnLaunched(LaunchActivatedEventArgs args)
         {
-            AdminMainPage = new AdminMainPage();
-            AdminMainPage.Activate();
+            this.adminMainPage = new AdminMainPage();
+            this.adminMainPage.Activate();
         }
 
-        private AdminMainPage? AdminMainPage;
+
     }
 }
