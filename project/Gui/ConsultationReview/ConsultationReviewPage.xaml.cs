@@ -86,8 +86,7 @@ namespace Project.Gui.ConsultationReview
                     reviewID: 0,
                     medicalRecordID: this.medicalRecordID,
                     text: this.FeedbackTextBox.Text,
-                    nrStars: this.selectedRating
-                );
+                    nrStars: this.selectedRating);
 
                 bool isSuccess = this.reviewModel.AddReview(review);
 
@@ -106,8 +105,6 @@ namespace Project.Gui.ConsultationReview
                     this.StatusMessage.Text = "Failed to submit feedback. Please try again later.";
                     this.StatusMessage.Foreground = new SolidColorBrush(Colors.Red);
                 }
-
-
             }
             else
             {

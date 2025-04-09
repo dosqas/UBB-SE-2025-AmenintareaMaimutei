@@ -9,7 +9,7 @@ namespace Project.Utils
     public class MessageToColorConverter : IValueConverter
     {
         /// <summary>
-        /// Converts the message to a corresponding color. 
+        /// Converts the message to a corresponding color.
         /// </summary>
         /// <param name="value">The message.</param>
         /// <param name="targetType">The type.</param>
