@@ -1,63 +1,107 @@
-﻿using Project.ClassModels;
-using Project.Models;
-using Project.Utils;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="ShiftUpdateViewModel.cs" company="YourCompany">
+//   Copyright (c) YourCompany. All rights reserved.
+// </copyright>
+// <summary>
+//   ViewModel for updating shifts.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace Project.ViewModels.UpdateViewModels
 {
-    class ShiftUpdateViewModel : INotifyPropertyChanged
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.ComponentModel;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    using System.Windows.Input;
+    using Project.ClassModels;
+    using Project.Models;
+    using Project.Utils;
+
+    /// <summary>
+    /// ViewModel for updating shifts.
+    /// </summary>
+    public class ShiftUpdateViewModel : INotifyPropertyChanged
     {
-        private readonly ShiftModel _shiftModel = new ShiftModel();
-        public ObservableCollection<Shift> Shifts { get; set; } = new ObservableCollection<Shift>();
+        /// <summary>
+        /// The model for managing shifts.
+        /// </summary>
+        private readonly ShiftModel shiftModel = new ();
 
-        private string _errorMessage;
-        public string ErrorMessage
-        {
-            get => _errorMessage;
-            set
-            {
-                _errorMessage = value;
-                OnPropertyChanged(nameof(ErrorMessage));
-            }
-        }
+        /// <summary>
+        /// The collection of shifts displayed in the view.
+        /// </summary>
+        private string errorMessage;
 
-        public ICommand SaveChangesCommand { get; }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ShiftUpdateViewModel"/> class.
+        /// </summary>
         public ShiftUpdateViewModel()
         {
-            _errorMessage = string.Empty;
-            SaveChangesCommand = new RelayCommand(SaveChanges);
-            LoadShifts();
+            this.errorMessage = string.Empty;
+            this.SaveChangesCommand = new RelayCommand(this.SaveChanges);
+            this.LoadShifts();
         }
-        private void LoadShifts()
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+        
+        /// <summary>
+        /// Gets or sets the ID of the shifts to be updated.
+        /// </summary>
+        public ObservableCollection<Shift> Shifts { get; set; } = new ();
+
+        /// <summary>
+        /// Gets or sets the error message to be displayed.
+        /// </summary>
+        public string ErrorMessage
         {
-            Shifts.Clear();
-            foreach (Shift shift in _shiftModel.GetShifts())
+            get => this.errorMessage;
+            set
             {
-                Shifts.Add(shift);
+                this.errorMessage = value;
+                this.OnPropertyChanged(nameof(this.ErrorMessage));
             }
         }
+
+        /// <summary>
+        /// Gets the command for saving changes.
+        /// </summary>
+        public ICommand SaveChangesCommand { get; }
+        
+        /// <summary>
+        /// Loads the shifts from the model.
+        /// </summary>
+        private void LoadShifts()
+        {
+            this.Shifts.Clear();
+            foreach (Shift shift in this.shiftModel.GetShifts())
+            {
+                this.Shifts.Add(shift);
+            }
+        }
+
+        /// <summary>
+        /// Saves the changes made to the shifts.
+        /// </summary>
         private void SaveChanges()
         {
             bool hasErrors = false;
+
             StringBuilder errorMessages = new StringBuilder();
 
-            foreach (Shift shift in Shifts)
+            foreach (Shift shift in this.Shifts)
             {
-                if (!ValidateShift(shift))
+                if (!this.ValidateShift(shift))
                 {
                     hasErrors = true;
-                    errorMessages.AppendLine("Shift " + shift.ShiftID + ": " + ErrorMessage);
+                    errorMessages.AppendLine("Shift " + shift.ShiftID + ": " + this.ErrorMessage);
                 }
                 else
                 {
-                    bool success = _shiftModel.UpdateShift(shift);
+                    bool success = this.shiftModel.UpdateShift(shift);
                     if (!success)
                     {
                         errorMessages.AppendLine("Failed to save changes for shift: " + shift.ShiftID);
@@ -65,36 +109,42 @@ namespace Project.ViewModels.UpdateViewModels
                     }
                 }
             }
+
             if (hasErrors)
             {
-                ErrorMessage = errorMessages.ToString();
+                this.ErrorMessage = errorMessages.ToString();
             }
             else
             {
-                ErrorMessage = "Changes saved successfully";
+                this.ErrorMessage = "Changes saved successfully";
             }
         }
 
+        /// <summary>
+        /// Validates the shift before saving it to the database.
+        /// </summary>
+        /// <param name="shift">Shift to be validated.</param>
+        /// <returns>True if the shift is valid, false otherwise.</returns>
         private bool ValidateShift(Shift shift)
         {
-            if(shift.StartTime != new TimeSpan(8, 0, 0) && shift.StartTime != new TimeSpan(20, 0, 0))
+            if (shift.StartTime != new TimeSpan(8, 0, 0) && shift.StartTime != new TimeSpan(20, 0, 0))
             {
-                ErrorMessage = "Start time should be either 8:00 AM or 8:00 PM";
+                this.ErrorMessage = "Start time should be either 8:00 AM or 8:00 PM";
                 return false;
             }
+
             if (shift.EndTime != new TimeSpan(8, 0, 0) && shift.EndTime != new TimeSpan(20, 0, 0))
             {
-                ErrorMessage = "End time should be either 8:00 AM or 8:00 PM";
+                this.ErrorMessage = "End time should be either 8:00 AM or 8:00 PM";
                 return false;
             }
+
             return true;
         }
 
-        public event PropertyChangedEventHandler? PropertyChanged;
         private void OnPropertyChanged(string propertyName)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-
     }
 }
