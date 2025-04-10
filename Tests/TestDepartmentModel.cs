@@ -1,26 +1,26 @@
+using System.Transactions;
+using FluentAssertions;
+using Microsoft.Data.SqlClient;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Project.ClassModels;
-using FluentAssertions;
 using Project.Models;
-using Microsoft.Data.SqlClient;
 using Project.Utils;
-using System.Transactions;
 
 namespace Tests;
 
 [TestClass]
-public class TestEquipmentModel
+public class TestDepartmentModel
 {
-    private EquipmentModel _equipmentModel = new EquipmentModel();
+    private DepartmentModel _departmentModel = new DepartmentModel();
 
     [TestInitialize]
     public void Setup()
     {
-        _equipmentModel = new EquipmentModel();
+        _departmentModel = new DepartmentModel();
     }
 
     [TestMethod]
-    public void AddEquipment_ShouldReturnTrue_WhenInsertSucceeds()
+    public void AddDepartment_ShouldReturnTrue_WhenInsertSucceeds()
     {
         using (var scope = new TransactionScope())
         {
@@ -31,34 +31,31 @@ public class TestEquipmentModel
                 {
                     command.ExecuteNonQuery();
                 }
-
                 using (var command = new SqlCommand("EXEC DeleteData", connection))
                 {
                     command.ExecuteNonQuery();
                 }
-
                 using (var command = new SqlCommand(DatabaseHelper.GetInsertDataProcedureSql(), connection))
                 {
                     command.ExecuteNonQuery();
                 }
-
                 using (var command = new SqlCommand("EXEC InsertData @nrOfRows", connection))
                 {
                     command.Parameters.AddWithValue("@nrOfRows", 10);
                     command.ExecuteNonQuery();
                 }
             }
-            var equipment = new Equipment { Name = "Test", Type = "Type", Specification = "Spec", Stock = 5 };
-            var result = _equipmentModel.AddEquipment(equipment);
+            var department = new Department { Name = "Test" };
+            var result = _departmentModel.AddDepartment(department);
             result.Should().BeTrue();
-            var equipments = _equipmentModel.GetEquipments();
-            equipments.Should().NotBeNull();
-            equipments.Count.Should().Be(11);
+            var departments = _departmentModel.GetDepartments();
+            departments.Should().NotBeNull();
+            departments.Count.Should().Be(11);
         }
     }
 
     [TestMethod]
-    public void UpdateEquipment_ShouldReturnTrue_WhenUpdateSucceeds()
+    public void UpdateDepartment_ShouldReturnTrue_WhenUpdateSucceeds()
     {
         using (var scope = new TransactionScope())
         {
@@ -69,31 +66,28 @@ public class TestEquipmentModel
                 {
                     command.ExecuteNonQuery();
                 }
-
                 using (var command = new SqlCommand("EXEC DeleteData", connection))
                 {
                     command.ExecuteNonQuery();
                 }
-
                 using (var command = new SqlCommand(DatabaseHelper.GetInsertDataProcedureSql(), connection))
                 {
                     command.ExecuteNonQuery();
                 }
-
                 using (var command = new SqlCommand("EXEC InsertData @nrOfRows", connection))
                 {
                     command.Parameters.AddWithValue("@nrOfRows", 10);
                     command.ExecuteNonQuery();
                 }
             }
-            var equipment = new Equipment { EquipmentID = 1, Name = "Test", Type = "Type", Specification = "Spec", Stock = 5 };
-            var result = _equipmentModel.UpdateEquipment(equipment);
+            var department = new Department { Name = "Test", DepartmentID = 1 };
+            var result = _departmentModel.UpdateDepartment(department);
             result.Should().BeTrue();
         }
     }
 
     [TestMethod]
-    public void UpdateEquipment_ShouldReturnFalse_WhenExceptionOccurs()
+    public void UpdateDepartment_ShouldReturnFalse_WhenUpdateFails()
     {
         using (var scope = new TransactionScope())
         {
@@ -104,31 +98,28 @@ public class TestEquipmentModel
                 {
                     command.ExecuteNonQuery();
                 }
-
                 using (var command = new SqlCommand("EXEC DeleteData", connection))
                 {
                     command.ExecuteNonQuery();
                 }
-
                 using (var command = new SqlCommand(DatabaseHelper.GetInsertDataProcedureSql(), connection))
                 {
                     command.ExecuteNonQuery();
                 }
-
                 using (var command = new SqlCommand("EXEC InsertData @nrOfRows", connection))
                 {
                     command.Parameters.AddWithValue("@nrOfRows", 10);
                     command.ExecuteNonQuery();
                 }
             }
-            var equipment = new Equipment { EquipmentID = -1 };
-            var result = _equipmentModel.UpdateEquipment(equipment);
+            var department = new Department { Name = "Test", DepartmentID = 100 };
+            var result = _departmentModel.UpdateDepartment(department);
             result.Should().BeFalse();
         }
     }
 
     [TestMethod]
-    public void DeleteEquipment_ShouldReturnTrue_WhenDeleteSucceeds()
+    public void DeleteDepartment_ShouldReturnTrue_WhenDeleteSucceeds()
     {
         using (var scope = new TransactionScope())
         {
@@ -139,34 +130,28 @@ public class TestEquipmentModel
                 {
                     command.ExecuteNonQuery();
                 }
-
                 using (var command = new SqlCommand("EXEC DeleteData", connection))
                 {
                     command.ExecuteNonQuery();
                 }
-
                 using (var command = new SqlCommand(DatabaseHelper.GetInsertDataProcedureSql(), connection))
                 {
                     command.ExecuteNonQuery();
                 }
-
                 using (var command = new SqlCommand("EXEC InsertData @nrOfRows", connection))
                 {
                     command.Parameters.AddWithValue("@nrOfRows", 10);
                     command.ExecuteNonQuery();
                 }
             }
-            var result = _equipmentModel.DeleteEquipment(2);
+            var result = _departmentModel.DeleteDepartment(1);
             result.Should().BeTrue();
-            var result2 = _equipmentModel.DeleteEquipment(100);
-            result2.Should().BeFalse();
         }
     }
 
     [TestMethod]
-    public void DoesEquipmentExist_ShouldReturnTrue_WhenEquipmentExists()
+    public void DeleteDepartment_ShouldReturnFalse_WhenDeleteFails()
     {
-
         using (var scope = new TransactionScope())
         {
             using (var connection = new SqlConnection(DatabaseHelper.GetConnectionString()))
@@ -176,32 +161,27 @@ public class TestEquipmentModel
                 {
                     command.ExecuteNonQuery();
                 }
-
                 using (var command = new SqlCommand("EXEC DeleteData", connection))
                 {
                     command.ExecuteNonQuery();
                 }
-
                 using (var command = new SqlCommand(DatabaseHelper.GetInsertDataProcedureSql(), connection))
                 {
                     command.ExecuteNonQuery();
                 }
-
                 using (var command = new SqlCommand("EXEC InsertData @nrOfRows", connection))
                 {
                     command.Parameters.AddWithValue("@nrOfRows", 10);
                     command.ExecuteNonQuery();
                 }
             }
-            var result = _equipmentModel.DoesEquipmentExist(5);
-            result.Should().BeTrue();
-            var result2 = _equipmentModel.DoesEquipmentExist(100);
-            result2.Should().BeFalse();
+            var result = _departmentModel.DeleteDepartment(100);
+            result.Should().BeFalse();
         }
     }
 
     [TestMethod]
-    public void GetEquipments_ShouldReturnEquipmentList_WhenDataExists()
+    public void GetDepartments_ShouldReturnListOfDepartments_WhenDataExists()
     {
         using (var scope = new TransactionScope())
         {
@@ -212,27 +192,110 @@ public class TestEquipmentModel
                 {
                     command.ExecuteNonQuery();
                 }
-
                 using (var command = new SqlCommand("EXEC DeleteData", connection))
                 {
                     command.ExecuteNonQuery();
                 }
-
                 using (var command = new SqlCommand(DatabaseHelper.GetInsertDataProcedureSql(), connection))
                 {
                     command.ExecuteNonQuery();
                 }
-
                 using (var command = new SqlCommand("EXEC InsertData @nrOfRows", connection))
                 {
                     command.Parameters.AddWithValue("@nrOfRows", 10);
                     command.ExecuteNonQuery();
                 }
             }
-            var result = _equipmentModel.GetEquipments();
+            var result = _departmentModel.GetDepartments();
             result.Should().NotBeNull();
             result.Count.Should().Be(10);
-            result[0].EquipmentID.Should().Be(1);
         }
     }
+
+    [TestMethod]
+    public void GetDepartments_ShouldReturnEmptyList_WhenNoDataExists()
+    {
+        using (var scope = new TransactionScope())
+        {
+            using (var connection = new SqlConnection(DatabaseHelper.GetConnectionString()))
+            {
+                connection.Open();
+                using (var command = new SqlCommand(DatabaseHelper.GetResetProcedureSql(), connection))
+                {
+                    command.ExecuteNonQuery();
+                }
+                using (var command = new SqlCommand("EXEC DeleteData", connection))
+                {
+                    command.ExecuteNonQuery();
+                }
+            }
+            var result = _departmentModel.GetDepartments();
+            result.Should().NotBeNull();
+            result.Count.Should().Be(0);
+        }
+    }
+
+    [TestMethod]
+    public void DoesDepartmentExist_ShouldReturnTrue_WhenDepartmentExists()
+    {
+        using (var scope = new TransactionScope())
+        {
+            using (var connection = new SqlConnection(DatabaseHelper.GetConnectionString()))
+            {
+                connection.Open();
+                using (var command = new SqlCommand(DatabaseHelper.GetResetProcedureSql(), connection))
+                {
+                    command.ExecuteNonQuery();
+                }
+                using (var command = new SqlCommand("EXEC DeleteData", connection))
+                {
+                    command.ExecuteNonQuery();
+                }
+                using (var command = new SqlCommand(DatabaseHelper.GetInsertDataProcedureSql(), connection))
+                {
+                    command.ExecuteNonQuery();
+                }
+                using (var command = new SqlCommand("EXEC InsertData @nrOfRows", connection))
+                {
+                    command.Parameters.AddWithValue("@nrOfRows", 10);
+                    command.ExecuteNonQuery();
+                }
+            }
+            var result = _departmentModel.DoesDepartmentExist(1);
+            result.Should().BeTrue();
+        }
+    }
+
+    [TestMethod]
+    public void DoesDepartmentExist_ShouldReturnFalse_WhenDepartmentDoesNotExist()
+    {
+        using (var scope = new TransactionScope())
+        {
+            using (var connection = new SqlConnection(DatabaseHelper.GetConnectionString()))
+            {
+                connection.Open();
+                using (var command = new SqlCommand(DatabaseHelper.GetResetProcedureSql(), connection))
+                {
+                    command.ExecuteNonQuery();
+                }
+                using (var command = new SqlCommand("EXEC DeleteData", connection))
+                {
+                    command.ExecuteNonQuery();
+                }
+                using (var command = new SqlCommand(DatabaseHelper.GetInsertDataProcedureSql(), connection))
+                {
+                    command.ExecuteNonQuery();
+                }
+                using (var command = new SqlCommand("EXEC InsertData @nrOfRows", connection))
+                {
+                    command.Parameters.AddWithValue("@nrOfRows", 10);
+                    command.ExecuteNonQuery();
+                }
+            }
+            var result = _departmentModel.DoesDepartmentExist(100);
+            result.Should().BeFalse();
+        }
+    }
+
+
 }
