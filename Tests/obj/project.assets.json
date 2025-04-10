@@ -8788,23 +8788,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Admin\\.nuget\\packages\\": {},
+    "C:\\Users\\salad\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\UBB-SE-2025-TeamBabes-From-AmenintareaMaimutei\\Tests\\Tests.csproj",
+      "projectUniqueName": "D:\\Uni\\ISS\\UBB-SE-2025-TeamBabes-From-AmenintareaMaimutei\\Tests\\Tests.csproj",
       "projectName": "Tests",
-      "projectPath": "D:\\UBB-SE-2025-TeamBabes-From-AmenintareaMaimutei\\Tests\\Tests.csproj",
-      "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-      "outputPath": "D:\\UBB-SE-2025-TeamBabes-From-AmenintareaMaimutei\\Tests\\obj\\",
+      "projectPath": "D:\\Uni\\ISS\\UBB-SE-2025-TeamBabes-From-AmenintareaMaimutei\\Tests\\Tests.csproj",
+      "packagesPath": "C:\\Users\\salad\\.nuget\\packages\\",
+      "outputPath": "D:\\Uni\\ISS\\UBB-SE-2025-TeamBabes-From-AmenintareaMaimutei\\Tests\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\salad\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -8819,8 +8819,8 @@
         "net8.0-windows10.0.19041": {
           "targetAlias": "net8.0-windows10.0.19041.0",
           "projectReferences": {
-            "D:\\UBB-SE-2025-TeamBabes-From-AmenintareaMaimutei\\project\\Project.csproj": {
-              "projectPath": "D:\\UBB-SE-2025-TeamBabes-From-AmenintareaMaimutei\\project\\Project.csproj"
+            "D:\\Uni\\ISS\\UBB-SE-2025-TeamBabes-From-AmenintareaMaimutei\\project\\Project.csproj": {
+              "projectPath": "D:\\Uni\\ISS\\UBB-SE-2025-TeamBabes-From-AmenintareaMaimutei\\project\\Project.csproj"
             }
           }
         }
@@ -8835,7 +8835,7 @@
         "auditLevel": "low",
         "auditMode": "direct"
       },
-      "SdkAnalysisLevel": "9.0.200"
+      "SdkAnalysisLevel": "9.0.100"
     },
     "frameworks": {
       "net8.0-windows10.0.19041": {
@@ -8890,43 +8890,43 @@
         "downloadDependencies": [
           {
             "name": "Microsoft.AspNetCore.App.Runtime.win-arm64",
-            "version": "[8.0.13, 8.0.13]"
+            "version": "[8.0.11, 8.0.11]"
           },
           {
             "name": "Microsoft.AspNetCore.App.Runtime.win-x64",
-            "version": "[8.0.13, 8.0.13]"
+            "version": "[8.0.11, 8.0.11]"
           },
           {
             "name": "Microsoft.AspNetCore.App.Runtime.win-x86",
-            "version": "[8.0.13, 8.0.13]"
+            "version": "[8.0.11, 8.0.11]"
           },
           {
             "name": "Microsoft.NETCore.App.Runtime.win-arm64",
-            "version": "[8.0.13, 8.0.13]"
+            "version": "[8.0.11, 8.0.11]"
           },
           {
             "name": "Microsoft.NETCore.App.Runtime.win-x64",
-            "version": "[8.0.13, 8.0.13]"
+            "version": "[8.0.11, 8.0.11]"
           },
           {
             "name": "Microsoft.NETCore.App.Runtime.win-x86",
-            "version": "[8.0.13, 8.0.13]"
+            "version": "[8.0.11, 8.0.11]"
           },
           {
             "name": "Microsoft.Windows.SDK.NET.Ref",
-            "version": "[10.0.19041.57, 10.0.19041.57]"
+            "version": "[10.0.19041.54, 10.0.19041.54]"
           },
           {
             "name": "Microsoft.WindowsDesktop.App.Runtime.win-arm64",
-            "version": "[8.0.13, 8.0.13]"
+            "version": "[8.0.11, 8.0.11]"
           },
           {
             "name": "Microsoft.WindowsDesktop.App.Runtime.win-x64",
-            "version": "[8.0.13, 8.0.13]"
+            "version": "[8.0.11, 8.0.11]"
           },
           {
             "name": "Microsoft.WindowsDesktop.App.Runtime.win-x86",
-            "version": "[8.0.13, 8.0.13]"
+            "version": "[8.0.11, 8.0.11]"
           }
         ],
         "frameworkReferences": {
@@ -8937,7 +8937,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.200/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.101/PortableRuntimeIdentifierGraph.json"
       }
     },
     "runtimes": {
@@ -8951,5 +8951,13 @@
         "#import": []
       }
     }
-  }
+  },
+  "logs": [
+    {
+      "code": "Undefined",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Problem reading the cache file D:\\Uni\\ISS\\UBB-SE-2025-TeamBabes-From-AmenintareaMaimutei\\Tests\\obj\\project.nuget.cache : Invalid property identifier character: <. Path 'version', line 3, position 0."
+    }
+  ]
 }

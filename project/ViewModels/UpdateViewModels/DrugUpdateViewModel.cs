@@ -113,7 +113,38 @@ namespace Project.ViewModels.UpdateViewModels
         /// <returns>True if valid; otherwise, false.</returns>
         private bool ValidateDrug(Drug drug)
         {
+<<<<<<< HEAD
+<<<<<<< Updated upstream
+            if (!System.Text.RegularExpressions.Regex.IsMatch(drug.Name, @"^[a-zA-Z0-9 ]*$")) { ErrorMessage = "Name should contain only alphanumeric characters"; return false; }
+=======
+
             if (!System.Text.RegularExpressions.Regex.IsMatch(drug.Name, @"^[a-zA-Z0-9 ]*$"))
+            {
+                this.ErrorMessage = "Name should contain only alphanumeric characters";
+                return false;
+            }
+
+            if (!System.Text.RegularExpressions.Regex.IsMatch(drug.Administration, @"^[a-zA-Z0-9 ]*$"))
+            {
+                this.ErrorMessage = "Administration should contain only alphanumeric characters";
+                return false;
+            }
+
+            if (!System.Text.RegularExpressions.Regex.IsMatch(drug.Specification, @"^[a-zA-Z0-9 ,.-]*$"))
+            {
+                this.ErrorMessage = "Specification should contain only alphanumeric characters";
+                return false;
+            }
+>>>>>>> Stashed changes
+
+            if (!System.Text.RegularExpressions.Regex.IsMatch(drug.Administration, @"^[a-zA-Z0-9 ]*$")) { ErrorMessage = "Administration should contain only alphanumeric characters"; return false; }
+            
+            if (!System.Text.RegularExpressions.Regex.IsMatch(drug.Specification, @"^[a-zA-Z0-9 ,.-]*$")) { ErrorMessage = "Specification should contain only alphanumeric characters"; return false; }
+            
+            if (drug.Supply <= 0)
+=======
+            if (!System.Text.RegularExpressions.Regex.IsMatch(drug.Name, @"^[a-zA-Z0-9 ]*$"))
+>>>>>>> f90fb830f3c66dcbf2f89141884b998fe10e6fbb
             {
                 this.ErrorMessage = "Name should contain only alphanumeric characters";
                 return false;
