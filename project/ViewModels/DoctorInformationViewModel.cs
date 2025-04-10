@@ -1,220 +1,299 @@
-using Project.ClassModels;
-using Project.Models;
-using System;
-using System.ComponentModel;
-
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="DoctorInformationViewModel.cs" company="YourCompany">
+//   Copyright (c) YourCompany. All rights reserved.
+// </copyright>
+// <summary>
+//   ViewModel for managing doctor information.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 namespace Project.ViewModels
 {
+    using System;
+    using System.ComponentModel;
+    using Project.ClassModels;
+    using Project.Models;
+
+    /// <summary>
+    /// ViewModel for managing doctor information.
+    /// </summary>
     public class DoctorInformationViewModel : INotifyPropertyChanged
     {
-        private readonly DoctorInformationModel _doctorModel = new DoctorInformationModel();
+        private readonly DoctorInformationModel doctorModel = new DoctorInformationModel();
 
-        // Properties...
-        private int _userID;
+        // Fields
+        private int userID;
+        private string username = string.Empty;
+        private string mail = string.Empty;
+        private string name = string.Empty;
+        private DateTime birthdate;
+        private string cnp = string.Empty;
+        private string address = string.Empty;
+        private string phoneNumber = string.Empty;
+        private DateTime registrationDate;
+        private int doctorID;
+        private string licenseNumber = string.Empty;
+        private float experience;
+        private float rating;
+        private int departmentID;
+        private string departmentName = string.Empty;
+        private decimal salary;
+
+        /// <summary>
+        /// Gets or sets the user ID.
+        /// </summary>
         public int UserID
         {
-            get => _userID;
+            get => this.userID;
             set
             {
-                _userID = value;
-                OnPropertyChanged(nameof(UserID));
+                this.userID = value;
+                this.OnPropertyChanged(nameof(this.UserID));
             }
         }
 
-        private string _username;
+        /// <summary>
+        /// Gets or sets the username.
+        /// </summary>
         public string Username
         {
-            get => _username;
+            get => this.username;
             set
             {
-                _username = value;
-                OnPropertyChanged(nameof(Username));
+                this.username = value;
+                this.OnPropertyChanged(nameof(this.Username));
             }
         }
 
-        private string _mail;
+        /// <summary>
+        /// Gets or sets the email address.
+        /// </summary>
         public string Mail
         {
-            get => _mail;
+            get => this.mail;
             set
             {
-                _mail = value;
-                OnPropertyChanged(nameof(Mail));
+                this.mail = value;
+                this.OnPropertyChanged(nameof(this.Mail));
             }
         }
 
-        private string _name;
+        /// <summary>
+        /// Gets or sets the name of the doctor.
+        /// </summary>
         public string Name
         {
-            get => _name;
+            get => this.name;
             set
             {
-                _name = value;
-                OnPropertyChanged(nameof(Name));
+                this.name = value;
+                this.OnPropertyChanged(nameof(this.Name));
             }
         }
 
-        private DateTime _birthdate;
+        /// <summary>
+        /// Gets or sets the birthdate of the doctor.
+        /// </summary>
         public DateTime Birthdate
         {
-            get => _birthdate;
+            get => this.birthdate;
             set
             {
-                _birthdate = value;
-                OnPropertyChanged(nameof(Birthdate));
+                this.birthdate = value;
+                this.OnPropertyChanged(nameof(this.Birthdate));
             }
         }
 
-        private string _cnp;
+        /// <summary>
+        /// Gets or sets the CNP (unique identifier).
+        /// </summary>
         public string Cnp
         {
-            get => _cnp;
+            get => this.cnp;
             set
             {
-                _cnp = value;
-                OnPropertyChanged(nameof(Cnp));
+                this.cnp = value;
+                this.OnPropertyChanged(nameof(this.Cnp));
             }
         }
 
-        private string _address;
+        /// <summary>
+        /// Gets or sets the address of the doctor.
+        /// </summary>
         public string Address
         {
-            get => _address;
+            get => this.address;
             set
             {
-                _address = value;
-                OnPropertyChanged(nameof(Address));
+                this.address = value;
+                this.OnPropertyChanged(nameof(this.Address));
             }
         }
 
-        private string _phoneNumber;
+        /// <summary>
+        /// Gets or sets the phone number of the doctor.
+        /// </summary>
         public string PhoneNumber
         {
-            get => _phoneNumber;
+            get => this.phoneNumber;
             set
             {
-                _phoneNumber = value;
-                OnPropertyChanged(nameof(PhoneNumber));
+                this.phoneNumber = value;
+                this.OnPropertyChanged(nameof(this.PhoneNumber));
             }
         }
 
-        private DateTime _registrationDate;
+        /// <summary>
+        /// Gets or sets the registration date of the doctor.
+        /// </summary>
         public DateTime RegistrationDate
         {
-            get => _registrationDate;
+            get => this.registrationDate;
             set
             {
-                _registrationDate = value;
-                OnPropertyChanged(nameof(RegistrationDate));
+                this.registrationDate = value;
+                this.OnPropertyChanged(nameof(this.RegistrationDate));
             }
         }
 
-        private int _doctorID;
+        /// <summary>
+        /// Gets or sets the doctor ID.
+        /// </summary>
         public int DoctorID
         {
-            get => _doctorID;
+            get => this.doctorID;
             set
             {
-                _doctorID = value;
-                OnPropertyChanged(nameof(DoctorID));
+                this.doctorID = value;
+                this.OnPropertyChanged(nameof(this.DoctorID));
             }
         }
 
-        private string _licenseNumber;
+        /// <summary>
+        /// Gets or sets the license number of the doctor.
+        /// </summary>
         public string LicenseNumber
         {
-            get => _licenseNumber;
+            get => this.licenseNumber;
             set
             {
-                _licenseNumber = value;
-                OnPropertyChanged(nameof(LicenseNumber));
+                this.licenseNumber = value;
+                this.OnPropertyChanged(nameof(this.LicenseNumber));
             }
         }
 
-        private float _experience;
+        /// <summary>
+        /// Gets or sets the years of experience of the doctor.
+        /// </summary>
         public float Experience
         {
-            get => _experience;
+            get => this.experience;
             set
             {
-                _experience = value;
-                OnPropertyChanged(nameof(Experience));
+                this.experience = value;
+                this.OnPropertyChanged(nameof(this.Experience));
             }
         }
 
-        private float _rating;
+        /// <summary>
+        /// Gets or sets the rating of the doctor.
+        /// </summary>
         public float Rating
         {
-            get => _rating;
+            get => this.rating;
             set
             {
-                _rating = value;
-                OnPropertyChanged(nameof(Rating));
+                this.rating = value;
+                this.OnPropertyChanged(nameof(this.Rating));
             }
         }
 
-        private int _departmentID;
+        /// <summary>
+        /// Gets or sets the department ID.
+        /// </summary>
         public int DepartmentID
         {
-            get => _departmentID;
+            get => this.departmentID;
             set
             {
-                _departmentID = value;
-                OnPropertyChanged(nameof(DepartmentID));
+                this.departmentID = value;
+                this.OnPropertyChanged(nameof(this.DepartmentID));
             }
         }
 
-        private string _departmentName;
+        /// <summary>
+        /// Gets or sets the name of the department.
+        /// </summary>
         public string DepartmentName
         {
-            get => _departmentName;
+            get => this.departmentName;
             set
             {
-                _departmentName = value;
-                OnPropertyChanged(nameof(DepartmentName));
+                this.departmentName = value;
+                this.OnPropertyChanged(nameof(this.DepartmentName));
             }
         }
 
-        private decimal _salary;
+        /// <summary>
+        /// Gets or sets the salary of the doctor.
+        /// </summary>
         public decimal Salary
         {
-            get => _salary;
+            get => this.salary;
             set
             {
-                _salary = value;
-                OnPropertyChanged(nameof(Salary));
+                this.salary = value;
+                this.OnPropertyChanged(nameof(this.Salary));
             }
         }
 
+        /// <summary>
+        /// Loads the doctor information based on the provided doctor ID.
+        /// </summary>
+        /// <param name="doctorID">The unique identifier of the doctor.</param>
+        /// <exception cref="Exception">Thrown if the doctor is not found.</exception>
         public void LoadDoctorInformation(int doctorID)
         {
-            var doctorInfo = _doctorModel.GetDoctorInformation(doctorID);
+            var doctorInfo = this.doctorModel.GetDoctorInformation(doctorID);
             if (doctorInfo != null)
             {
-                UserID = doctorInfo.UserID;
-                Username = doctorInfo.Username;
-                Mail = doctorInfo.Mail;
-                Name = doctorInfo.Name;
-                Birthdate = doctorInfo.Birthdate;
-                Cnp = doctorInfo.Cnp;
-                Address = doctorInfo.Address;
-                PhoneNumber = doctorInfo.PhoneNumber;
-                RegistrationDate = doctorInfo.RegistrationDate;
-                DoctorID = doctorInfo.DoctorID;
-                LicenseNumber = doctorInfo.LicenseNumber;
-                Experience = doctorInfo.Experience;
-                Rating = doctorInfo.Rating;
-                DepartmentID = doctorInfo.DepartmentID;
-                DepartmentName = doctorInfo.DepartmentName;
-                Salary = _doctorModel.ComputeSalary(doctorID);
+                this.UserID = doctorInfo.UserID;
+                this.Username = doctorInfo.Username;
+                this.Mail = doctorInfo.Mail;
+                this.Name = doctorInfo.Name;
+                this.Birthdate = doctorInfo.Birthdate;
+                this.Cnp = doctorInfo.Cnp;
+                this.Address = doctorInfo.Address;
+                this.PhoneNumber = doctorInfo.PhoneNumber;
+                this.RegistrationDate = doctorInfo.RegistrationDate;
+                this.DoctorID = doctorInfo.DoctorID;
+                this.LicenseNumber = doctorInfo.LicenseNumber;
+                this.Experience = doctorInfo.Experience;
+                this.Rating = doctorInfo.Rating;
+                this.DepartmentID = doctorInfo.DepartmentID;
+                this.DepartmentName = doctorInfo.DepartmentName;
+                this.Salary = this.doctorModel.ComputeSalary(doctorID);
             }
-            else throw new Exception("Doctor not found");
+            else
+            {
+                throw new Exception("Doctor not found");
+            }
         }
 
-        public event PropertyChangedEventHandler? PropertyChanged;
+        /// <summary>
+        /// Occurs when a property value changes.
+        /// </summary>
+        /// <summary>
+        /// Occurs when a property value changes.
+        /// </summary>
+        public event PropertyChangedEventHandler? PropertyChanged = (sender, e) => { };
+
+        /// <summary>
+        /// Raises the <see cref="PropertyChanged"/> event.
+        /// </summary>
+        /// <param name="propertyName">The name of the property that changed.</param>
         protected void OnPropertyChanged(string propertyName)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            this.PropertyChanged.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

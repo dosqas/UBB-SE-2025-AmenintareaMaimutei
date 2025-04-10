@@ -1,108 +1,155 @@
-﻿using Project.ClassModels;
-using Project.Models;
-using Project.Utils;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
-using Windows.Media.Playback;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="DoctorUpdateViewModel.cs" company="YourCompany">
+//   Copyright (c) YourCompany. All rights reserved.
+// </copyright>
+// <summary>
+//   ViewModel responsible for updating doctors, including validation and persistence.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace Project.ViewModel
 {
-    class DoctorUpdateViewModel : INotifyPropertyChanged
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.Collections.Specialized;
+    using System.ComponentModel;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    using System.Windows.Input;
+    using Project.ClassModels;
+    using Project.Models;
+    using Project.Utils;
+
+    /// <summary>
+    /// ViewModel for updating doctors in the system.
+    /// </summary>
+    public class DoctorUpdateViewModel : INotifyPropertyChanged
     {
-        private readonly DoctorModel _doctorModel = new DoctorModel();
-        private readonly UserModel _userModel = new UserModel();
-        public ObservableCollection<Doctor> Doctors { get; set; } = new ObservableCollection<Doctor>();
+        private readonly DoctorModel doctorModel = new DoctorModel();
+        private readonly UserModel userModel = new UserModel();
+        private string errorMessage = string.Empty;
 
-
-
-        private string _errorMessage;
-        public string ErrorMessage
-        {
-            get => _errorMessage;
-            set
-            {
-                _errorMessage = value;
-                OnPropertyChanged(nameof(ErrorMessage));
-            }
-        }
-
-        public ICommand SaveChangesCommand { get; }
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DoctorUpdateViewModel"/> class.
+        /// </summary>
         public DoctorUpdateViewModel()
         {
-            _errorMessage = string.Empty;
-            SaveChangesCommand = new RelayCommand(SaveChanges);
-            LoadDoctors();
+            this.SaveChangesCommand = new RelayCommand(this.SaveChanges);
+            this.LoadDoctors();
         }
 
-        private void LoadDoctors()
+        /// <summary>
+        /// Gets or sets the error message for display.
+        /// </summary>
+        public string ErrorMessage
         {
-            Doctors.Clear();
-            foreach (Doctor doctor in _doctorModel.GetDoctors())
+            get => this.errorMessage;
+            set
             {
-                Doctors.Add(doctor);
+                this.errorMessage = value;
+                this.OnPropertyChanged(nameof(this.ErrorMessage));
             }
         }
 
+        /// <summary>
+        /// Gets the command for saving changes to doctors.
+        /// </summary>
+        public ICommand SaveChangesCommand { get; }
+
+        /// <summary>
+        /// Gets the list of doctors to be displayed and updated.
+        /// </summary>
+        public ObservableCollection<Doctor> Doctors { get; set; } = new ObservableCollection<Doctor>();
+
+        /// <summary>
+        /// Loads the doctors from the model into the view model.
+        /// </summary>
+        private void LoadDoctors()
+        {
+            this.Doctors.Clear();
+
+            foreach (Doctor doctor in this.doctorModel.GetDoctors())
+            {
+                this.Doctors.Add(doctor);
+            }
+        }
+
+        /// <summary>
+        /// Saves the changes made to each doctor after validation.
+        /// </summary>
         private void SaveChanges()
         {
             bool hasErrors = false;
             StringBuilder errorMessages = new StringBuilder();
 
-            foreach (Doctor doctor in Doctors)
+            foreach (Doctor doctor in this.Doctors)
             {
-                if (!ValidateDoctor(doctor))
+                if (!this.ValidateDoctor(doctor))
                 {
                     hasErrors = true;
-                    errorMessages.AppendLine("Doctor " + doctor.DoctorID + ": " + ErrorMessage);
+                    errorMessages.AppendLine($"Doctor {doctor.DoctorID}: {this.ErrorMessage}");
                 }
                 else
                 {
-                    bool success = _doctorModel.UpdateDoctor(doctor);
+                    bool success = this.doctorModel.UpdateDoctor(doctor);
                     if (!success)
                     {
-                        errorMessages.AppendLine("Failed to save changes for doctor: " + doctor.DoctorID);
+                        errorMessages.AppendLine($"Failed to save changes for doctor: {doctor.DoctorID}");
                         hasErrors = true;
                     }
                 }
             }
-            if (hasErrors)
-            {
-                ErrorMessage = errorMessages.ToString();
-            }
-            else
-            {
-                ErrorMessage = "Changes saved successfully";
-            }
+
+            this.ErrorMessage = hasErrors ? errorMessages.ToString() : "Changes saved successfully";
         }
 
+        /// <summary>
+        /// Validates the information of a single doctor.
+        /// </summary>
+        /// <param name="doctor">The doctor to validate.</param>
+        /// <returns><c>true</c> if valid; otherwise, <c>false</c>.</returns>
         private bool ValidateDoctor(Doctor doctor)
         {
-            bool userExistsAsDoctor = _userModel.UserExistsWithRole(doctor.UserID, "Doctor");
-            bool userIsDoctor = _doctorModel.UserExistsInDoctors(doctor.UserID, doctor.DoctorID);
-            if (!userExistsAsDoctor || userIsDoctor) { ErrorMessage = "UserID doesn’t exist or has already been approved"; return false; }
+            if (!this.userModel.UserExistsWithRole(doctor.UserID, "Doctor") ||
+                this.doctorModel.UserExistsInDoctors(doctor.UserID, doctor.DoctorID))
+            {
+                this.ErrorMessage = "UserID doesn’t exist or has already been approved";
+                return false;
+            }
 
-            bool departmentExists = _doctorModel.DoesDepartmentExist(doctor.DepartmentID);
-            if (!departmentExists) { ErrorMessage = "DepartmentID doesn’t exist in the Departments Records"; return false; }
+            if (!this.doctorModel.DoesDepartmentExist(doctor.DepartmentID))
+            {
+                this.ErrorMessage = "DepartmentID doesn’t exist in the Departments Records";
+                return false;
+            }
 
-            if (doctor.Experience < 0) { ErrorMessage = "The experience provided should be a positive number"; return false; }
+            if (doctor.Experience < 0)
+            {
+                this.ErrorMessage = "The experience provided should be a positive number";
+                return false;
+            }
 
-            if (!System.Text.RegularExpressions.Regex.IsMatch(doctor.LicenseNumber, @"^[a-zA-Z0-9 ]*$")) { ErrorMessage = "License Number should contain only alphanumeric characters"; return false; }
+            if (!System.Text.RegularExpressions.Regex.IsMatch(doctor.LicenseNumber, @"^[a-zA-Z0-9 ]*$"))
+            {
+                this.ErrorMessage = "License Number should contain only alphanumeric characters";
+                return false;
+            }
 
             return true;
         }
 
+        /// <inheritdoc/>
         public event PropertyChangedEventHandler? PropertyChanged;
+
+        /// <summary>
+        /// Triggers the PropertyChanged event.
+        /// </summary>
+        /// <param name="propertyName">The name of the changed property.</param>
         protected void OnPropertyChanged(string propertyName)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

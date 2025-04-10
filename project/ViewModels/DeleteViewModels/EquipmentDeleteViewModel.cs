@@ -1,113 +1,148 @@
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Windows.Input;
-using Project.ClassModels;
-using Project.Models;
-using Project.Utils;
-
 namespace Project.ViewModels.DeleteViewModels
 {
-    class EquipmentDeleteViewModel : INotifyPropertyChanged
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.ComponentModel;
+    using System.Windows.Input;
+    using Project.ClassModels;
+    using Project.Models;
+    using Project.Utils;
+
+    /// <summary>
+    /// ViewModel for deleting equipment.
+    /// </summary>
+    public class EquipmentDeleteViewModel : INotifyPropertyChanged
     {
-        private readonly EquipmentModel _equipmentModel = new EquipmentModel();
-        private ObservableCollection<Equipment> _equipments;
-        private int _equipmentID;
-        private string _errorMessage;
-        private string _messageColor = "Red";
+        private readonly EquipmentModel equipmentModel = new EquipmentModel();
+        private ObservableCollection<Equipment> equipments = new ObservableCollection<Equipment>();
+        private int equipmentID;
+        private string errorMessage = string.Empty;
+        private string messageColor = "Red";
 
-        public ObservableCollection<Equipment> Equipments
-        {
-            get { return _equipments; }
-            set { SetProperty(ref _equipments, value); }
-        }
-
-        public int EquipmentID
-        {
-            get => _equipmentID;
-            set
-            {
-                _equipmentID = value;
-                OnPropertyChanged(nameof(EquipmentID));
-                OnPropertyChanged(nameof(CanDeleteEquipment));
-            }
-        }
-
-        public string ErrorMessage
-        {
-            get => _errorMessage ?? string.Empty;
-            set
-            {
-                _errorMessage = value;
-                MessageColor = string.IsNullOrEmpty(value) ? "Red" : value.Contains("successfully") ? "Green" : "Red";
-                OnPropertyChanged(nameof(ErrorMessage));
-                OnPropertyChanged(nameof(MessageColor));
-            }
-        }
-
-        public string MessageColor
-        {
-            get => _messageColor;
-            set
-            {
-                _messageColor = value;
-                OnPropertyChanged(nameof(MessageColor));
-            }
-        }
-
-        public ICommand DeleteEquipmentCommand { get; }
-
-        public bool CanDeleteEquipment => EquipmentID > 0;
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EquipmentDeleteViewModel"/> class.
+        /// </summary>
         public EquipmentDeleteViewModel()
         {
-            // Load equipments for the DataGrid
-            Equipments = new ObservableCollection<Equipment>(_equipmentModel.GetEquipments());
-
-            DeleteEquipmentCommand = new RelayCommand(RemoveEquipment);
+            // Load equipment for the DataGrid
+            this.Equipments = new ObservableCollection<Equipment>(this.equipmentModel.GetEquipments());
+            this.DeleteEquipmentCommand = new RelayCommand(this.RemoveEquipment);
         }
 
-        private bool CanExecuteDeleteEquipment()
+        /// <summary>
+        /// Occurs when a property value changes.
+        /// </summary>
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        /// <summary>
+        /// Gets or sets the collection of equipment.
+        /// </summary>
+        public ObservableCollection<Equipment> Equipments
         {
-            return EquipmentID > 0;
+            get => this.equipments;
+            set => this.SetProperty(ref this.equipments, value);
         }
 
+        /// <summary>
+        /// Gets or sets the equipment ID.
+        /// </summary>
+        public int EquipmentID
+        {
+            get => this.equipmentID;
+            set
+            {
+                this.equipmentID = value;
+                this.OnPropertyChanged(nameof(this.EquipmentID));
+                this.OnPropertyChanged(nameof(this.CanDeleteEquipment));
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the error message.
+        /// </summary>
+        public string ErrorMessage
+        {
+            get => this.errorMessage;
+            set
+            {
+                this.errorMessage = value;
+                this.MessageColor = string.IsNullOrEmpty(value) ? "Red" : value.Contains("successfully") ? "Green" : "Red";
+                this.OnPropertyChanged(nameof(this.ErrorMessage));
+                this.OnPropertyChanged(nameof(this.MessageColor));
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the message color.
+        /// </summary>
+        public string MessageColor
+        {
+            get => this.messageColor;
+            set
+            {
+                this.messageColor = value;
+                this.OnPropertyChanged(nameof(this.MessageColor));
+            }
+        }
+
+        /// <summary>
+        /// Gets the command to delete the equipment.
+        /// </summary>
+        public ICommand DeleteEquipmentCommand { get; }
+
+        /// <summary>
+        /// Gets a value indicating whether the equipment can be deleted.
+        /// </summary>
+        public bool CanDeleteEquipment => this.EquipmentID > 0;
+
+        /// <summary>
+        /// Raises the <see cref="PropertyChanged"/> event.
+        /// </summary>
+        /// <param name="propertyName">The name of the property that changed.</param>
+        protected void OnPropertyChanged(string propertyName)
+        {
+            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        /// <summary>
+        /// Removes the equipment from the database.
+        /// </summary>
         private void RemoveEquipment()
         {
-            if (EquipmentID == 0)
+            if (this.EquipmentID == 0)
             {
-                ErrorMessage = "No equipment was selected";
+                this.ErrorMessage = "No equipment was selected";
                 return;
             }
 
-            if (!_equipmentModel.DoesEquipmentExist(EquipmentID))
+            if (!this.equipmentModel.DoesEquipmentExist(this.EquipmentID))
             {
-                ErrorMessage = "EquipmentID doesn't exist in the records";
+                this.ErrorMessage = "EquipmentID doesn't exist in the records";
                 return;
             }
 
-            bool success = _equipmentModel.DeleteEquipment(EquipmentID);
-            ErrorMessage = success ? "Equipment deleted successfully" : "Failed to delete equipment";
+            bool success = this.equipmentModel.DeleteEquipment(this.EquipmentID);
+            this.ErrorMessage = success ? "Equipment deleted successfully" : "Failed to delete equipment";
 
             if (success)
             {
-                Equipments = new ObservableCollection<Equipment>(_equipmentModel.GetEquipments());
+                this.Equipments = new ObservableCollection<Equipment>(this.equipmentModel.GetEquipments());
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        private void SetProperty<T>(ref T field, T value, [System.Runtime.CompilerServices.CallerMemberName] string propertyName = null)
+        /// <summary>
+        /// Sets the property value and raises the <see cref="PropertyChanged"/> event if the value has changed.
+        /// </summary>
+        /// <typeparam name="T">The type of the property.</typeparam>
+        /// <param name="field">The field to set.</param>
+        /// <param name="value">The value to set.</param>
+        /// <param name="propertyName">The name of the property. This is optional and will be automatically set by the compiler.</param>
+        private void SetProperty<T>(ref T field, T value, [System.Runtime.CompilerServices.CallerMemberName] string propertyName = null!)
         {
             if (!EqualityComparer<T>.Default.Equals(field, value))
             {
                 field = value;
-                OnPropertyChanged(propertyName);
+                this.OnPropertyChanged(propertyName);
             }
         }
     }

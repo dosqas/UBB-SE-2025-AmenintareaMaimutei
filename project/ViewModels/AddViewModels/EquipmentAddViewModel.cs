@@ -1,146 +1,191 @@
-using Project.ClassModels;
-using Project.Models;
-using Project.Utils;
-using System;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Windows.Input;
-
 namespace Project.ViewModels.AddViewModels
 {
-    internal class EquipmentAddViewModel : INotifyPropertyChanged
+    using System.Collections.ObjectModel;
+    using System.ComponentModel;
+    using System.Windows.Input;
+    using Project.ClassModels;
+    using Project.Models;
+    using Project.Utils;
+
+    /// <summary>
+    /// ViewModel for adding equipment.
+    /// </summary>
+    public class EquipmentAddViewModel : INotifyPropertyChanged
     {
-        private readonly EquipmentModel _equipmentModel = new EquipmentModel();
-        public ObservableCollection<Equipment> Equipments { get; set; } = new ObservableCollection<Equipment>();
+        private readonly EquipmentModel equipmentModel = new EquipmentModel();
+        private string name = string.Empty;
+        private string type = string.Empty;
+        private string specification = string.Empty;
+        private int stock;
+        private string errorMessage = string.Empty;
 
-        private string _name = "";
-        public string Name
-        {
-            get => _name;
-            set
-            {
-                _name = value;
-                OnPropertyChanged(nameof(Name));
-            }
-        }
-
-        private string _type = "";
-        public string Type
-        {
-            get => _type;
-            set
-            {
-                _type = value;
-                OnPropertyChanged(nameof(Type));
-            }
-        }
-
-        private string _specification = "";
-        public string Specification
-        {
-            get => _specification;
-            set
-            {
-                _specification = value;
-                OnPropertyChanged(nameof(Specification));
-            }
-        }
-
-        private int _stock;
-        public int Stock
-        {
-            get => _stock;
-            set
-            {
-                _stock = value;
-                OnPropertyChanged(nameof(Stock));
-            }
-        }
-
-        private string _errorMessage = "";
-        public string ErrorMessage
-        {
-            get => _errorMessage;
-            set
-            {
-                _errorMessage = value;
-                OnPropertyChanged(nameof(ErrorMessage));
-            }
-        }
-
-        public ICommand SaveEquipmentCommand { get; }
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EquipmentAddViewModel"/> class.
+        /// </summary>
         public EquipmentAddViewModel()
         {
-            SaveEquipmentCommand = new RelayCommand(SaveEquipment);
-            LoadEquipments();
+            this.SaveEquipmentCommand = new RelayCommand(this.SaveEquipment);
+            this.LoadEquipments();
         }
 
-        private void LoadEquipments()
+        /// <summary>
+        /// Occurs when a property value changes.
+        /// </summary>
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        /// <summary>
+        /// Gets or sets the collection of equipment.
+        /// </summary>
+        public ObservableCollection<Equipment> Equipments { get; set; } = new ObservableCollection<Equipment>();
+
+        /// <summary>
+        /// Gets or sets the name of the equipment.
+        /// </summary>
+        public string Name
         {
-            Equipments.Clear();
-            foreach (Equipment equipment in _equipmentModel.GetEquipments())
+            get => this.name;
+            set
             {
-                Equipments.Add(equipment);
+                this.name = value;
+                this.OnPropertyChanged(nameof(this.Name));
             }
         }
 
+        /// <summary>
+        /// Gets or sets the type of the equipment.
+        /// </summary>
+        public string Type
+        {
+            get => this.type;
+            set
+            {
+                this.type = value;
+                this.OnPropertyChanged(nameof(this.Type));
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the specification of the equipment.
+        /// </summary>
+        public string Specification
+        {
+            get => this.specification;
+            set
+            {
+                this.specification = value;
+                this.OnPropertyChanged(nameof(this.Specification));
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the stock of the equipment.
+        /// </summary>
+        public int Stock
+        {
+            get => this.stock;
+            set
+            {
+                this.stock = value;
+                this.OnPropertyChanged(nameof(this.Stock));
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the error message.
+        /// </summary>
+        public string ErrorMessage
+        {
+            get => this.errorMessage;
+            set
+            {
+                this.errorMessage = value;
+                this.OnPropertyChanged(nameof(this.ErrorMessage));
+            }
+        }
+
+        /// <summary>
+        /// Gets the command to save the equipment.
+        /// </summary>
+        public ICommand SaveEquipmentCommand { get; }
+
+        /// <summary>
+        /// Raises the <see cref="PropertyChanged"/> event.
+        /// </summary>
+        /// <param name="propertyName">The name of the property that changed.</param>
+        protected void OnPropertyChanged(string propertyName)
+        {
+            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        /// <summary>
+        /// Loads the equipment from the database.
+        /// </summary>
+        private void LoadEquipments()
+        {
+            this.Equipments.Clear();
+            foreach (Equipment equipment in this.equipmentModel.GetEquipments())
+            {
+                this.Equipments.Add(equipment);
+            }
+        }
+
+        /// <summary>
+        /// Saves the equipment to the database.
+        /// </summary>
         private void SaveEquipment()
         {
             var equipment = new Equipment
             {
                 EquipmentID = 0,
-                Name = Name,
-                Type = Type,
-                Specification = Specification,
-                Stock = Stock
+                Name = this.Name,
+                Type = this.Type,
+                Specification = this.Specification,
+                Stock = this.Stock,
             };
 
-            if (ValidateEquipment(equipment))
+            if (this.ValidateEquipment(equipment))
             {
-                bool success = _equipmentModel.AddEquipment(equipment);
-                ErrorMessage = success ? "Equipment added successfully" : "Failed to add equipment";
+                bool success = this.equipmentModel.AddEquipment(equipment);
+                this.ErrorMessage = success ? "Equipment added successfully" : "Failed to add equipment";
                 if (success)
                 {
-                    LoadEquipments();
+                    this.LoadEquipments();
                 }
             }
         }
 
+        /// <summary>
+        /// Validates the equipment.
+        /// </summary>
+        /// <param name="equipment">The equipment to validate.</param>
+        /// <returns>True if the equipment is valid, otherwise false.</returns>
         private bool ValidateEquipment(Equipment equipment)
         {
             if (string.IsNullOrEmpty(equipment.Name))
             {
-                ErrorMessage = "Please enter the name of the equipment.";
+                this.ErrorMessage = "Please enter the name of the equipment.";
                 return false;
             }
 
             if (string.IsNullOrWhiteSpace(equipment.Type))
             {
-                ErrorMessage = "Please enter the type of the equipment.";
+                this.ErrorMessage = "Please enter the type of the equipment.";
                 return false;
             }
 
             if (string.IsNullOrWhiteSpace(equipment.Specification))
             {
-                ErrorMessage = "Please enter the specifications of the equipment.";
+                this.ErrorMessage = "Please enter the specifications of the equipment.";
                 return false;
             }
 
             if (equipment.Stock <= 0)
             {
-                ErrorMessage = "Please enter a number >0 for the stock.";
+                this.ErrorMessage = "Please enter a number >0 for the stock.";
                 return false;
             }
 
             return true;
         }
-
-        public event PropertyChangedEventHandler? PropertyChanged;
-        protected void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
     }
 }
-
