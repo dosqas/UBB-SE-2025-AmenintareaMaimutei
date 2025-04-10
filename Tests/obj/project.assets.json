@@ -8693,23 +8693,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\salad\\.nuget\\packages\\": {},
+    "C:\\Users\\sampa\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Uni\\ISS\\UBB-SE-2025-TeamBabes-From-AmenintareaMaimutei\\Tests\\Tests.csproj",
+      "projectUniqueName": "E:\\UBB-SE-2025-TeamBabes-From-AmenintareaMaimutei\\Tests\\Tests.csproj",
       "projectName": "Tests",
-      "projectPath": "D:\\Uni\\ISS\\UBB-SE-2025-TeamBabes-From-AmenintareaMaimutei\\Tests\\Tests.csproj",
-      "packagesPath": "C:\\Users\\salad\\.nuget\\packages\\",
-      "outputPath": "D:\\Uni\\ISS\\UBB-SE-2025-TeamBabes-From-AmenintareaMaimutei\\Tests\\obj\\",
+      "projectPath": "E:\\UBB-SE-2025-TeamBabes-From-AmenintareaMaimutei\\Tests\\Tests.csproj",
+      "packagesPath": "C:\\Users\\sampa\\.nuget\\packages\\",
+      "outputPath": "E:\\UBB-SE-2025-TeamBabes-From-AmenintareaMaimutei\\Tests\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\salad\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\sampa\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -8724,8 +8724,8 @@
         "net8.0-windows10.0.19041": {
           "targetAlias": "net8.0-windows10.0.19041.0",
           "projectReferences": {
-            "D:\\Uni\\ISS\\UBB-SE-2025-TeamBabes-From-AmenintareaMaimutei\\project\\Project.csproj": {
-              "projectPath": "D:\\Uni\\ISS\\UBB-SE-2025-TeamBabes-From-AmenintareaMaimutei\\project\\Project.csproj"
+            "E:\\UBB-SE-2025-TeamBabes-From-AmenintareaMaimutei\\project\\Project.csproj": {
+              "projectPath": "E:\\UBB-SE-2025-TeamBabes-From-AmenintareaMaimutei\\project\\Project.csproj"
             }
           }
         }
@@ -8740,7 +8740,7 @@
         "auditLevel": "low",
         "auditMode": "direct"
       },
-      "SdkAnalysisLevel": "9.0.100"
+      "SdkAnalysisLevel": "9.0.200"
     },
     "frameworks": {
       "net8.0-windows10.0.19041": {
@@ -8789,43 +8789,43 @@
         "downloadDependencies": [
           {
             "name": "Microsoft.AspNetCore.App.Runtime.win-arm64",
-            "version": "[8.0.11, 8.0.11]"
+            "version": "[8.0.14, 8.0.14]"
           },
           {
             "name": "Microsoft.AspNetCore.App.Runtime.win-x64",
-            "version": "[8.0.11, 8.0.11]"
+            "version": "[8.0.14, 8.0.14]"
           },
           {
             "name": "Microsoft.AspNetCore.App.Runtime.win-x86",
-            "version": "[8.0.11, 8.0.11]"
+            "version": "[8.0.14, 8.0.14]"
           },
           {
             "name": "Microsoft.NETCore.App.Runtime.win-arm64",
-            "version": "[8.0.11, 8.0.11]"
+            "version": "[8.0.14, 8.0.14]"
           },
           {
             "name": "Microsoft.NETCore.App.Runtime.win-x64",
-            "version": "[8.0.11, 8.0.11]"
+            "version": "[8.0.14, 8.0.14]"
           },
           {
             "name": "Microsoft.NETCore.App.Runtime.win-x86",
-            "version": "[8.0.11, 8.0.11]"
+            "version": "[8.0.14, 8.0.14]"
           },
           {
             "name": "Microsoft.Windows.SDK.NET.Ref",
-            "version": "[10.0.19041.54, 10.0.19041.54]"
+            "version": "[10.0.19041.57, 10.0.19041.57]"
           },
           {
             "name": "Microsoft.WindowsDesktop.App.Runtime.win-arm64",
-            "version": "[8.0.11, 8.0.11]"
+            "version": "[8.0.14, 8.0.14]"
           },
           {
             "name": "Microsoft.WindowsDesktop.App.Runtime.win-x64",
-            "version": "[8.0.11, 8.0.11]"
+            "version": "[8.0.14, 8.0.14]"
           },
           {
             "name": "Microsoft.WindowsDesktop.App.Runtime.win-x86",
-            "version": "[8.0.11, 8.0.11]"
+            "version": "[8.0.14, 8.0.14]"
           }
         ],
         "frameworkReferences": {
@@ -8836,7 +8836,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.101/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.201/PortableRuntimeIdentifierGraph.json"
       }
     },
     "runtimes": {
