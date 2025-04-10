@@ -8,7 +8,22 @@ using System.Windows.Input;
 
 namespace Project.ViewModels.AddViewModels
 {
+<<<<<<< Updated upstream
     internal class DrugAddViewModel : INotifyPropertyChanged
+=======
+    using System;
+    using System.Collections.ObjectModel;
+    using System.ComponentModel;
+    using System.Windows.Input;
+    using Project.ClassModels;
+    using Project.Models;
+    using Project.Utils;
+
+    /// <summary>
+    /// ViewModel for adding a new drug.
+    /// </summary>
+    public class DrugAddViewModel : INotifyPropertyChanged
+>>>>>>> Stashed changes
     {
         private readonly DrugModel _drugModel = new DrugModel();
         public ObservableCollection<Drug> Drugs { get; set; } = new ObservableCollection<Drug>();
