@@ -1,110 +1,174 @@
-using Project.ClassModels;
-using Project.Models;
-using Project.Utils;
-using System;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Windows.Input;
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="ScheduleAddViewModel.cs" company="YourCompany">
+//   Copyright (c) YourCompany. All rights reserved.
+// </copyright>
+// <summary>
+//   ViewModel for adding schedules.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
+
 
 namespace Project.ViewModels.AddViewModels
 {
+    using System.Collections.ObjectModel;
+    using System.ComponentModel;
+    using System.Windows.Input;
+    using Project.ClassModels;
+    using Project.Models;
+    using Project.Utils;
+
+    /// <summary>
+    /// ViewModel for adding schedules.
+    /// </summary>
     internal class ScheduleAddViewModel : INotifyPropertyChanged
     {
-        private readonly ScheduleModel _scheduleModel = new ScheduleModel();
+        /// <summary>
+        /// The model for managing schedules.
+        /// </summary>
+        private readonly ScheduleModel scheduleModel = new ();
+
+        /// <summary>
+        /// The collection of schedules displayed in the view.
+        /// </summary>
         public ObservableCollection<Schedule> Schedules { get; set; } = new ObservableCollection<Schedule>();
 
-        private int _doctorID;
+        /// <summary>
+        /// The command to save a schedule.
+        /// </summary>
         public int DoctorID
         {
-            get => _doctorID;
+            get => this.doctorID;
             set
             {
-                _doctorID = value;
-                OnPropertyChanged(nameof(DoctorID));
+                this.doctorID = value;
+                this.OnPropertyChanged(nameof(this.DoctorID));
             }
         }
 
-        private int _shiftID;
+        /// <summary>
+        /// The ID of the shift to be added.
+        /// </summary>
         public int ShiftID
         {
-            get => _shiftID;
+            get => this.shiftID;
             set
             {
-                _shiftID = value;
-                OnPropertyChanged(nameof(ShiftID));
+                this.shiftID = value;
+                this.OnPropertyChanged(nameof(this.ShiftID));
             }
         }
 
-        private string _errorMessage = "";
+        /// <summary>
+        /// The error message to be displayed.
+        /// </summary>
         public string ErrorMessage
         {
-            get => _errorMessage;
+            get => this.errorMessage;
             set
             {
-                _errorMessage = value;
-                OnPropertyChanged(nameof(ErrorMessage));
+                this.errorMessage = value;
+                this.OnPropertyChanged(nameof(this.ErrorMessage));
             }
         }
 
+        /// <summary>
+        /// The command to save the schedule.
+        /// </summary>
         public ICommand SaveScheduleCommand { get; }
 
+        /// <summary>
+        /// The command to delete the schedule.
+        /// </summary>
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        /// <summary>
+        /// The ID of the doctor to be added.
+        /// </summary>
+        private int doctorID;
+        
+        /// <summary>
+        /// The ID of the shift to be added.
+        /// </summary>
+        private int shiftID;
+        
+        /// <summary>
+        /// The color of the message displayed in the view.
+        /// </summary>
+        private string errorMessage = string.Empty;
+        
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ScheduleAddViewModel"/> class.
+        /// </summary>
         public ScheduleAddViewModel()
         {
-            SaveScheduleCommand = new RelayCommand(SaveSchedule);
-            LoadSchedules();
+            this.SaveScheduleCommand = new RelayCommand(this.SaveSchedule);
+            this.LoadSchedules();
+        }
+        
+        /// <summary>
+        /// Raises the <see cref="PropertyChanged"/> event for the specified property.
+        /// </summary>
+        /// <param name="propertyName">The name of the property that changed.</param>
+        protected void OnPropertyChanged(string propertyName)
+        {
+            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        /// <summary>
+        /// Loads the schedules from the database and populates the Schedules collection.
+        /// </summary>
         private void LoadSchedules()
         {
-            Schedules.Clear();
-            foreach (Schedule schedule in _scheduleModel.GetSchedules())
+            this.Schedules.Clear();
+            foreach (Schedule schedule in this.scheduleModel.GetSchedules())
             {
-                Schedules.Add(schedule);
+                this.Schedules.Add(schedule);
             }
         }
-
+    
+        /// <summary>
+        /// Saves the schedule to the database.
+        /// </summary>
         private void SaveSchedule()
         {
             var schedule = new Schedule
             {
                 ScheduleID = 0,
-                DoctorID = DoctorID,
-                ShiftID = ShiftID
+                DoctorID = this.DoctorID,
+                ShiftID = this.ShiftID,
             };
 
-            if (ValidateSchedule(schedule))
+            if (this.ValidateSchedule(schedule))
             {
-                bool success = _scheduleModel.AddSchedule(schedule);
-                ErrorMessage = success ? "Schedule added successfully" : "Failed to add schedule";
+                bool success = this.scheduleModel.AddSchedule(schedule);
+                this.ErrorMessage = success ? "Schedule added successfully" : "Failed to add schedule";
                 if (success)
                 {
-                    LoadSchedules();
+                    this.LoadSchedules();
                 }
             }
         }
 
+        /// <summary>
+        /// Validates the schedule before saving it to the database.
+        /// </summary>
+        /// <param name="schedule">Schedule to be validated.</param>
+        /// <returns>True if the schedule is valid, false otherwise.</returns>
         private bool ValidateSchedule(Schedule schedule)
         {
-            if (schedule.DoctorID == 0 || !_scheduleModel.DoesDoctorExist(schedule.DoctorID))
+            if (schedule.DoctorID == 0 || !this.scheduleModel.DoesDoctorExist(schedule.DoctorID))
             {
-                ErrorMessage = "DoctorID doesn’t exist in the Doctors Records.";
+                this.ErrorMessage = "DoctorID doesn’t exist in the Doctors Records.";
                 return false;
             }
 
-            if (schedule.ShiftID == 0 || !_scheduleModel.DoesShiftExist(schedule.ShiftID))
+            if (schedule.ShiftID == 0 || !this.scheduleModel.DoesShiftExist(schedule.ShiftID))
             {
-                ErrorMessage = "ShiftID doesn’t exist in the Shifts Records.";
+                this.ErrorMessage = "ShiftID doesn’t exist in the Shifts Records.";
                 return false;
             }
 
             return true;
         }
-
-        public event PropertyChangedEventHandler? PropertyChanged;
-        protected void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
     }
 }
-

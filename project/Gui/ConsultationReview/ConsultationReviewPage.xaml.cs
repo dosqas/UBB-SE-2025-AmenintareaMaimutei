@@ -1,105 +1,99 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Microsoft.UI.Xaml;
-using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Controls.Primitives;
-using Microsoft.UI.Xaml.Data;
-using Microsoft.UI.Xaml.Input;
-using Microsoft.UI.Xaml.Media;
-using Microsoft.UI.Xaml.Navigation;
-using Microsoft.UI;
-using Project.Models;
-using Project.ClassModels;
-
-// To learn more about WinUI, the WinUI project structure,
-// and more about our project templates, see: http://aka.ms/winui-project-info.
-
 namespace Project.Gui.ConsultationReview
 {
+    using System;
+    using Microsoft.UI;
+    using Microsoft.UI.Xaml;
+    using Microsoft.UI.Xaml.Controls;
+    using Microsoft.UI.Xaml.Media;
+    using Project.ClassModels;
+    using Project.Models;
 
+    /// <summary>
+    /// ConsultationReview Page.
+    /// </summary>
     public sealed partial class ConsultationReviewPage : Page
     {
-        private int _reviewID;
-        private int _selectedRating = 0;
-        private int _medicalRecordID;
-        private ReviewModel _reviewModel = new();
+        private int reviewID;
+        private int selectedRating = 0;
+        private int medicalRecordID;
+        private ReviewModel reviewModel = new ();
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ConsultationReviewPage"/> class.
+        /// </summary>
+        /// <param name="doctorName">Name of the doctor.</param>
+        /// <param name="time">Time of the consultation.</param>
+        /// <param name="medicalRecordID">The ID of the medical record.</param>
         public ConsultationReviewPage(string doctorName, DateTime time, int medicalRecordID)
         {
-            //TODO: add check if medicalRecordID exists or make sure it is initiated with a correct one
-            _medicalRecordID = medicalRecordID;
+            // TODO: add check if medicalRecordID exists or make sure it is initiated with a correct one
+            this.medicalRecordID = medicalRecordID;
             this.InitializeComponent();
-            DoctorNameText.Text = doctorName;
-            ConsultationDateText.Text = time.ToString("yyyy-MM-dd HH:mm");
-            UpdateStarButtons();
+            this.DoctorNameText.Text = doctorName;
+            this.ConsultationDateText.Text = time.ToString("yyyy-MM-dd HH:mm");
+            this.UpdateStarButtons();
         }
 
         private void StarClick(object sender, RoutedEventArgs e)
         {
-            if(sender is Button starButton && starButton.Tag is string tag)
+            if (sender is Button starButton && starButton.Tag is string tag)
             {
-                if(int.TryParse(tag, out int starNumber))
+                if (int.TryParse(tag, out int starNumber))
                 {
-                    _selectedRating = starNumber;
-                    UpdateStarButtons();
-                    RatingError.Visibility = Visibility.Collapsed;
+                    this.selectedRating = starNumber;
+                    this.UpdateStarButtons();
+                    this.RatingError.Visibility = Visibility.Collapsed;
                 }
-            }    
+            }
         }
 
         private void UpdateStarButtons()
         {
-            for(int i = 1; i <= 5; i++ )
+            for (int i = 1; i <= 5; i++)
             {
-                if(FindName($"Star{i}") is Button starButton)
+                if (this.FindName($"Star{i}") is Button starButton)
                 {
-                    starButton.Foreground = i <= _selectedRating ? new SolidColorBrush(Microsoft.UI.Colors.Gold) : new SolidColorBrush(Microsoft.UI.Colors.Gray);
+                    starButton.Foreground = i <= this.selectedRating ? new SolidColorBrush(Microsoft.UI.Colors.Gold) : new SolidColorBrush(Microsoft.UI.Colors.Gray);
                 }
             }
         }
 
         private void SubmitButton_Click(object sender, RoutedEventArgs e)
         {
-            if (FeedbackTextBox.Text.Length < 5 || FeedbackTextBox.Text.Length > 255)
+            if (this.FeedbackTextBox.Text.Length < 5 || this.FeedbackTextBox.Text.Length > 255)
             {
-                FeedbackError.Text = "Feedback must be between 5 and 255 characters.";
-                FeedbackError.Visibility = Visibility.Visible;
+                this.FeedbackError.Text = "Feedback must be between 5 and 255 characters.";
+                this.FeedbackError.Visibility = Visibility.Visible;
             }
             else
             {
-                FeedbackError.Visibility = Visibility.Collapsed;
+                this.FeedbackError.Visibility = Visibility.Collapsed;
             }
 
-            if (_selectedRating < 1 || _selectedRating > 5)
+            if (this.selectedRating < 1 || this.selectedRating > 5)
             {
-                RatingError.Text = "Please select a rating.";
-                RatingError.Visibility = Visibility.Visible;
+                this.RatingError.Text = "Please select a rating.";
+                this.RatingError.Visibility = Visibility.Visible;
             }
             else
             {
-                RatingError.Visibility = Visibility.Collapsed;
+                this.RatingError.Visibility = Visibility.Collapsed;
             }
 
-            if (FeedbackError.Visibility == Visibility.Collapsed && RatingError.Visibility == Visibility.Collapsed)
+            if (this.FeedbackError.Visibility == Visibility.Collapsed && this.RatingError.Visibility == Visibility.Collapsed)
             {
-                Review review = new Review( reviewID: 0,
-                    //reviewID: Guid.NewGuid(), --> reviewID is autoincremented in the database
-                    medicalRecordID: _medicalRecordID,
-                    text: FeedbackTextBox.Text,
-                    nrStars: _selectedRating
-                );
+                Review review = new Review(
+                    reviewID: 0,
+                    medicalRecordID: this.medicalRecordID,
+                    text: this.FeedbackTextBox.Text,
+                    nrStars: this.selectedRating);
 
-                bool isSuccess = _reviewModel.AddReview(review);
+                bool isSuccess = this.reviewModel.AddReview(review);
 
                 if (isSuccess)
                 {
-                    StatusMessage.Text = "Thank you for your feedback!";
-                    StatusMessage.Foreground = new SolidColorBrush(Colors.Green);
+                    this.StatusMessage.Text = "Thank you for your feedback!";
+                    this.StatusMessage.Foreground = new SolidColorBrush(Colors.Green);
 
                     if (sender is Button submitButton)
                     {
@@ -108,16 +102,14 @@ namespace Project.Gui.ConsultationReview
                 }
                 else
                 {
-                    StatusMessage.Text = "Failed to submit feedback. Please try again later.";
-                    StatusMessage.Foreground = new SolidColorBrush(Colors.Red);
+                    this.StatusMessage.Text = "Failed to submit feedback. Please try again later.";
+                    this.StatusMessage.Foreground = new SolidColorBrush(Colors.Red);
                 }
-
-
             }
             else
             {
-                StatusMessage.Text = "Please fix the errors before submitting.";
-                StatusMessage.Foreground = new SolidColorBrush(Colors.Red);
+                this.StatusMessage.Text = "Please fix the errors before submitting.";
+                this.StatusMessage.Foreground = new SolidColorBrush(Colors.Red);
             }
         }
     }

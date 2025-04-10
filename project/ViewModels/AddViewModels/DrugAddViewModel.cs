@@ -1,14 +1,29 @@
-using Project.ClassModels;
-using Project.Models;
-using Project.Utils;
-using System;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Windows.Input;
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="DrugAddViewModel.cs" company="YourCompany">
+//   Copyright (c) YourCompany. All rights reserved.
+// </copyright>
+// <summary>
+//   ViewModel responsible for handling drug addition logic, validation, and data binding.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace Project.ViewModels.AddViewModels
 {
+<<<<<<< HEAD
 <<<<<<< Updated upstream
+=======
+    using System;
+    using System.Collections.ObjectModel;
+    using System.ComponentModel;
+    using System.Windows.Input;
+    using Project.ClassModels;
+    using Project.Models;
+    using Project.Utils;
+
+    /// <summary>
+    /// ViewModel for adding a new drug.
+    /// </summary>
+>>>>>>> f90fb830f3c66dcbf2f89141884b998fe10e6fbb
     internal class DrugAddViewModel : INotifyPropertyChanged
 =======
     using System;
@@ -25,136 +40,180 @@ namespace Project.ViewModels.AddViewModels
     public class DrugAddViewModel : INotifyPropertyChanged
 >>>>>>> Stashed changes
     {
-        private readonly DrugModel _drugModel = new DrugModel();
-        public ObservableCollection<Drug> Drugs { get; set; } = new ObservableCollection<Drug>();
+        private readonly DrugModel drugModel = new DrugModel();
+        private string name = string.Empty;
+        private string administration = string.Empty;
+        private string specification = string.Empty;
+        private int supply;
+        private string errorMessage = string.Empty;
 
-        private string _name = "";
-        public string Name
-        {
-            get => _name;
-            set
-            {
-                _name = value;
-                OnPropertyChanged(nameof(Name));
-            }
-        }
-
-        private string _administration = "";
-        public string Administration
-        {
-            get => _administration;
-            set
-            {
-                _administration = value;
-                OnPropertyChanged(nameof(Administration));
-            }
-        }
-
-        private string _specification = "";
-        public string Specification
-        {
-            get => _specification;
-            set
-            {
-                _specification = value;
-                OnPropertyChanged(nameof(Specification));
-            }
-        }
-
-        private int _supply;
-        public int Supply
-        {
-            get => _supply;
-            set
-            {
-                _supply = value;
-                OnPropertyChanged(nameof(Supply));
-            }
-        }
-
-        private string _errorMessage = "";
-        public string ErrorMessage
-        {
-            get => _errorMessage;
-            set
-            {
-                _errorMessage = value;
-                OnPropertyChanged(nameof(ErrorMessage));
-            }
-        }
-
-        public ICommand SaveDrugCommand { get; }
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DrugAddViewModel"/> class.
+        /// </summary>
         public DrugAddViewModel()
         {
-            SaveDrugCommand = new RelayCommand(SaveDrug);
-            LoadDrugs();
+            this.SaveDrugCommand = new RelayCommand(this.SaveDrug);
+            this.LoadDrugs();
         }
 
-        private void LoadDrugs()
+        /// <summary>
+        /// Gets the list of all drugs.
+        /// </summary>
+        public ObservableCollection<Drug> Drugs { get; set; } = new ObservableCollection<Drug>();
+
+        /// <summary>
+        /// Gets or sets the name of the drug.
+        /// </summary>
+        public string Name
         {
-            Drugs.Clear();
-            foreach (Drug drug in _drugModel.GetDrugs())
+            get => this.name;
+            set
             {
-                Drugs.Add(drug);
+                this.name = value;
+                this.OnPropertyChanged(nameof(this.Name));
             }
         }
 
+        /// <summary>
+        /// Gets or sets the administration method of the drug.
+        /// </summary>
+        public string Administration
+        {
+            get => this.administration;
+            set
+            {
+                this.administration = value;
+                this.OnPropertyChanged(nameof(this.Administration));
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the specifications of the drug.
+        /// </summary>
+        public string Specification
+        {
+            get => this.specification;
+            set
+            {
+                this.specification = value;
+                this.OnPropertyChanged(nameof(this.Specification));
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the supply amount of the drug.
+        /// </summary>
+        public int Supply
+        {
+            get => this.supply;
+            set
+            {
+                this.supply = value;
+                this.OnPropertyChanged(nameof(this.Supply));
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the error message to be displayed.
+        /// </summary>
+        public string ErrorMessage
+        {
+            get => this.errorMessage;
+            set
+            {
+                this.errorMessage = value;
+                this.OnPropertyChanged(nameof(this.ErrorMessage));
+            }
+        }
+
+        /// <summary>
+        /// Gets the command that triggers the SaveDrug method.
+        /// </summary>
+        public ICommand SaveDrugCommand { get; }
+
+        /// <summary>
+        /// Loads all drugs into the ObservableCollection.
+        /// </summary>
+        private void LoadDrugs()
+        {
+            this.Drugs.Clear();
+
+            foreach (Drug drug in this.drugModel.GetDrugs())
+            {
+                this.Drugs.Add(drug);
+            }
+        }
+
+        /// <summary>
+        /// Creates and saves a new drug if validation passes.
+        /// </summary>
         private void SaveDrug()
         {
             var drug = new Drug
             {
                 DrugID = 0,
-                Name = Name,
-                Administration = Administration,
-                Specification = Specification,
-                Supply = Supply
+                Name = this.Name,
+                Administration = this.Administration,
+                Specification = this.Specification,
+                Supply = this.Supply,
             };
 
-            if (ValidateDrug(drug))
+            if (this.ValidateDrug(drug))
             {
-                bool success = _drugModel.AddDrug(drug);
-                ErrorMessage = success ? "Drug added successfully" : "Failed to add drug";
+                bool success = this.drugModel.AddDrug(drug);
+                this.ErrorMessage = success ? "Drug added successfully" : "Failed to add drug";
+
                 if (success)
                 {
-                    LoadDrugs();
+                    this.LoadDrugs();
                 }
             }
         }
 
+        /// <summary>
+        /// Validates the drug information before saving.
+        /// </summary>
+        /// <param name="drug">The drug to validate.</param>
+        /// <returns><c>true</c> if valid; otherwise, <c>false</c>.</returns>
         private bool ValidateDrug(Drug drug)
         {
             if (string.IsNullOrWhiteSpace(drug.Name))
             {
-                ErrorMessage = "Please enter the name of the drug.";
+                this.ErrorMessage = "Please enter the name of the drug.";
                 return false;
             }
 
             if (string.IsNullOrWhiteSpace(drug.Administration))
             {
-                ErrorMessage = "Please enter the administration of the drug.";
+                this.ErrorMessage = "Please enter the administration of the drug.";
                 return false;
             }
 
             if (string.IsNullOrWhiteSpace(drug.Specification))
             {
-                ErrorMessage = "Please enter the specifications of the drug.";
+                this.ErrorMessage = "Please enter the specifications of the drug.";
                 return false;
             }
 
             if (drug.Supply <= 0)
             {
-                ErrorMessage = "Please enter a number >0 for the supply.";
+                this.ErrorMessage = "Please enter a number > 0 for the supply.";
                 return false;
             }
 
             return true;
         }
 
+        /// <inheritdoc/>
         public event PropertyChangedEventHandler? PropertyChanged;
+
+        /// <summary>
+        /// Triggers the PropertyChanged event.
+        /// </summary>
+        /// <param name="propertyName">The name of the changed property.</param>
         protected void OnPropertyChanged(string propertyName)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

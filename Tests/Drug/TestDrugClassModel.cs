@@ -5,9 +5,15 @@ using Microsoft.Data.SqlClient;
 using System;
 using Project.Utils;
 using System.Transactions;
+<<<<<<< HEAD
 using DrugNamespace = Project.Models;
 
 namespace Tests
+=======
+using DrugNamespace = Project.Models; // Alias for the Drug class namespace
+
+namespace Tests.Drug
+>>>>>>> f90fb830f3c66dcbf2f89141884b998fe10e6fbb
 {
     [TestClass]
     public class TestDrugClassModel
@@ -25,6 +31,7 @@ namespace Tests
         {
             using (var scope = new TransactionScope())
             {
+<<<<<<< HEAD
                 using (var connection = new SqlConnection(DatabaseHelper.GetConnectionString()))
                 {
                     connection.Open();
@@ -47,6 +54,8 @@ namespace Tests
                     // No insert needed here for Add
                 }
 
+=======
+>>>>>>> f90fb830f3c66dcbf2f89141884b998fe10e6fbb
                 var drug = new DrugNamespace.Drug
                 {
                     DrugID = 0,
@@ -55,7 +64,10 @@ namespace Tests
                     Specification = "500mg",
                     Supply = 100
                 };
+<<<<<<< HEAD
 
+=======
+>>>>>>> f90fb830f3c66dcbf2f89141884b998fe10e6fbb
                 var result = _drugModel.AddDrug(drug);
                 result.Should().BeTrue();
             }
@@ -66,6 +78,7 @@ namespace Tests
         {
             using (var scope = new TransactionScope())
             {
+<<<<<<< HEAD
                 using (var connection = new SqlConnection(DatabaseHelper.GetConnectionString()))
                 {
                     connection.Open();
@@ -92,6 +105,8 @@ namespace Tests
                     }
                 }
 
+=======
+>>>>>>> f90fb830f3c66dcbf2f89141884b998fe10e6fbb
                 var drug = new DrugNamespace.Drug
                 {
                     DrugID = 1,
@@ -100,7 +115,10 @@ namespace Tests
                     Specification = "200mg",
                     Supply = 50
                 };
+<<<<<<< HEAD
 
+=======
+>>>>>>> f90fb830f3c66dcbf2f89141884b998fe10e6fbb
                 var result = _drugModel.UpdateDrug(drug);
                 result.Should().BeTrue();
             }
@@ -111,6 +129,7 @@ namespace Tests
         {
             using (var scope = new TransactionScope())
             {
+<<<<<<< HEAD
                 using (var connection = new SqlConnection(DatabaseHelper.GetConnectionString()))
                 {
                     connection.Open();
@@ -136,6 +155,9 @@ namespace Tests
                     DrugID = -1
                 };
 
+=======
+                var drug = new DrugNamespace.Drug { DrugID = -1 };
+>>>>>>> f90fb830f3c66dcbf2f89141884b998fe10e6fbb
                 var result = _drugModel.UpdateDrug(drug);
                 result.Should().BeFalse();
             }
@@ -149,11 +171,15 @@ namespace Tests
                 using (var connection = new SqlConnection(DatabaseHelper.GetConnectionString()))
                 {
                     connection.Open();
+<<<<<<< HEAD
 
+=======
+>>>>>>> f90fb830f3c66dcbf2f89141884b998fe10e6fbb
                     using (var command = new SqlCommand(DatabaseHelper.GetResetProcedureSql(), connection))
                     {
                         command.ExecuteNonQuery();
                     }
+<<<<<<< HEAD
 
                     using (var command = new SqlCommand("EXEC DeleteData", connection))
                     {
@@ -172,6 +198,9 @@ namespace Tests
                     }
                 }
 
+=======
+                }
+>>>>>>> f90fb830f3c66dcbf2f89141884b998fe10e6fbb
                 var result = _drugModel.DeleteDrug(1);
                 result.Should().BeTrue();
             }
@@ -182,6 +211,7 @@ namespace Tests
         {
             using (var scope = new TransactionScope())
             {
+<<<<<<< HEAD
                 using (var connection = new SqlConnection(DatabaseHelper.GetConnectionString()))
                 {
                     connection.Open();
@@ -208,6 +238,8 @@ namespace Tests
                     }
                 }
 
+=======
+>>>>>>> f90fb830f3c66dcbf2f89141884b998fe10e6fbb
                 var result = _drugModel.DoesDrugExist(1);
                 result.Should().BeTrue();
             }
@@ -221,7 +253,10 @@ namespace Tests
                 using (var connection = new SqlConnection(DatabaseHelper.GetConnectionString()))
                 {
                     connection.Open();
+<<<<<<< HEAD
 
+=======
+>>>>>>> f90fb830f3c66dcbf2f89141884b998fe10e6fbb
                     using (var command = new SqlCommand(DatabaseHelper.GetResetProcedureSql(), connection))
                     {
                         command.ExecuteNonQuery();
@@ -243,7 +278,10 @@ namespace Tests
                         command.ExecuteNonQuery();
                     }
                 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> f90fb830f3c66dcbf2f89141884b998fe10e6fbb
                 var result = _drugModel.GetDrugs();
                 result.Should().NotBeNull();
                 result.Count.Should().Be(10);

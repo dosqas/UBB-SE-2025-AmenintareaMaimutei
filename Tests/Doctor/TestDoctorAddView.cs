@@ -1,4 +1,5 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+<<<<<<< HEAD
 using Project.ViewModels.AddViewModels;
 using FluentAssertions;
 using Microsoft.Data.SqlClient;
@@ -72,5 +73,16 @@ namespace Tests
                 _viewModel.Doctors[0].UserID.Should().Be(1);
             }
         }
+=======
+
+namespace Tests;
+
+[TestClass]
+public class TestDoctorAddView
+{
+    [TestMethod]
+    public void TestMethod1()
+    {
+>>>>>>> f90fb830f3c66dcbf2f89141884b998fe10e6fbb
     }
 }
