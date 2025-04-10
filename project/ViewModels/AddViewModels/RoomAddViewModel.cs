@@ -12,7 +12,7 @@ namespace Project.ViewModels.AddViewModels
     /// <summary>
     /// ViewModel for adding rooms. Handles room data binding, validation, and interaction with the RoomModel.
     /// </summary>
-    internal class RoomAddViewModel : INotifyPropertyChanged
+    public class RoomAddViewModel : INotifyPropertyChanged
     {
         private readonly RoomModel roomModel = new RoomModel();
         private int capacity;
