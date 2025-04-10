@@ -5,7 +5,6 @@ namespace Project.ClassModels
     using Microsoft.Data.SqlClient;
     using Project.Models;
     using Project.Utils;
-    using WinRT;
 
     /// <summary>
     /// EquipmentModel class handles database operations for equipment.
