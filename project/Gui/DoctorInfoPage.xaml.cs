@@ -1,37 +1,47 @@
-using Microsoft.UI.Xaml;
-using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Navigation;
-using Project.Models;
-using Project.ViewModels;
-
 namespace Project.Gui
 {
+    using Microsoft.UI.Xaml;
+    using Microsoft.UI.Xaml.Controls;
+    using Microsoft.UI.Xaml.Navigation;
+    using Project.Models;
+    using Project.ViewModels;
+
+    /// <summary>
+    /// DoctorInfoPage class.
+    /// </summary>
     public sealed partial class DoctorInfoPage : Page
     {
-        private DoctorInformationViewModel _viewModel;
+        private DoctorInformationViewModel viewModel;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DoctorInfoPage"/> class.
+        /// </summary>
         public DoctorInfoPage()
         {
             this.InitializeComponent();
-            _viewModel = new DoctorInformationViewModel();
-            this.DataContext = _viewModel;
+            this.viewModel = new DoctorInformationViewModel();
+            this.DataContext = this.viewModel;
         }
 
+        /// <summary>
+        /// Handles the navigatedTo event.
+        /// </summary>
+        /// <param name="e">The event arguments.</param>
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
             if (e.Parameter is Doctor doctor)
             {
                 int doctorID = doctor.DoctorID;
-                _viewModel.LoadDoctorInformation(doctorID);
+                this.viewModel.LoadDoctorInformation(doctorID);
             }
         }
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
-            if (Frame.CanGoBack)
+            if (this.Frame.CanGoBack)
             {
-                Frame.GoBack();
+                this.Frame.GoBack();
             }
         }
     }

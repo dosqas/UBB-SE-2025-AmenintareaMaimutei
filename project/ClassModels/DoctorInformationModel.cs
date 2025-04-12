@@ -1,28 +1,47 @@
-using System;
-using System.Data.SqlClient;
-using Project.Models;
-using Project.Utils;
-using Microsoft.Data.SqlClient;
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="DoctorInformationModel.cs" company="YourCompany">
+//   Copyright (c) YourCompany. All rights reserved.
+// </copyright>
+// <summary>
+//   This file contains the DoctorInformationModel class, which provides methods for retrieving and computing
+//   information related to doctors.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace Project.ClassModels
 {
+    using System;
+    using System.Data.SqlClient;
+    using Microsoft.Data.SqlClient;
+    using Project.Models;
+    using Project.Utils;
+
+    /// <summary>
+    /// Represents a model for retrieving and computing information related to doctors.
+    /// </summary>
     public class DoctorInformationModel
     {
-        private readonly string _connectionString = DatabaseHelper.GetConnectionString();
+        private readonly string connectionString = DatabaseHelper.GetConnectionString();
 
+        /// <summary>
+        /// Retrieves detailed information about a doctor based on their ID.
+        /// </summary>
+        /// <param name="doctorId">The unique identifier of the doctor.</param>
+        /// <returns>A <see cref="DoctorInformation"/> object containing the doctor's details.</returns>
+        /// <exception cref="Exception">Thrown if the doctor is not found or the information is null.</exception>
         public DoctorInformation GetDoctorInformation(int doctorId)
         {
-            DoctorInformation doctorInformation = null;
+            DoctorInformation? doctorInformation = null; // Use nullable type
 
-            using (SqlConnection connection = new SqlConnection(_connectionString))
+            using (SqlConnection connection = new SqlConnection(this.connectionString))
             {
                 connection.Open();
                 string query = @"
-                    SELECT 
-                        UserID, Username, Mail, Role, Name, Birthdate, Cnp, Address, PhoneNumber, RegistrationDate, 
-                        DoctorID, LicenseNumber, Experience, Rating, DepartmentID, DepartmentName
-                    FROM UserDoctorDepartmentView
-                    WHERE DoctorID = @DoctorID";
+                            SELECT 
+                                UserID, Username, Mail, Role, Name, Birthdate, Cnp, Address, PhoneNumber, RegistrationDate, 
+                                DoctorID, LicenseNumber, Experience, Rating, DepartmentID, DepartmentName
+                            FROM UserDoctorDepartmentView
+                            WHERE DoctorID = @DoctorID";
 
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
@@ -48,27 +67,34 @@ namespace Project.ClassModels
                                 (float)reader.GetDouble(reader.GetOrdinal("Experience")),
                                 (float)reader.GetDouble(reader.GetOrdinal("Rating")),
                                 reader.GetInt32(reader.GetOrdinal("DepartmentID")),
-                                reader.GetString(reader.GetOrdinal("DepartmentName"))
-                            );
+                                reader.GetString(reader.GetOrdinal("DepartmentName")));
                         }
-                        else throw new Exception("Doctor not found");
+                        else
+                        {
+                            throw new Exception("Doctor not found");
+                        }
                     }
                 }
             }
 
-            return doctorInformation;
+            return doctorInformation ?? throw new Exception("Doctor information is null");
         }
 
+        /// <summary>
+        /// Computes the salary of a doctor based on their shifts in the current month.
+        /// </summary>
+        /// <param name="doctorId">The unique identifier of the doctor.</param>
+        /// <returns>The computed salary as a decimal value.</returns>
         public decimal ComputeSalary(int doctorId)
         {
             decimal salary = 0;
 
-            using (SqlConnection connection = new SqlConnection(_connectionString))
+            using (SqlConnection connection = new SqlConnection(this.connectionString))
             {
                 connection.Open();
                 string query = @"
-                    SELECT StartTime, EndTime
-                    FROM GetCurrentMonthShiftsForDoctor(@DoctorID)";
+                            SELECT StartTime, EndTime
+                            FROM GetCurrentMonthShiftsForDoctor(@DoctorID)";
 
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {

@@ -1,64 +1,88 @@
-﻿using Project.ClassModels;
-using Project.Models;
-using Project.Utils;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
-
-namespace Project.ViewModels.UpdateViewModels
+﻿namespace Project.ViewModels.UpdateViewModels
 {
-    class DepartmentUpdateViewModel : INotifyPropertyChanged
-    {
-        private readonly DepartmentModel _departmentModel = new DepartmentModel();
-        public ObservableCollection<Department> Departments { get; set; } = new ObservableCollection<Department>();
+    using System.Collections.ObjectModel;
+    using System.ComponentModel;
+    using System.Text;
+    using System.Windows.Input;
+    using Project.ClassModels;
+    using Project.Models;
+    using Project.Utils;
 
-        private string _errorMessage;
-        public string ErrorMessage
-        {
-            get => _errorMessage;
-            set
-            {
-                _errorMessage = value;
-                OnPropertyChanged(nameof(ErrorMessage));
-            }
-        }
-        public ICommand SaveChangesCommand { get; }
+    /// <summary>
+    /// ViewModel for updating departments.
+    /// </summary>
+    public class DepartmentUpdateViewModel : INotifyPropertyChanged
+    {
+        private readonly DepartmentModel departmentModel = new DepartmentModel();
+        private string errorMessage = string.Empty;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DepartmentUpdateViewModel"/> class.
+        /// </summary>
         public DepartmentUpdateViewModel()
         {
-            _errorMessage = string.Empty;
-            SaveChangesCommand = new RelayCommand(SaveChanges);
-            LoadDepartments();
+            this.SaveChangesCommand = new RelayCommand(this.SaveChanges);
+            this.LoadDepartments();
         }
 
-        private void LoadDepartments()
+        /// <summary>
+        /// Occurs when a property value changes.
+        /// </summary>
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        /// <summary>
+        /// Gets or sets the collection of departments.
+        /// </summary>
+        public ObservableCollection<Department> Departments { get; set; } = new ObservableCollection<Department>();
+
+        /// <summary>
+        /// Gets or sets the error message.
+        /// </summary>
+        public string ErrorMessage
         {
-            Departments.Clear();
-            foreach (Department department in _departmentModel.GetDepartments())
+            get => this.errorMessage;
+            set
             {
-                Departments.Add(department);
+                this.errorMessage = value;
+                this.OnPropertyChanged(nameof(this.ErrorMessage));
             }
         }
+
+        /// <summary>
+        /// Gets the command to save changes to the departments.
+        /// </summary>
+        public ICommand SaveChangesCommand { get; }
+
+        /// <summary>
+        /// Loads the departments from the database.
+        /// </summary>
+        private void LoadDepartments()
+        {
+            this.Departments.Clear();
+            foreach (Department department in this.departmentModel.GetDepartments())
+            {
+                this.Departments.Add(department);
+            }
+        }
+
+        /// <summary>
+        /// Saves the changes to the departments in the database.
+        /// </summary>
         private void SaveChanges()
         {
             bool hasErrors = false;
             StringBuilder errorMessages = new StringBuilder();
 
-            foreach (Department department in Departments)
+            foreach (Department department in this.Departments)
             {
-                if (!ValidateDepartment(department))
+                if (!this.ValidateDepartment(department))
                 {
                     hasErrors = true;
-                    errorMessages.AppendLine("Department " + department.DepartmentID + ": " + ErrorMessage);
+                    errorMessages.AppendLine("Department " + department.DepartmentID + ": " + this.ErrorMessage);
                 }
                 else
                 {
-                    bool success = _departmentModel.UpdateDepartment(department);
+                    bool success = this.departmentModel.UpdateDepartment(department);
                     if (!success)
                     {
                         errorMessages.AppendLine("Failed to save changes for department: " + department.DepartmentID);
@@ -66,25 +90,33 @@ namespace Project.ViewModels.UpdateViewModels
                     }
                 }
             }
-            if (hasErrors)
-            {
-                ErrorMessage = errorMessages.ToString();
-            }
-            else
-            {
-                ErrorMessage = "Changes saved successfully";
-            }
+
+            this.ErrorMessage = hasErrors ? errorMessages.ToString() : "Changes saved successfully";
         }
+
+        /// <summary>
+        /// Validates the department.
+        /// </summary>
+        /// <param name="department">The department to validate.</param>
+        /// <returns>True if the department is valid, otherwise false.</returns>
         private bool ValidateDepartment(Department department)
         {
-            if (!System.Text.RegularExpressions.Regex.IsMatch(department.Name, @"^[a-zA-Z0-9 ]*$")) { ErrorMessage = "Department Name should contain only alphanumeric characters"; return false; }
+            if (!System.Text.RegularExpressions.Regex.IsMatch(department.Name, @"^[a-zA-Z0-9 ]*$"))
+            {
+                this.ErrorMessage = "Department Name should contain only alphanumeric characters";
+                return false;
+            }
+
             return true;
         }
 
-        public event PropertyChangedEventHandler? PropertyChanged;
+        /// <summary>
+        /// Raises the <see cref="PropertyChanged"/> event.
+        /// </summary>
+        /// <param name="propertyName">The name of the property that changed.</param>
         private void OnPropertyChanged(string propertyName)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

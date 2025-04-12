@@ -1,63 +1,59 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Microsoft.UI.Xaml;
-using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Controls.Primitives;
-using Microsoft.UI.Xaml.Data;
-using Microsoft.UI.Xaml.Input;
-using Microsoft.UI.Xaml.Media;
-using Microsoft.UI.Xaml.Navigation;
-using Project.Gui;
-using System.Diagnostics;
-using Project.Gui.ModifyViews;
-using Project.Gui.AddViews;
-using Project.Gui.DeleteViews;
-
-// To learn more about WinUI, the WinUI project structure,
-// and more about our project templates, see: http://aka.ms/winui-project-info.
-
 namespace Project.Gui
 {
+    using Microsoft.UI.Xaml;
+    using Microsoft.UI.Xaml.Controls;
+    using Project.Gui.DeleteViews;
+    using Project.Gui.ModifyViews;
+
     /// <summary>
     /// An empty window that can be used on its own or navigated to within a Frame.
     /// </summary>
     public sealed partial class AdminMainPage : Window
     {
-        public static AdminMainPage Instance { get; private set; }
-        public Frame Frame => ContentFrame;
-
+        /// <summary>
+        /// Initializes a new instance of the  <see cref="AdminMainPage"/> class.
+        /// </summary>
         public AdminMainPage()
         {
             this.InitializeComponent();
             Instance = this;
-            ContentFrame.Navigate(typeof(HomePage));
+            this.ContentFrame.Navigate(typeof(HomePage));
         }
 
-        public Frame getContentFrame()
+        /// <summary>
+        /// Gets and Sets the Instance.
+        /// </summary>
+        public static AdminMainPage? Instance { get; private set; }
+
+        /// <summary>
+        /// Gets the Frame.
+        /// </summary>
+        public Frame Frame => this.ContentFrame;
+
+        /// <summary>
+        /// Gets the content of the frame.
+        /// </summary>
+        /// <returns>Frame.</returns>
+        public Frame GetContentFrame()
         {
-            return ContentFrame;
+            return this.ContentFrame;
         }
 
         private void NavigationView_SelectionChanged(global::Microsoft.UI.Xaml.Controls.NavigationView sender, global::Microsoft.UI.Xaml.Controls.NavigationViewSelectionChangedEventArgs args)
         {
             if (args.SelectedItemContainer != null)
             {
-                string invokedItemName = args.SelectedItemContainer.Tag.ToString();
+                string? invokedItemName = args.SelectedItemContainer.Tag.ToString();
                 switch (invokedItemName)
                 {
                     case "HomePage":
-                        ContentFrame.Navigate(typeof(HomePage));
+                        this.ContentFrame.Navigate(typeof(HomePage));
                         break;
                     case "Add":
-                        ContentFrame.Navigate(typeof(AddPage));
+                        this.ContentFrame.Navigate(typeof(AddPage));
                         break;
                     case "Modify":
-                        ContentFrame.Navigate(typeof(ModifyPage));
+                        this.ContentFrame.Navigate(typeof(ModifyPage));
                         break;
                     case "LogOut":
                         var loginPage = new LoginPage();
@@ -65,7 +61,7 @@ namespace Project.Gui
                         this.Close();
                         break;
                     case "Delete":
-                        ContentFrame.Navigate(typeof(DeleteMainPage));
+                        this.ContentFrame.Navigate(typeof(DeleteMainPage));
                         break;
                     default:
                         break;

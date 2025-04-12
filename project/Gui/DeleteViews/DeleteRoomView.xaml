@@ -14,7 +14,7 @@
 
     <Page.Resources>
         <local:MessageToColorConverter x:Key="MessageToColorConverter"/>
-        <local:ZeroToEmptyStringConverter x:Key="ZeroToEmptyStringConverter"/>
+        <local:InputFieldToEmptyStringConverter x:Key="ZeroToEmptyStringConverter"/>
     </Page.Resources>
 
     <Grid>

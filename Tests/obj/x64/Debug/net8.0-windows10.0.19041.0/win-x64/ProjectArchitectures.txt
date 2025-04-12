@@ -1,0 +1,2 @@
+E:\UBB-SE-2025-TeamBabes-From-AmenintareaMaimutei\project\Project.csproj;x64
+E:\UBB-SE-2025-TeamBabes-From-AmenintareaMaimutei\Tests\Tests.csproj;x64
