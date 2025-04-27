@@ -1,0 +1,45 @@
+name: Sync Fork
+
+on:
+  schedule:
+    - cron: '*/30 * * * *'  # Every 30 minutes
+  workflow_dispatch:  # Allow manual trigger
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      # 1. Checkout the fork repository
+      - name: Checkout target repo
+        uses: actions/checkout@v4
+        with:
+          repository: dosqas/UBB-SE-2025-927-1
+          token: ${{ secrets.GH_TOKEN }}
+          fetch-depth: 0
+
+      # 2. Set up Git configuration for the bot
+      - name: Set up Git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      # 3. Add the upstream remote for the original repo
+      - name: Add upstream remote
+        run: |
+          git remote add upstream https://github.com/vodaioan03/UBB-SE-2025-927-1.git
+
+      # 4. Fetch changes from the original repo (upstream)
+      - name: Fetch changes from upstream
+        run: |
+          git fetch upstream
+
+      # 5. Merge changes from upstream/main into the fork's main (no force push)
+      - name: Merge changes from upstream
+        run: |
+          git checkout main
+          git merge upstream/main --no-ff --no-commit
+
+      # 6. Push merged changes to the fork
+      - name: Push changes to fork
+        run: |
+          git push origin main
