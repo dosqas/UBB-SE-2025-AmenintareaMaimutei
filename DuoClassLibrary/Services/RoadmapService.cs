@@ -22,7 +22,7 @@ namespace DuoClassLibrary.Services
         // {
         //        return await serviceProxy.GetAllAsync();
         // }
-        public async Task<Roadmap> GetByIdAsync(int roadmapId)
+        public async Task<Roadmaps> GetByIdAsync(int roadmapId)
         {
                 return await serviceProxy.GetByIdAsync(roadmapId);
         }

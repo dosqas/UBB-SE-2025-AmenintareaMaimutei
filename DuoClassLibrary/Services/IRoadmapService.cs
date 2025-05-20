@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using DuoClassLibrary.Models.Roadmap;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using DuoClassLibrary.Models.Roadmap;
+
 
 namespace DuoClassLibrary.Services
 {
@@ -10,6 +11,6 @@ namespace DuoClassLibrary.Services
         // Task DeleteAsync(Roadmap roadmap);
         // Task<List<Roadmap>> GetAllAsync();
         // Task<Roadmap> GetByNameAsync(string roadmapName);
-        Task<Roadmap> GetByIdAsync(int roadmapId);
+        Task<Roadmaps> GetByIdAsync(int roadmapId);
     }
 }

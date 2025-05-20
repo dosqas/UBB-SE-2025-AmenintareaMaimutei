@@ -1,53 +1,56 @@
-﻿using System.ComponentModel;
-using System.Runtime.CompilerServices;
+using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 
 namespace DuoClassLibrary.Models
 {
     /// <summary>
-    /// Represents a tag that can be assigned to courses or modules, with support for property change notifications.
+    /// Represents a tag that can be assigned to courses or modules.
+    /// Tags are used to categorize or label content for better organization and searchability.
     /// </summary>
-    public partial class Tag : INotifyPropertyChanged
+    [ExcludeFromCodeCoverage]
+    [Serializable]
+    public class Tag
     {
+        #region Fields and Properties
+
         /// <summary>
         /// Gets or sets the unique identifier for the tag.
         /// </summary>
+        [Key]
         public int TagId { get; set; }
 
         /// <summary>
         /// Gets or sets the name of the tag.
         /// </summary>
+        [Required]
         public string Name { get; set; } = string.Empty;
 
-        private bool isSelected;
+        public ICollection<CourseTag> CourseTags { get; set; } = new List<CourseTag>();
+
+        #endregion
+
+        #region Constructors
 
         /// <summary>
-        /// Gets or sets a value indicating whether the tag is currently selected.
+        /// Initializes a new instance of the <see cref="Tag"/> class.
         /// </summary>
-        public bool IsSelected
+        public Tag()
         {
-            get => isSelected;
-            set
-            {
-                if (isSelected != value)
-                {
-                    isSelected = value;
-                    OnPropertyChanged();
-                }
-            }
         }
 
-        /// <summary>
-        /// Occurs when a property value changes.
-        /// </summary>
-        public event PropertyChangedEventHandler? PropertyChanged;
+        #endregion
+
+        #region Methods
 
         /// <summary>
-        /// Raises the <see cref="PropertyChanged"/> event.
+        /// Returns a string representation of the tag, including its name.
         /// </summary>
-        /// <param name="propertyName">The name of the property that changed. This is optional and defaults to the caller name.</param>
-        protected void OnPropertyChanged([CallerMemberName] string propertyName = "")
+        /// <returns>A string describing the tag.</returns>
+        public override string ToString()
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            return $"Tag: {Name}";
         }
+
+        #endregion
     }
 }

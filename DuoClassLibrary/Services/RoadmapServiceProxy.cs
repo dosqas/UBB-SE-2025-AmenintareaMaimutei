@@ -50,12 +50,12 @@ namespace DuoClassLibrary.Services
         //        throw new Exception("Failed to delete roadmap");
         //    }
         // }
-        public async Task<Roadmap> GetByIdAsync(int roadmapId)
+        public async Task<Roadmaps> GetByIdAsync(int roadmapId)
         {
             var response = await httpClient.GetAsync($"{url}api/Roadmaps/{roadmapId}");
             response.EnsureSuccessStatusCode();
 
-            var roadmap = await response.Content.ReadFromJsonAsync<Roadmap>();
+            var roadmap = await response.Content.ReadFromJsonAsync<Roadmaps>();
             if (roadmap == null)
             {
                 throw new Exception("Roadmap not found");

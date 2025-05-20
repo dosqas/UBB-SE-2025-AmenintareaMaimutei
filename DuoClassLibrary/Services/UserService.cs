@@ -1,47 +1,114 @@
-using System;
-using System.Threading.Tasks;
-using DuoClassLibrary.Models;
 
-namespace DuoClassLibrary.Services
+using DuoClassLibrary.Services.Interfaces;
+using DuoClassLibrary.Models;
+using DuoClassLibrary.Services;
+
+
+namespace Duo.Services
 {
     public class UserService : IUserService
     {
-        private readonly IUserServiceProxy userServiceProxy;
+        private readonly IUserHelperService _userHelperService;
+        private User _currentUser;
+        private static readonly object _lock = new object();
 
-        public UserService(IUserServiceProxy userServiceProxy)
+        public UserService(IUserHelperService userHelperService)
         {
-            this.userServiceProxy = userServiceProxy ?? throw new ArgumentNullException(nameof(userServiceProxy));
+            _userHelperService = userHelperService ?? throw new ArgumentNullException(nameof(userHelperService));
         }
 
-        public async Task<User> GetByIdAsync(int userId)
-        {
-            if (userId <= 0)
-            {
-                throw new ArgumentException("User ID must be greater than 0.", nameof(userId));
-            }
-            return await userServiceProxy.GetByIdAsync(userId);
-        }
-
-        public async Task<User> GetByUsernameAsync(string username)
+        public async Task SetUser(string username)
         {
             if (string.IsNullOrWhiteSpace(username))
             {
-                throw new ArgumentException("Username cannot be null or empty.", nameof(username));
+                throw new ArgumentException("Username cannot be empty", nameof(username));
             }
-            return await userServiceProxy.GetByUsernameAsync(username);
+
+            try 
+            {
+                System.Diagnostics.Debug.WriteLine($"Setting user for username: {username}");
+                var existingUser = await _userHelperService.GetUserByUsername(username);
+                System.Diagnostics.Debug.WriteLine($"Found existing user: {existingUser != null}");
+
+                if (existingUser != null)
+                {
+                    lock (_lock)
+                    {
+                        _currentUser = existingUser;
+                        System.Diagnostics.Debug.WriteLine($"Current user set to: {_currentUser.UserName}");
+                    }
+                    await Task.Delay(100); // Add a small delay to ensure the user is set
+                    return;
+                }
+
+                var newUser = new User(username);
+                int userId = await _userHelperService.CreateUser(newUser);
+                lock (_lock)
+                {
+                    _currentUser = new User(userId, username);
+                    System.Diagnostics.Debug.WriteLine($"Created new user: {_currentUser.UserName}");
+                }
+                await Task.Delay(100); // Add a small delay to ensure the user is set
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error in SetUser: {ex.Message}");
+                var lastAttemptUser = await _userHelperService.GetUserByUsername(username);
+                if (lastAttemptUser != null)
+                {
+                    lock (_lock)
+                    {
+                        _currentUser = lastAttemptUser;
+                        System.Diagnostics.Debug.WriteLine($"Recovered user from last attempt: {_currentUser.UserName}");
+                    }
+                    await Task.Delay(100); // Add a small delay to ensure the user is set
+                    return;
+                }
+
+                throw new Exception($"Failed to create or find user: {ex.Message}", ex);
+            }
         }
 
-        public async Task<int> CreateUserAsync(User user)
+        public User GetCurrentUser()
         {
-            if (user == null)
+            lock (_lock)
             {
-                throw new ArgumentNullException(nameof(user));
+                System.Diagnostics.Debug.WriteLine($"Getting current user: {_currentUser?.UserName ?? "null"}");
+                return _currentUser;
             }
-            if (string.IsNullOrWhiteSpace(user.Username))
+        }
+
+        public async Task<User> GetUserById(int id)
+        {
+            try
             {
-                throw new ArgumentException("Username cannot be null or empty.", nameof(user));
+                return await _userHelperService.GetUserById(id);
             }
-            return await userServiceProxy.CreateUserAsync(user);
+            catch (Exception ex)
+            {
+                throw new Exception($"Failed to get user by ID: {ex.Message}", ex);
+            }
+        }
+
+        public async Task<User> GetUserByUsername(string username)
+        {
+            try
+            {
+                return await _userHelperService.GetUserByUsername(username);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        public void ClearCurrentUser()
+        {
+            lock (_lock)
+            {
+                System.Diagnostics.Debug.WriteLine("Clearing current user");
+                _currentUser = null;
+            }
         }
 
         public async Task UpdateUserSectionProgressAsync(int userId, int newNrOfSectionsCompleted, int newNrOfQuizzesInSectionCompleted)
@@ -50,7 +117,7 @@ namespace DuoClassLibrary.Services
             {
                 throw new ArgumentException("User ID must be greater than 0.", nameof(userId));
             }
-            await userServiceProxy.UpdateUserSectionProgressAsync(
+            await _userHelperService.UpdateUserSectionProgressAsync(
                 userId,
                 newNrOfSectionsCompleted,
                 newNrOfQuizzesInSectionCompleted);
@@ -62,10 +129,10 @@ namespace DuoClassLibrary.Services
             {
                 throw new ArgumentException("User ID must be greater than 0.", nameof(userId));
             }
-            var user = await GetByIdAsync(userId);
+            var user = await GetUserById(userId);
             user.NumberOfCompletedQuizzesInSection++;
 
-            await userServiceProxy.UpdateUserAsync(user);
+            await _userHelperService.UpdateUserAsync(user);
         }
 
         public async Task IncrementSectionProgressAsync(int userId)
@@ -74,20 +141,12 @@ namespace DuoClassLibrary.Services
             {
                 throw new ArgumentException("User ID must be greater than 0.", nameof(userId));
             }
-            var user = await GetByIdAsync(userId);
+            var user = await GetUserById(userId);
             user.NumberOfCompletedSections++;
             user.NumberOfCompletedQuizzesInSection = 0;
 
-            await userServiceProxy.UpdateUserAsync(user);
+            await _userHelperService.UpdateUserAsync(user);
         }
 
-        public async Task UpdateUserAsync(User user)
-        {
-            if (user == null)
-            {
-                throw new ArgumentNullException(nameof(user));
-            }
-            await userServiceProxy.UpdateUserAsync(user);
-        }
     }
 }

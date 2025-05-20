@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
 
 namespace DuoClassLibrary.Models
@@ -7,11 +8,15 @@ namespace DuoClassLibrary.Models
     /// Represents a course with its details such as title, description, difficulty, and pricing information.
     /// </summary>
     [ExcludeFromCodeCoverage]
+    [Serializable]
     public class Course
     {
+        #region Fields and Properties
+
         /// <summary>
         /// Gets or sets the unique identifier of the course.
         /// </summary>
+        [Key]
         public int CourseId { get; set; }
 
         /// <summary>
@@ -49,6 +54,34 @@ namespace DuoClassLibrary.Models
         /// </summary>
         public required string Difficulty { get; set; }
 
-        public List<Tag> Tags { get; set; } = new ();
+        public List<Enrollment>? Enrollments { get; set; }
+
+        public ICollection<CourseTag> CourseTags { get; set; } = new List<CourseTag>();
+
+        #endregion
+
+        #region Constructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Course"/> class.
+        /// </summary>
+        public Course()
+        {
+        }
+
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// Returns a string representation of the course, including its title and difficulty level.
+        /// </summary>
+        /// <returns>A string describing the course.</returns>
+        public override string ToString()
+        {
+            return $"Course: {Title}, Difficulty: {Difficulty}, Cost: {Cost} coins";
+        }
+
+        #endregion
     }
 }
