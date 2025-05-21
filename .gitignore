@@ -1,5 +1,19 @@
-﻿################################################################################
-# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
-################################################################################
+﻿.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
 
-/Duo.Api/.vs/Duo.Api
+# Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+build/
+bld/
+[Bb]in/
+[Oo]bj/
+
+# Dotnet specific
+*.dbmdl
+*.log

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Duo.Api.Persistence;
-using Duo.Api.Repositories.Repos;
+using Duo.Api.Repositories.Interfaces;
 using Duo.Api.Models;
 
 namespace Duo.Api.Controllers
@@ -9,11 +9,11 @@ namespace Duo.Api.Controllers
     [Route("[controller]")]
     public class CategoryController : ControllerBase
     {
-        private readonly CategoryRepository _categoryRepository;
+        private readonly ICategoryRepository _categoryRepository;
 
-        public CategoryController(CategoryRepository _categoryRepository)
+        public CategoryController(ICategoryRepository categoryRepository)
         {
-            this._categoryRepository = _categoryRepository;
+            _categoryRepository = categoryRepository ?? throw new ArgumentNullException(nameof(categoryRepository));
         }
 
         [HttpGet(Name = "GetAllCategories")]

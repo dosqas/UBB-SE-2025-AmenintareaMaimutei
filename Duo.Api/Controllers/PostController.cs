@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Duo.Api.Persistence;
-using Duo.Api.Repositories.Repos;
 using Duo.Api.Repositories.Interfaces;
 using Duo.Api.Models;
 
@@ -10,11 +8,11 @@ namespace Duo.Api.Controllers
     [Route("[controller]")]
     public class PostController : ControllerBase
     {
-        private readonly PostRepository _postRepository;
+        private readonly IPostRepository _postRepository;
 
-        public PostController(PostRepository _postRepository)
+        public PostController(IPostRepository postRepository)
         {
-            this._postRepository = _postRepository;
+            _postRepository = postRepository;
         }
         [HttpGet(Name = "GetAllPosts")]
         public async Task<IEnumerable<Post>> Get()

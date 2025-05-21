@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Duo.Api.Persistence;
 using Duo.Api.Repositories.Interfaces;
-using Duo.Api.Repositories.Repos;
 using Duo.Api.Models;
 
 namespace Duo.Api.Controllers
@@ -10,11 +8,11 @@ namespace Duo.Api.Controllers
     [Route("[controller]")]
     public class HashtagController : ControllerBase
     {
-        private readonly HashtagRepository _hashtagRepository;
+        private readonly IHashtagRepository _hashtagRepository;
 
-        public HashtagController(HashtagRepository hashtagRepository)
+        public HashtagController(IHashtagRepository hashtagRepository)
         {
-            this._hashtagRepository = hashtagRepository;
+            _hashtagRepository = hashtagRepository;
         }
 
         [HttpGet(Name = "GetAllHashtags")]

@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using Duo.Api.Models;
-using Duo.Api.Repositories;
 using Duo.Api.Repositories.Interfaces;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
@@ -17,12 +16,18 @@ namespace Duo.Api.Controllers
     /// <remarks>
     /// Initializes a new instance of the <see cref="UserController"/> class with the specified repository.
     /// </remarks>
-    /// <param name="repository">The repository instance for data access.</param>
+    /// <param name="userRepository">The user repository instance for data access.</param>
     [ApiController]
+    [Route("[controller]")]
     [ExcludeFromCodeCoverage]
-    public class UserController(IRepository repository) : BaseController(repository)
+    public class UserController : ControllerBase
     {
         private readonly IUserRepository _userRepository;
+
+        public UserController(IUserRepository userRepository)
+        {
+            _userRepository = userRepository;
+        }
 
         [HttpGet(Name = "GetAllUsers")]
         public async Task<IEnumerable<User>> Get()

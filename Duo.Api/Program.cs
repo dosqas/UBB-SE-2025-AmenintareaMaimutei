@@ -79,6 +79,13 @@ namespace Duo.Api
             // Register IRepository and Repository for dependency injection.
             builder.Services.AddScoped<IRepository, Repository>();
 
+            // Register CategoryRepository for dependency injection.
+            builder.Services.AddScoped<Duo.Api.Repositories.Interfaces.ICategoryRepository, Duo.Api.Repositories.Repos.CategoryRepository>();
+            builder.Services.AddScoped<Duo.Api.Repositories.Interfaces.IPostRepository, Duo.Api.Repositories.Repos.PostRepository>();
+            builder.Services.AddScoped<Duo.Api.Repositories.Interfaces.IHashtagRepository, Duo.Api.Repositories.Repos.HashtagRepository>();
+            builder.Services.AddScoped<Duo.Api.Repositories.Interfaces.ICommentRepository, Duo.Api.Repositories.Repos.CommentRepository>();
+            builder.Services.AddScoped<Duo.Api.Repositories.Interfaces.IUserRepository, Duo.Api.Repositories.Repos.UserRepository>();
+
             // Configure Swagger/OpenAPI.
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
