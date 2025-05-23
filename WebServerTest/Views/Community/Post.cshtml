@@ -1,0 +1,64 @@
+@model DuoClassLibrary.Models.Post
+@inject IHtmlHelper<DuoClassLibrary.Models.Post> Html
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title">@Model.Title</h2>
+                    <div class="d-flex gap-2 mb-3">
+                        @foreach (var hashtag in Model.Hashtags)
+                        {
+                            <a href="@Url.Action("Index", new { hashtags = new[] { hashtag } })" 
+                               class="badge bg-primary text-decoration-none">
+                                #@hashtag
+                            </a>
+                        }
+                    </div>
+                    <p class="card-text">@Model.Description</p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <small class="text-muted">
+                            Posted by @Model.Username on @Model.Date
+                        </small>
+                        <div class="d-flex align-items-center">
+                            <span class="me-2">@Model.LikeCount likes</span>
+                            <form asp-controller="Community" asp-action="LikePost" method="post" class="d-inline">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@Model.Id" />
+                                <button type="submit" class="btn btn-sm btn-outline-primary">
+                                    <i class="bi bi-heart"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Comments Section -->
+            <partial name="_Comments" model="ViewBag.Comments" view-data="ViewData" />
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $('.like-button').click(function() {
+                var button = $(this);
+                var postId = button.data('post-id');
+                
+                $.post('/api/post/like/' + postId, function(response) {
+                    if (response.success) {
+                        var likesSpan = button.siblings('span');
+                        var currentLikes = parseInt(likesSpan.text());
+                        likesSpan.text((currentLikes + 1) + ' likes');
+                    }
+                });
+            });
+        });
+    </script>
+} 

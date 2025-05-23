@@ -830,7 +830,7 @@ namespace Duo.Api.Repositories
 
             if (existing == null)
             {
-                var enrollment = new Enrollment
+                var enrollment = new Duo.Api.Models.Enrollment
                 {
                     UserId = userId,
                     CourseId = courseId,

@@ -1,0 +1,257 @@
+@model List<DuoClassLibrary.Models.Category>
+@using Microsoft.AspNetCore.Http
+
+@{
+    string username = Context.Session.GetString("Username");
+    int? userId = Context.Session.GetInt32("UserId");
+    bool isLoggedIn = !string.IsNullOrEmpty(username);
+}
+
+<div class="vertical-navbar">
+    <!-- Brand -->
+    <div class="navbar-brand">
+        <a href="/">Duo</a>
+    </div>
+    
+    <!-- Navigation Items -->
+    <ul class="nav-menu">
+        <!-- Profile -->
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="collapse" data-bs-target="#profileSubmenu" aria-expanded="false">
+                <i class="bi bi-person"></i>
+                <span>Profile</span>
+                <i class="bi bi-chevron-down expand-icon"></i>
+            </a>
+            <div class="submenu collapse" id="profileSubmenu">
+                <a class="submenu-item" href="/">
+                    <i class="bi bi-house"></i>
+                    <span>Home Page</span>
+                </a>
+                <a class="submenu-item" asp-controller="Settings" asp-action="Index">
+                    <i class="bi bi-gear"></i>
+                    <span>Settings</span>
+                </a>
+            </div>
+        </li>
+        
+        <!-- Community Dropdown -->
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="collapse" data-bs-target="#communitySubmenu" aria-expanded="false">
+                <i class="bi bi-people"></i>
+                <span>Community</span>
+                <i class="bi bi-chevron-down expand-icon"></i>
+            </a>
+            <div class="submenu collapse" id="communitySubmenu">
+                <a class="submenu-item" asp-controller="Community" asp-action="Index">
+                    <i class="bi bi-house"></i>
+                    <span>All Posts</span>
+                </a>
+                @if (Model != null && Model.Any())
+                {
+                    foreach (var category in Model)
+                    {
+                        <a class="submenu-item" asp-controller="Community" asp-action="Index" asp-route-categoryId="@category.Id">
+                            <i class="bi bi-chat"></i>
+                            <span>@category.Name</span>
+                        </a>
+                    }
+                }
+                else
+                {
+                    <a class="submenu-item" asp-controller="Community" asp-action="Index" asp-route-categoryId="1">
+                        <i class="bi bi-megaphone"></i>
+                        <span>Announcements</span>
+                    </a>
+                    <a class="submenu-item" asp-controller="Community" asp-action="Index" asp-route-categoryId="2">
+                        <i class="bi bi-globe"></i>
+                        <span>Discover</span>
+                    </a>
+                    <a class="submenu-item" asp-controller="Community" asp-action="Index" asp-route-categoryId="3">
+                        <i class="bi bi-chat"></i>
+                        <span>General Discussion</span>
+                    </a>
+                    <a class="submenu-item" asp-controller="Community" asp-action="Index" asp-route-categoryId="4">
+                        <i class="bi bi-question-circle"></i>
+                        <span>Lesson Help</span>
+                    </a>
+                    <a class="submenu-item" asp-controller="Community" asp-action="Index" asp-route-categoryId="5">
+                        <i class="bi bi-chat-dots"></i>
+                        <span>Off Topic</span>
+                    </a>
+                }
+            </div>
+        </li>
+    </ul>
+    
+    <!-- Footer with user profile and settings -->
+    <div class="sidebar-footer">
+        @if (isLoggedIn)
+        {
+            <!-- User profile - non-clickable -->
+            <div class="user-display">
+                <i class="bi bi-person-circle"></i>
+                <span>@username</span>
+            </div>
+            
+            <!-- Settings button -->
+            <a class="settings-link" asp-controller="Settings" asp-action="Index">
+                <i class="bi bi-gear"></i>
+                <span>Settings</span>
+            </a>
+        }
+        else
+        {
+            <div class="auth-links">
+                <a class="auth-link" asp-controller="Account" asp-action="Register">
+                    <i class="bi bi-person-plus"></i>
+                    <span>Register</span>
+                </a>
+                <a class="auth-link" asp-controller="Account" asp-action="Login">
+                    <i class="bi bi-box-arrow-in-right"></i>
+                    <span>Login</span>
+                </a>
+            </div>
+        }
+    </div>
+</div>
+
+<style>
+    /* Vertical navbar styles */
+    .vertical-navbar {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        padding: 1rem 0;
+    }
+    
+    .navbar-brand {
+        padding: 0.5rem 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .navbar-brand a {
+        color: #1899D6;
+        font-size: 1.5rem;
+        font-weight: bold;
+        text-decoration: none;
+    }
+    
+    .nav-menu {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    
+    .nav-item {
+        margin-bottom: 0.25rem;
+    }
+    
+    .nav-link {
+        display: flex;
+        align-items: center;
+        padding: 0.75rem 1.5rem;
+        color: #333;
+        text-decoration: none;
+        position: relative;
+    }
+    
+    .nav-link:hover {
+        background-color: rgba(0,0,0,0.05);
+    }
+    
+    .nav-link i:first-child {
+        min-width: 24px;
+        margin-right: 12px;
+        font-size: 1.1rem;
+    }
+    
+    .nav-link span {
+        flex: 1;
+    }
+    
+    /* Hide default dropdown arrows from Bootstrap */
+    .dropdown-toggle::after {
+        display: none !important;
+    }
+    
+    .expand-icon {
+        margin-left: auto;
+        font-size: 0.8rem;
+        transition: transform 0.2s;
+    }
+    
+    .dropdown-toggle[aria-expanded="true"] .expand-icon {
+        transform: rotate(180deg);
+    }
+    
+    .submenu {
+        padding-left: 2.5rem;
+    }
+    
+    .submenu-item {
+        display: flex;
+        align-items: center;
+        padding: 0.5rem 1rem;
+        color: #666;
+        text-decoration: none;
+        font-size: 0.9rem;
+    }
+    
+    .submenu-item:hover {
+        background-color: rgba(0,0,0,0.05);
+    }
+    
+    .submenu-item i {
+        min-width: 20px;
+        margin-right: 10px;
+        font-size: 1rem;
+    }
+    
+    .sidebar-footer {
+        margin-top: auto;
+        padding: 1rem 1.5rem;
+        border-top: 1px solid rgba(0,0,0,0.1);
+    }
+    
+    .user-display {
+        display: flex;
+        align-items: center;
+        margin-bottom: 0.5rem;
+        color: #666;
+    }
+    
+    .user-display i {
+        margin-right: 0.5rem;
+        font-size: 1.2rem;
+    }
+    
+    .settings-link {
+        display: flex;
+        align-items: center;
+        color: #666;
+        text-decoration: none;
+        font-size: 0.9rem;
+    }
+    
+    .settings-link i {
+        margin-right: 0.5rem;
+    }
+    
+    .auth-links {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .auth-link {
+        display: flex;
+        align-items: center;
+        color: #666;
+        text-decoration: none;
+        font-size: 0.9rem;
+    }
+    
+    .auth-link i {
+        margin-right: 0.5rem;
+    }
+</style> 
