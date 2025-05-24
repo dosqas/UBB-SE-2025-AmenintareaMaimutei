@@ -45,6 +45,14 @@ builder.Services.AddScoped<ISearchService, SearchService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IPostService, PostService>();
 builder.Services.AddScoped<ICommentService, CommentService>();
+builder.Services.AddScoped<IRoadmapService, RoadmapService>();
+builder.Services.AddScoped<ISectionService, SectionService>();
+builder.Services.AddScoped<IQuizService, QuizService>();
+
+// Register service proxies
+builder.Services.AddScoped<IRoadmapServiceProxy, RoadmapServiceProxy>();
+builder.Services.AddScoped<ISectionServiceProxy, SectionServiceProxy>();
+builder.Services.AddScoped<IQuizServiceProxy, QuizServiceProxy>();
 
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<DataContext>();
