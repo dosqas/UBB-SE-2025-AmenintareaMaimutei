@@ -53,8 +53,12 @@ namespace Duo.ViewModels
             PreviousPageCommand = new RelayCommand(async () => await PreviousPage());
             FilterPostsCommand = new RelayCommand(async () => await FilterPosts());
             ClearFiltersCommand = new RelayCommand(async () => await ClearFilters());
+        }
 
-            _ = LoadAllHashtagsAsync();
+        public async Task InitializeAsync()
+        {
+            await LoadAllHashtagsAsync();
+            await LoadPosts();
         }
 
         public ObservableCollection<Post> Posts

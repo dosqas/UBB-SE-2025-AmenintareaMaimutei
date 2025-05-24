@@ -72,7 +72,7 @@ namespace Duo.Views.Pages
                 }
             }
 
-            await _viewModel.LoadPosts();
+            await _viewModel.InitializeAsync();
             UpdateHashtagsList();
         }
 

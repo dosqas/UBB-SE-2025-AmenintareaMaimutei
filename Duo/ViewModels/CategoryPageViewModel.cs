@@ -120,13 +120,13 @@ namespace Duo.ViewModels
             }
         }
 
-        private void HandleCategorySelection(string categoryName)
+        private async void HandleCategorySelection(string categoryName)
         {
             CurrentCategoryName = categoryName;
             
             try
             {
-                var category = _categoryService.GetCategoryByName(categoryName);
+                var category = await _categoryService.GetCategoryByName(categoryName);
                 if (category != null)
                 {
                     CurrentCategoryId = category.Id;
@@ -154,14 +154,14 @@ namespace Duo.ViewModels
             }
         }
 
-        private void SelectCategory(string category)
+        private async void SelectCategory(string category)
         {
             if (IsCategoryTag(category))
             {
                 CurrentCategoryName = category;
                 try
                 {
-                    var categoryObj = _categoryService.GetCategoryByName(category);
+                    var categoryObj = await _categoryService.GetCategoryByName(category);
                     if (categoryObj != null)
                     {
                         CurrentCategoryId = categoryObj.Id;

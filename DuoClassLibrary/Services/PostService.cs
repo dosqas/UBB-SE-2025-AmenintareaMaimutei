@@ -506,18 +506,18 @@ namespace DuoClassLibrary.Services
                 IEnumerable<Post> filteredPosts = allPosts;
                 int totalCount;
 
-                // Filter by hashtags if needed
+                // Filter by category first if needed
+                if (categoryId.HasValue && categoryId.Value > INVALID_ID)
+                {
+                    filteredPosts = filteredPosts.Where(p => p.CategoryID == categoryId.Value);
+                }
+
+                // Filter by hashtags if needed and not "All"
                 if (selectedHashtags.Count > DEFAULT_COUNT && !selectedHashtags.Contains("All"))
                 {
                     filteredPosts = filteredPosts.Where(p => 
                         p.Hashtags != null && 
                         p.Hashtags.Any(h => selectedHashtags.Contains(h)));
-                }
-                
-                // Filter by category if needed
-                if (categoryId.HasValue && categoryId.Value > INVALID_ID)
-                {
-                    filteredPosts = filteredPosts.Where(p => p.CategoryID == categoryId.Value);
                 }
 
                 // Apply text filtering if needed

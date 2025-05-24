@@ -15,7 +15,7 @@ public class CommentRepositoryProxi : ICommentRepository, IDisposable
 
     public async Task<Comment?> GetCommentById(int commentId)
     {
-        var response = await _httpClient.GetAsync(Enviroment.BaseUrl + $"api/comment/{commentId}");
+        var response = await _httpClient.GetAsync(Enviroment.BaseUrl + $"api/Comment/{commentId}");
         if (!response.IsSuccessStatusCode)
             throw new Exception($"Failed to fetch comment. Status code: {response.StatusCode}");
         var jsonResponse = await response.Content.ReadAsStringAsync();
@@ -26,32 +26,47 @@ public class CommentRepositoryProxi : ICommentRepository, IDisposable
     {
         try
         {
-            var response = await _httpClient.GetAsync(Enviroment.BaseUrl + $"api/comment/ByPost/{postId}");
+            var url = Enviroment.BaseUrl + $"api/Comment/ByPost/{postId}";
+            
+            var response = await _httpClient.GetAsync(url);
+            var responseContent = await response.Content.ReadAsStringAsync();
+         
             if (!response.IsSuccessStatusCode)
             {
-                throw new Exception($"Failed to fetch comments. Status code: {response.StatusCode}, Reason: {response.ReasonPhrase}");
+                throw new Exception($"Failed to fetch comments. Status code: {response.StatusCode}, Reason: {response.ReasonPhrase}, Content: {responseContent}");
             }
 
-            var jsonResponse = await response.Content.ReadAsStringAsync();
-            if (string.IsNullOrEmpty(jsonResponse))
+            if (string.IsNullOrEmpty(responseContent))
             {
+                Console.WriteLine("Empty response received from API");
                 return new List<Comment>();
             }
 
-            var result = JsonSerializer.Deserialize<List<Comment>>(jsonResponse, new JsonSerializerOptions 
-            { 
-                PropertyNameCaseInsensitive = true,
-                AllowTrailingCommas = true
-            });
+            try
+            {
+                var result = JsonSerializer.Deserialize<List<Comment>>(responseContent, new JsonSerializerOptions 
+                { 
+                    PropertyNameCaseInsensitive = true,
+                    AllowTrailingCommas = true
+                });
 
-            return result ?? new List<Comment>();
+                return result ?? new List<Comment>();
+            }
+            catch (JsonException ex)
+            {
+                Console.WriteLine($"JSON deserialization error: {ex.Message}");
+                Console.WriteLine($"Problematic JSON content: {responseContent}");
+                throw new Exception($"Failed to deserialize comments. Content: {responseContent}", ex);
+            }
         }
-        catch (JsonException ex)
+        catch (HttpRequestException ex)
         {
-            throw new Exception($"Failed to deserialize comments: {ex.Message}", ex);
+            Console.WriteLine($"HTTP request error: {ex.Message}");
+            throw new Exception($"Network error while fetching comments: {ex.Message}", ex);
         }
         catch (Exception ex)
         {
+            Console.WriteLine($"Unexpected error: {ex.Message}");
             throw new Exception($"An error occurred while fetching comments: {ex.Message}", ex);
         }
     }

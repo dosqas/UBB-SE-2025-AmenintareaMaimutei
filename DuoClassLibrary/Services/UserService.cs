@@ -1,4 +1,3 @@
-
 using DuoClassLibrary.Services.Interfaces;
 using DuoClassLibrary.Models;
 using DuoClassLibrary.Services;
@@ -82,7 +81,12 @@ namespace Duo.Services
         {
             try
             {
-                return await _userHelperService.GetUserById(id);
+                var user = await _userHelperService.GetUserById(id);
+                if (user == null)
+                {
+                    throw new Exception($"User with ID {id} not found");
+                }
+                return user;
             }
             catch (Exception ex)
             {

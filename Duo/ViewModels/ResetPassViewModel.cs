@@ -16,6 +16,7 @@ namespace Duo.ViewModels
     public class ResetPassViewModel : INotifyPropertyChanged
     {
         private readonly ForgotPassService _forgotPassService;
+        private readonly PasswordResetValidator _validator;
         private string _email = string.Empty;
         private string _verificationCode = string.Empty;
         private string _newPassword = string.Empty;
@@ -174,6 +175,7 @@ namespace Duo.ViewModels
             }
             
             _forgotPassService = new ForgotPassService(userHelperService);
+            _validator = new PasswordResetValidator();
         }
 
         /// <summary>

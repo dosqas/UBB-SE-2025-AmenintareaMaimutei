@@ -16,6 +16,7 @@ namespace Duo.ViewModels
     public class SignUpViewModel : INotifyPropertyChanged
     {
         private readonly SignUpService signUpService;
+        private readonly SignUpValidator validator;
         private User newUser = new User();
         private string confirmPassword = string.Empty;
         private string passwordStrength = string.Empty;
@@ -35,6 +36,7 @@ namespace Duo.ViewModels
         public SignUpViewModel(SignUpService signUpService)
         {
             this.signUpService = signUpService ?? throw new ArgumentNullException(nameof(signUpService));
+            this.validator = new SignUpValidator();
         }
 
         /// <summary>

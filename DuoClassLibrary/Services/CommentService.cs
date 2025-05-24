@@ -41,11 +41,11 @@ namespace DuoClassLibrary.Services
                         try
                         {
                             User user = await _userService.GetUserById(comment.UserId);
-                            comment.Username = user.UserName;
+                            comment.Username = user?.UserName ?? "Unknown User";
                         }
-                        catch (Exception ex)
+                        catch (Exception)
                         {
-                            throw new Exception(ex.Message);
+                            comment.Username = "Unknown User";
                         }
                     }
                 }
@@ -119,11 +119,15 @@ namespace DuoClassLibrary.Services
                     level = parentComment.Level + 1;
                 }
 
+                User user = _userService.GetCurrentUser();
+
+
                 // Create the comment without relying on UserService
                 var comment = new Comment
                 {
                     Content = content,
                     PostId = postId,
+                    UserId = user.UserId,
                     ParentCommentId = parentCommentId,
                     CreatedAt = DateTime.Now,
                     Level = level

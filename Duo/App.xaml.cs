@@ -37,7 +37,7 @@ namespace Duo
         public static IServiceProvider ServiceProvider;
         public static User? CurrentUser { get; set; }
         public static Window? MainAppWindow { get; private set; }
-        public static UserService userService;
+        public static IUserService userService;
   
         public static IUserHelperService _userHelperService;
         public static IUserRepository _userRepository;

@@ -64,6 +64,13 @@ namespace Duo.ViewModels
                 // Try to get the user
                 LoggedInUser = await loginService.GetUserByCredentials(Username, Password);
                 LoginStatus = LoggedInUser != null;
+
+                if (LoginStatus)
+                {
+                    App.CurrentUser = LoggedInUser;
+                    App.userService.SetUser(App.CurrentUser.UserName);
+                }
+
                 return LoginStatus;
             }
             catch (Exception)
