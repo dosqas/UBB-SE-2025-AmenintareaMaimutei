@@ -1,0 +1,8 @@
+CREATE OR ALTER PROCEDURE DeletePost (
+    @Id INT
+) AS
+BEGIN
+	DELETE FROM Comments WHERE PostID = @Id;
+    DELETE FROM Posts
+    WHERE Id = @Id
+END

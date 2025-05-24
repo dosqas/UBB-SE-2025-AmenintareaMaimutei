@@ -126,7 +126,7 @@ namespace Duo.Api.Migrations
                     b.ToTable("Enrollments");
                 });
 
-            modelBuilder.Entity("Duo.Api.Models.Entities.Achievement", b =>
+            modelBuilder.Entity("Duo.Api.Models.Models.Achievement", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -154,7 +154,7 @@ namespace Duo.Api.Migrations
                     b.ToTable("Achievements");
                 });
 
-            modelBuilder.Entity("Duo.Api.Models.Entities.Category", b =>
+            modelBuilder.Entity("Duo.Api.Models.Models.Category", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -171,7 +171,7 @@ namespace Duo.Api.Migrations
                     b.ToTable("Categories");
                 });
 
-            modelBuilder.Entity("Duo.Api.Models.Entities.Comment", b =>
+            modelBuilder.Entity("Duo.Api.Models.Models.Comment", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -206,7 +206,7 @@ namespace Duo.Api.Migrations
                     b.ToTable("Comments");
                 });
 
-            modelBuilder.Entity("Duo.Api.Models.Entities.Friend", b =>
+            modelBuilder.Entity("Duo.Api.Models.Models.Friend", b =>
                 {
                     b.Property<int>("FriendshipId")
                         .ValueGeneratedOnAdd()
@@ -225,7 +225,7 @@ namespace Duo.Api.Migrations
                     b.ToTable("Friends");
                 });
 
-            modelBuilder.Entity("Duo.Api.Models.Entities.Hashtag", b =>
+            modelBuilder.Entity("Duo.Api.Models.Models.Hashtag", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -242,7 +242,7 @@ namespace Duo.Api.Migrations
                     b.ToTable("Hashtags");
                 });
 
-            modelBuilder.Entity("Duo.Api.Models.Entities.LeaderboardEntry", b =>
+            modelBuilder.Entity("Duo.Api.Models.Models.LeaderboardEntry", b =>
                 {
                     b.Property<int>("UserId")
                         .ValueGeneratedOnAdd()
@@ -277,7 +277,7 @@ namespace Duo.Api.Migrations
                     b.ToTable("LeaderboardEntries");
                 });
 
-            modelBuilder.Entity("Duo.Api.Models.Entities.MyCourse", b =>
+            modelBuilder.Entity("Duo.Api.Models.Models.MyCourse", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -301,7 +301,7 @@ namespace Duo.Api.Migrations
                     b.ToTable("MyCourses");
                 });
 
-            modelBuilder.Entity("Duo.Api.Models.Entities.Post", b =>
+            modelBuilder.Entity("Duo.Api.Models.Models.Post", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -337,7 +337,7 @@ namespace Duo.Api.Migrations
                     b.ToTable("Posts");
                 });
 
-            modelBuilder.Entity("Duo.Api.Models.Entities.PostHashtags", b =>
+            modelBuilder.Entity("Duo.Api.Models.Models.PostHashtags", b =>
                 {
                     b.Property<int>("PostId")
                         .HasColumnType("int");

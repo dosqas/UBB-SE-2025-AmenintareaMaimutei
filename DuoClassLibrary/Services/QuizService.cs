@@ -29,6 +29,10 @@ namespace DuoClassLibrary.Services
             this.serviceProxy = serviceProxy ?? throw new ArgumentNullException(nameof(serviceProxy));
         }
 
+        public QuizService()
+        {
+        }
+
         public async Task<List<Quiz>> GetAllAvailableQuizzes()
         {
                 return await serviceProxy.GetAllAvailableQuizzesAsync().ConfigureAwait(false);

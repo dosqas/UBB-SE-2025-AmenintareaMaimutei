@@ -17,3 +17,6 @@ bld/
 # Dotnet specific
 *.dbmdl
 *.log
+
+#test
+Duo/TestResults/

@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="Duo.Views.Pages.LeaderboardPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Duo.ViewModels"
+    xmlns:data="using:DuoClassLibrary.Models"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid Padding="20">
+        
+        <TextBlock Text="Leaderboard" 
+               FontSize="36" 
+               FontWeight="Bold" 
+               HorizontalAlignment="Center" 
+               VerticalAlignment="Top" 
+               Margin="0,20,0,10"/>
+
+        <!-- Button Container -->
+        <StackPanel Orientation="Horizontal" 
+                HorizontalAlignment="Center" 
+                VerticalAlignment="Top" 
+                Spacing="10" 
+                Margin="0,70,0,0">
+            <!-- Global Button -->
+            <Button Content="Global" 
+                Width="100" 
+                Height="40" 
+                FontSize="14" 
+                Background="LightGray" 
+                BorderBrush="DarkGray" 
+                BorderThickness="1"
+                Click="GlobalButton_Click"/>
+
+            <!-- Friends Button -->
+            <Button Content="Friends" 
+                Width="100" 
+                Height="40" 
+                FontSize="14" 
+                Background="LightGray" 
+                BorderBrush="DarkGray" 
+                BorderThickness="1"
+                IsEnabled="False"/>
+        </StackPanel>
+
+        <Button Content="Refresh" 
+                Width="100" 
+                Height="40" 
+                FontSize="14"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Top"
+                Background="Purple" 
+                BorderBrush="MediumPurple" 
+                BorderThickness="1"
+                Margin="250,145,0,0"
+                Click="RefreshButton_Click"/>
+
+
+
+        <ComboBox x:Name="RankingCriteriaComboBox" 
+              Width="150" 
+              HorizontalAlignment="Center" 
+              VerticalAlignment="Top" 
+              Margin="-200,150,0,0"
+              SelectionChanged="RankingCriteriaComboBox_SelectionChanged">
+            <ComboBox.Items>
+                <ComboBoxItem x:Name="SortBy" Content="Sort By" IsSelected="True" IsEnabled="False" Foreground="Gray"/>
+                <ComboBoxItem Content="Accuracy" />
+                <ComboBoxItem Content="Completed Quizzes" />
+            </ComboBox.Items>
+        </ComboBox>
+
+
+        <ListView x:Name="LeaderboardListView" ItemsSource="{x:Bind Leaderboard, Mode=OneWay}" 
+                  Margin="10" 
+                  Width="500" 
+                  Height="300">
+            <ListView.Header>
+                <Grid Background="LightGray" Padding="5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="50" />
+                        <!-- Fixed width for Rank -->
+                        <ColumnDefinition Width="*" />
+                        <!-- Flexible width for Username -->
+                        <ColumnDefinition Width="100" />
+                        <!-- Fixed width for Accuracy -->
+                        <ColumnDefinition Width="*" />
+                        <!-- Flexible width for Completed Quizzes -->
+                    </Grid.ColumnDefinitions>
+                    <Border BorderBrush="Gray" BorderThickness="0,0,1,0" Grid.Column="0">
+                        <TextBlock Text="Rank" FontWeight="Bold" HorizontalAlignment="Center" />
+                    </Border>
+                    <Border BorderBrush="Gray" BorderThickness="0,0,1,0" Grid.Column="1">
+                        <TextBlock Text="Username" FontWeight="Bold" HorizontalAlignment="Center" />
+                    </Border>
+                    <Border BorderBrush="Gray" BorderThickness="0,0,1,0" Grid.Column="2">
+                        <TextBlock Text="Accuracy (%)" FontWeight="Bold" HorizontalAlignment="Center" />
+                    </Border>
+                    <Border BorderBrush="Gray" BorderThickness="0,0,0,0" Grid.Column="3">
+                        <TextBlock Text="Completed Quizzes" FontWeight="Bold" HorizontalAlignment="Center" />
+                    </Border>
+                </Grid>
+            </ListView.Header>
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="data:LeaderboardEntry">
+                    <Grid Padding="5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="50" />
+                            <!-- Fixed width for Rank -->
+                            <ColumnDefinition Width="*" />
+                            <!-- Flexible width for Username -->
+                            <ColumnDefinition Width="100" />
+                            <!-- Fixed width for Accuracy -->
+                            <ColumnDefinition Width="*" />
+                            <!-- Flexible width for Completed Quizzes -->
+                        </Grid.ColumnDefinitions>
+                        <!-- Add Borders for Separation -->
+                        <Border BorderBrush="Gray" BorderThickness="0,0,1,0" Grid.Column="0">
+                            <TextBlock Text="{x:Bind Rank}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <Border BorderBrush="Gray" BorderThickness="0,0,1,0" Grid.Column="1">
+                            <!-- StackPanel for Profile Image and Username -->
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center">
+                                <!-- Profile Picture -->
+                                <Border Width="30" Height="30" BorderBrush="Gray" BorderThickness="1" Margin="5" CornerRadius="15">
+                                    <Image Source="../../Assets/default.png" Stretch="UniformToFill" VerticalAlignment="Center"/>
+                                </Border>
+                                <!-- Username Text -->
+                                <TextBlock Text="{x:Bind Username}" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                            </StackPanel>
+                        </Border>
+                        <Border BorderBrush="Gray" BorderThickness="0,0,1,0" Grid.Column="2">
+                            <TextBlock Text="{x:Bind Accuracy}" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <Border BorderBrush="Gray" BorderThickness="0,0,0,0" Grid.Column="3">
+                            <TextBlock Text="{x:Bind CompletedQuizzes}" Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <StackPanel VerticalAlignment="Bottom" HorizontalAlignment="Center">
+            <!-- Rank TextBlock -->
+            <TextBlock x:Name="CurrentUserRank"
+                       FontSize="18"
+                       FontWeight="Bold"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Top"/>
+
+        </StackPanel>
+    </Grid>
+
+</Page>

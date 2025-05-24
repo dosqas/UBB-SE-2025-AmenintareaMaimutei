@@ -1,0 +1,6 @@
+CREATE OR ALTER PROCEDURE ReadHashtagById
+    @Id INT
+AS
+BEGIN
+    SELECT * FROM Hashtags WHERE Id = @Id;
+END;
