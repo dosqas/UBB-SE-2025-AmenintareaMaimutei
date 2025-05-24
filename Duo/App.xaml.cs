@@ -28,6 +28,12 @@ using DuoClassLibrary.Repositories.Interfaces;
 using DuoClassLibrary.Repositories.Proxies;
 using Microsoft.EntityFrameworkCore;
 using DuoClassLibrary.Services;
+using Castle.Core.Configuration;
+using Duo.Helpers.Interfaces;
+using Duo.ViewModels.ExerciseViewModels;
+using Duo.ViewModels.Roadmap;
+using System.Net.Http;
+using Duo.Helpers.ViewFactories;
 
 namespace Duo
 {
@@ -95,6 +101,104 @@ namespace Duo
             services.AddTransient<ResetPassViewModel>();
             services.AddTransient<ProfileViewModel>();
             services.AddTransient<LeaderboardViewModel>();
+
+
+            var handler = new HttpClientHandler
+            {
+                ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true
+            };
+
+            var httpClient = new HttpClient(handler);
+
+            services.AddSingleton<HttpClient>();
+
+            // Course
+            services.AddSingleton<ICourseServiceProxy>(sp =>
+            {
+                var httpClient = sp.GetRequiredService<HttpClient>();
+                return new CourseServiceProxy(httpClient);
+            });
+            services.AddSingleton<ICourseService>(sp =>
+            {
+                var proxy = sp.GetRequiredService<ICourseServiceProxy>();
+                return new CourseService(proxy);
+            });
+
+            // Coins
+            services.AddSingleton<ICoinsServiceProxy>(sp =>
+            {
+                var httpClient = sp.GetRequiredService<HttpClient>();
+                return new CoinsServiceProxy(httpClient);
+            });
+            services.AddSingleton<ICoinsService>(sp =>
+            {
+                var proxy = sp.GetRequiredService<ICoinsServiceProxy>();
+                return new CoinsService(proxy);
+            });
+
+            // Exercise
+            services.AddSingleton<IExerciseServiceProxy>(sp =>
+            {
+                var httpClient = sp.GetRequiredService<HttpClient>();
+                return new ExerciseServiceProxy(httpClient);
+            });
+            services.AddSingleton<IExerciseService>(sp =>
+            {
+                var proxy = sp.GetRequiredService<IExerciseServiceProxy>();
+                return new ExerciseService(proxy);
+            });
+
+            // Quiz
+            services.AddSingleton<IQuizServiceProxy>(sp =>
+            {
+                var httpClient = sp.GetRequiredService<HttpClient>();
+                return new QuizServiceProxy(httpClient);
+            });
+            services.AddSingleton<IQuizService>(sp =>
+            {
+                var proxy = sp.GetRequiredService<IQuizServiceProxy>();
+                return new QuizService(proxy);
+            });
+
+            // Section
+            services.AddSingleton<ISectionServiceProxy>(sp =>
+            {
+                var httpClient = sp.GetRequiredService<HttpClient>();
+                return new SectionServiceProxy(httpClient);
+            });
+            services.AddSingleton<ISectionService>(sp =>
+            {
+                var proxy = sp.GetRequiredService<ISectionServiceProxy>();
+                return new SectionService(proxy);
+            });
+
+            // Roadmap
+            services.AddSingleton<IRoadmapServiceProxy>(
+                sp =>
+                {
+                    var httpClient = sp.GetRequiredService<HttpClient>();
+                    return new RoadmapServiceProxy(httpClient);
+                });
+            services.AddSingleton<IRoadmapService>(
+                sp =>
+                {
+                    var proxy = sp.GetRequiredService<IRoadmapServiceProxy>();
+                    return new RoadmapService(proxy);
+                });
+
+            services.AddSingleton<IExerciseViewFactory, ExerciseViewFactory>();
+
+            services.AddTransient<FillInTheBlankExerciseViewModel>();
+            services.AddTransient<MultipleChoiceExerciseViewModel>();
+            services.AddTransient<AssociationExerciseViewModel>();
+            services.AddTransient<ExerciseCreationViewModel>();
+            services.AddTransient<QuizExamViewModel>();
+            services.AddTransient<CreateQuizViewModel>();
+            services.AddTransient<CreateSectionViewModel>();
+
+            services.AddSingleton<RoadmapMainPageViewModel>();
+            services.AddTransient<RoadmapSectionViewModel>();
+            services.AddSingleton<RoadmapQuizPreviewViewModel>();
         }
 
         /// <summary>

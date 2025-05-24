@@ -1,4 +1,4 @@
-﻿/*// <copyright file="ExerciseViewFactory.cs" company="DuoISS">
+﻿// <copyright file="ExerciseViewFactory.cs" company="DuoISS">
 // Copyright (c) DuoISS. All rights reserved.
 // </copyright>
 
@@ -52,4 +52,3 @@ namespace Duo.Helpers.ViewFactories
         }
     }
 }
-*/

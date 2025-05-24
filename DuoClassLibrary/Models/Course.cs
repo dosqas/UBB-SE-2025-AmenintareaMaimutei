@@ -56,7 +56,7 @@ namespace DuoClassLibrary.Models
 
         public List<Enrollment>? Enrollments { get; set; }
 
-        public ICollection<CourseTag> CourseTags { get; set; } = new List<CourseTag>();
+        public List<Tag> Tags { get; set; } = new();
 
         #endregion
 

@@ -30,7 +30,6 @@
 
                     <StackPanel>
                         <TextBlock x:Name="UsernameText" Text="Username" FontSize="20" FontWeight="Bold" />
-                        <TextBlock x:Name="FriendCountText" Text="Friends: 0" FontSize="14" />
                     </StackPanel>
                 </StackPanel>
 
@@ -43,9 +42,6 @@
 
                         <TextBlock Text="Email" FontWeight="Bold" Margin="0,18,0,0"/>
                         <TextBlock x:Name="EmailInput" Text="example@email.com" IsHitTestVisible="False" />
-
-
-
 
                         <TextBlock Text="Password" FontWeight="Bold" Margin="0,18,0,0"/>
                         <Button Content="Change Password"

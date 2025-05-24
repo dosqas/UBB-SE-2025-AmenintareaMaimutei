@@ -31,6 +31,7 @@ namespace DuolingoNou.Views.Pages
         {
             if (_viewModel.CurrentUser != null)
             {
+                UsernameText.Text = _viewModel.CurrentUser.UserName;
                 UsernameInput.Text = _viewModel.CurrentUser.UserName;
                 EmailInput.Text = _viewModel.CurrentUser.Email;
                 PublicRadio.IsChecked = !_viewModel.CurrentUser.PrivacyStatus;
