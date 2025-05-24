@@ -35,6 +35,13 @@
                 <NavigationViewItem x:Name="CommunityItem" Content="Community" Icon="People" Tag="Community">
                     <!-- Community items will be populated dynamically -->
                 </NavigationViewItem>
+                <!-- Added from 927 -->
+                <NavigationViewItem Content="Courses" Icon="Library" ToolTipService.ToolTip="Courses" Tag="CoursesParent">
+                </NavigationViewItem>
+                <NavigationViewItem Content="Roadmap" Icon="Help" ToolTipService.ToolTip="Quiz" Tag="QuizParent">
+                </NavigationViewItem>
+                <NavigationViewItem Content="Quiz Admin"  Icon="Admin" ToolTipService.ToolTip="Admin" Tag="QuizAdminParent">
+                </NavigationViewItem>
             </NavigationView.MenuItems>
 
             <NavigationView.PaneFooter>
