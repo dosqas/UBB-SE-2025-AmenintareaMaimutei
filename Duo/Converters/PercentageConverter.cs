@@ -1,4 +1,4 @@
-﻿// <copyright file="StatusColorConverter.cs" company="DuoISS">
+﻿// <copyright file="PercentageConverter.cs" company="DuoISS">
 // Copyright (c) DuoISS. All rights reserved.
 // </copyright>
 
@@ -6,40 +6,38 @@ namespace Duo.Converters
 {
     using System;
     using Microsoft.UI.Xaml.Data;
-    using Microsoft.UI.Xaml.Media;
 
     /// <summary>
-    /// Converts a boolean status to a color brush: green for true, gray for false.
+    /// Converts a double value (e.g., 0.25) to a percentage string (e.g., "25%").
     /// </summary>
-    public partial class StatusColorConverter : IValueConverter
+    public partial class PercentageConverter : IValueConverter
     {
         /// <summary>
-        /// Converts a boolean value to a <see cref="SolidColorBrush"/>:
-        /// Green if <c>true</c>, Gray if <c>false</c>.
+        /// Converts a double value (e.g., 0.25) to a percentage string (e.g., "25%").
         /// </summary>
-        /// <param name="value">The value to convert, expected to be a <see cref="bool"/>.</param>
+        /// <param name="value">The value to convert (expected to be a double).</param>
         /// <param name="targetType">The target type of the binding (not used).</param>
         /// <param name="parameter">An optional parameter (not used).</param>
         /// <param name="language">The culture info (not used).</param>
-        /// <returns>A green brush if true, a gray brush if false or if input is invalid.</returns>
+        /// <returns>A formatted percentage string (e.g., "25%").</returns>
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            if (value is bool status)
+            if (value is double percentage)
             {
-                return new SolidColorBrush(status ? Microsoft.UI.Colors.Green : Microsoft.UI.Colors.Gray);
+                return (percentage * 100).ToString("F0") + "%";
             }
 
-            return new SolidColorBrush(Microsoft.UI.Colors.Gray); // Default color
+            return "0%";
         }
 
         /// <summary>
-        /// Not implemented. Throws a <see cref="NotImplementedException"/>.
+        /// Not implemented. Throws a NotImplementedException.
         /// </summary>
         /// <param name="value">The value to convert back.</param>
         /// <param name="targetType">The type to convert back to.</param>
         /// <param name="parameter">An optional parameter.</param>
         /// <param name="language">The culture info.</param>
-        /// <returns>Throws <see cref="NotImplementedException"/>.</returns>
+        /// <returns>Throws NotImplementedException.</returns>
         public object ConvertBack(object value, Type targetType, object parameter, string language)
         {
             throw new NotImplementedException();

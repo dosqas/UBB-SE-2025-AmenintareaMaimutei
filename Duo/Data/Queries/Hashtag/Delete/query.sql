@@ -1,6 +1,0 @@
-CREATE OR ALTER PROCEDURE DeleteHashtag
-    @Id INT
-AS
-BEGIN
-    DELETE FROM Hashtags WHERE Id = @Id;
-END;

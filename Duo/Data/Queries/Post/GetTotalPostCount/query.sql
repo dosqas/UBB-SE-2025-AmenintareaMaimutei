@@ -1,7 +1,0 @@
-CREATE OR ALTER PROCEDURE GetTotalPostCount
-AS
-BEGIN
-    SET NOCOUNT ON;
-
-    SELECT COUNT(*) AS TotalCount FROM Posts;
-END; 

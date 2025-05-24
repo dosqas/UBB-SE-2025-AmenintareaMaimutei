@@ -1,53 +1,55 @@
-using System;
+// <copyright file="PasswordResetValidator.cs" company="DuoISS">
+// Copyright (c) DuoISS. All rights reserved.
+// </copyright>
 
 namespace Duo.Validators
 {
     /// <summary>
-    /// Provides validation methods for the password reset process
+    /// Provides validation methods used during the password reset process.
     /// </summary>
     public class PasswordResetValidator
     {
         /// <summary>
-        /// Validates if the email is in a valid format
+        /// Validates whether the specified email address has a basic valid format.
         /// </summary>
-        /// <param name="email">The email to validate</param>
-        /// <returns>True if the email is valid; otherwise, false</returns>
-        public bool IsValidEmail(string email)
+        /// <param name="email">The email address to validate.</param>
+        /// <returns><c>true</c> if the email format is valid; otherwise, <c>false</c>.</returns>
+        public static bool IsValidEmail(string email)
         {
-            return !string.IsNullOrWhiteSpace(email) && 
-                   email.Contains("@") && 
-                   email.Contains(".");
+            return !string.IsNullOrWhiteSpace(email) &&
+                   email.Contains('@') &&
+                   email.Contains('.');
         }
 
         /// <summary>
-        /// Validates if the verification code is not empty
+        /// Validates whether the verification code is non-empty.
         /// </summary>
-        /// <param name="code">The verification code to validate</param>
-        /// <returns>True if the code is not empty; otherwise, false</returns>
-        public bool IsValidVerificationCode(string code)
+        /// <param name="code">The verification code to validate.</param>
+        /// <returns><c>true</c> if the code is not empty or whitespace; otherwise, <c>false</c>.</returns>
+        public static bool IsValidVerificationCode(string code)
         {
             return !string.IsNullOrWhiteSpace(code);
         }
 
         /// <summary>
-        /// Validates if the passwords match
+        /// Validates that the password and its confirmation match exactly.
         /// </summary>
-        /// <param name="password">The password</param>
-        /// <param name="confirmPassword">The password confirmation</param>
-        /// <returns>True if the passwords match; otherwise, false</returns>
-        public bool DoPasswordsMatch(string password, string confirmPassword)
+        /// <param name="password">The original password.</param>
+        /// <param name="confirmPassword">The password confirmation input.</param>
+        /// <returns><c>true</c> if both passwords match; otherwise, <c>false</c>.</returns>
+        public static bool DoPasswordsMatch(string password, string confirmPassword)
         {
             return password == confirmPassword;
         }
 
         /// <summary>
-        /// Validates if the new password is not empty
+        /// Validates whether the new password is non-empty.
         /// </summary>
-        /// <param name="password">The password to validate</param>
-        /// <returns>True if the password is not empty; otherwise, false</returns>
-        public bool IsValidNewPassword(string password)
+        /// <param name="password">The new password to validate.</param>
+        /// <returns><c>true</c> if the password is not empty or whitespace; otherwise, <c>false</c>.</returns>
+        public static bool IsValidNewPassword(string password)
         {
             return !string.IsNullOrWhiteSpace(password);
         }
     }
-} 
+}

@@ -1,6 +1,0 @@
-CREATE OR ALTER PROCEDURE GetCommentsCountForPost
-	@PostID int
-AS
-BEGIN
-SELECT COUNT(*) FROM Comments WHERE PostID = @PostID
-END;

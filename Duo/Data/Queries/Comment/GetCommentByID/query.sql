@@ -1,6 +1,0 @@
-CREATE OR ALTER PROCEDURE GetCommentByID
-	@CommentID INT
-	AS
-	BEGIN
-		SELECT * FROM Comments WHERE Id = @CommentID;
-END;

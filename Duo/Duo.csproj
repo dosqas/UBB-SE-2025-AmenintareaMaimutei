@@ -14,6 +14,12 @@
 		<WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
 		<EnableWindowsTargeting>true</EnableWindowsTargeting>
 	</PropertyGroup>
+	<ItemGroup>
+	  <Compile Remove="Repositories\**" />
+	  <EmbeddedResource Remove="Repositories\**" />
+	  <None Remove="Repositories\**" />
+	  <Page Remove="Repositories\**" />
+	</ItemGroup>
 
 	<ItemGroup>
 		<Content Include="Assets\SplashScreen.scale-200.png" />
@@ -58,22 +64,6 @@
 		</PackageReference>
 	</ItemGroup>
 	<ItemGroup>
-		<Folder Include="Data\Queries\Category\GetByName\" />
-		<Folder Include="Data\Queries\Comment\DeleteComment\" />
-		<Folder Include="Data\Queries\Comment\GetAll\" />
-		<Folder Include="Data\Queries\Comment\GetCommentByID\" />
-		<Folder Include="Data\Queries\Comment\IncrementLikeCount\" />
-		<Folder Include="Data\Queries\Comment\Update\" />
-		<Folder Include="Data\Queries\Post\GetAllPosts\" />
-		<Folder Include="Data\Queries\Post\GetAll\" />
-		<Folder Include="Data\Queries\Post\Search\" />
-		<Folder Include="Data\Queries\Hashtag\GetHashtagByText\" />
-		<Folder Include="Data\Queries\PostHashtag\AddHashtagToPost\" />
-		<Folder Include="Data\Queries\PostHashtag\DeleteHashtagFromPost\" />
-		<Folder Include="Data\Queries\PostHashtag\GetHashtagsForPost\" />
-		<Folder Include="Repositories\Interfaces\" />
-	</ItemGroup>
-	<ItemGroup>
 	  <ProjectReference Include="..\DuoClassLibrary\DuoClassLibrary.csproj" />
 	</ItemGroup>
 	<ItemGroup>
@@ -111,4 +101,16 @@
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
 		<CodeAnalysisRuleSet>SE.ruleset</CodeAnalysisRuleSet>
 	</PropertyGroup>
+
+	<ItemGroup>
+	  <PRIResource Remove="Repositories\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Remove="stylecop.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <AdditionalFiles Include="stylecop.json" />
+	</ItemGroup>
 </Project>

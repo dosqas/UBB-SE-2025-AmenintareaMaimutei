@@ -1,5 +1,0 @@
-CREATE PROCEDURE GetAllComments
-AS
-BEGIN
-SELECT * FROM Comments
-END
