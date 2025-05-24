@@ -63,7 +63,7 @@ namespace Duo.ViewModels
             LoadPostDetailsCommand = new RelayCommandWithParameter<int>(LoadPostDetails);
             AddCommentCommand = new RelayCommandWithParameter<string>(AddComment);
             AddReplyCommand = new RelayCommandWithParameter<Tuple<int, string>>(AddReply);
-            BackCommand = new RelayCommand(GoBack);
+            BackCommand = new RelayCommand(_ => GoBack());
         }
 
         public DuoClassLibrary.Models.Post Post

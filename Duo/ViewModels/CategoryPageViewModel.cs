@@ -35,7 +35,7 @@ namespace Duo.ViewModels
             _ = InitializeAsync();
             
             SelectCategoryCommand = new RelayCommandWithParameter<string>(SelectCategory);
-            CreatePostCommand = new RelayCommand(CreatePost);
+            CreatePostCommand = new RelayCommand(_ => CreatePost());
         }
 
         public bool IsLoading

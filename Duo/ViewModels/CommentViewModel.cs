@@ -45,10 +45,10 @@ namespace Duo.ViewModels
                 }
             }
             
-            ToggleRepliesCommand = new RelayCommand(ToggleReplies);
-            ShowReplyFormCommand = new RelayCommand(ShowReplyForm);
-            CancelReplyCommand = new RelayCommand(CancelReply);
-            LikeCommentCommand = new RelayCommand(OnLikeComment);
+            ToggleRepliesCommand = new RelayCommand(_ => ToggleReplies());
+            ShowReplyFormCommand = new RelayCommand(_ => ShowReplyForm());
+            CancelReplyCommand = new RelayCommand(_ => CancelReply());
+            LikeCommentCommand = new RelayCommand(_ => OnLikeComment());
         }
 
         public int Id => _comment.Id;

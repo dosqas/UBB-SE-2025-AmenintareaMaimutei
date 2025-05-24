@@ -17,7 +17,10 @@ namespace Duo.ViewModels
 
         public CommentCreationViewModel()
         {
-            SubmitCommentCommand = new RelayCommand(SubmitComment, CanSubmitComment);
+            SubmitCommentCommand = new RelayCommand(
+                _ => SubmitComment(),
+                _ => CanSubmitComment()
+            );
         }
 
         public string CommentText

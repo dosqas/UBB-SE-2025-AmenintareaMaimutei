@@ -48,11 +48,11 @@ namespace Duo.ViewModels
             _currentPage = DEFAULT_PAGE_NUMBER;
             _selectedHashtags.Add(ALL_HASHTAGS_FILTER);
 
-            LoadPostsCommand = new RelayCommand(async () => await LoadPosts());
-            NextPageCommand = new RelayCommand(async () => await NextPage());
-            PreviousPageCommand = new RelayCommand(async () => await PreviousPage());
-            FilterPostsCommand = new RelayCommand(async () => await FilterPosts());
-            ClearFiltersCommand = new RelayCommand(async () => await ClearFilters());
+            LoadPostsCommand = new RelayCommand(async _ => await LoadPosts());
+            NextPageCommand = new RelayCommand(async _ => await NextPage());
+            PreviousPageCommand = new RelayCommand(async _ => await PreviousPage());
+            FilterPostsCommand = new RelayCommand(async _ => await FilterPosts());
+            ClearFiltersCommand = new RelayCommand(async _ => await ClearFilters());
         }
 
         public async Task InitializeAsync()

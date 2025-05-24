@@ -172,7 +172,7 @@ namespace Duo.ViewModels
             _userService = _userService ?? App.userService;
 
             // Initialize commands
-            CreatePostCommand = new RelayCommand(async () => await CreatePostAsync());
+            CreatePostCommand = new RelayCommand(async _ => await CreatePostAsync());
             AddHashtagCommand = new RelayCommandWithParameter<string>(AddHashtag);
             RemoveHashtagCommand = new RelayCommandWithParameter<string>(RemoveHashtag);
             SelectCommunityCommand = new RelayCommandWithParameter<int>(SelectCommunity);
