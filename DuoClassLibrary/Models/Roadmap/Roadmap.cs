@@ -3,19 +3,19 @@ using DuoClassLibrary.Models.Sections;
 
 namespace DuoClassLibrary.Models.Roadmap;
 
-public class Roadmaps
+public class Roadmap
 {
     public int Id { get; set; }
     public string Name { get; set; }
     public List<Section> Sections { get; set; }
 
-    public Roadmaps()
+    public Roadmap()
     {
         Sections = new List<Section>();
         Name = string.Empty;
     }
 
-    public Roadmaps(int id, string name)
+    public Roadmap(int id, string name)
     {
         Id = id;
         Name = name;

@@ -207,6 +207,12 @@ namespace Duo.Views.Components
                 return;
             }
 
+            if(QuizStatus == QUIZ_STATUS.COMPLETED && IsExam)
+            {
+
+                return;
+            }
+
             if (Command?.CanExecute(CommandParameter) == true)
             {
                 Command.Execute(CommandParameter);

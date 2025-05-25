@@ -17,7 +17,7 @@ namespace Duo.ViewModels.Roadmap
     public class RoadmapMainPageViewModel : ViewModelBase
     {
         private IRoadmapService roadmapService;
-        private DuoClassLibrary.Models.Roadmap.Roadmaps roadmap;
+        private DuoClassLibrary.Models.Roadmap.Roadmap roadmap;
         private IUserService userService;
         private User user;
         private BaseQuiz selectedQuiz;

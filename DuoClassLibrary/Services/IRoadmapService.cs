@@ -11,6 +11,6 @@ namespace DuoClassLibrary.Services
         // Task DeleteAsync(Roadmap roadmap);
         // Task<List<Roadmap>> GetAllAsync();
         // Task<Roadmap> GetByNameAsync(string roadmapName);
-        Task<Roadmaps> GetByIdAsync(int roadmapId);
+        Task<Roadmap> GetByIdAsync(int roadmapId);
     }
 }

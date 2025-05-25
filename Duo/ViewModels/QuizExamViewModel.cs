@@ -557,6 +557,12 @@ namespace Duo.ViewModels
                         RaiseErrorMessage("Progression Error", "Exam ID does not match section's final exam.");
                         return;
                     }
+                    bool isExamCompleted = await quizService.IsExamCompleted(user.UserId, ExamId);
+                    if (isExamCompleted)
+                    {
+                        RaiseErrorMessage("Progression Error", "Exam already completed.");
+                        return;
+                    }
 
                     if (CurrentExam.SectionId == null)
                     {
