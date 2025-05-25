@@ -15,7 +15,7 @@
                 <!-- Avatar and Basic Info -->
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Spacing="20">
                     <Grid Width="100" Height="100">
-                        <PersonPicture ProfilePicture="Assets/userIcon.png" Width="100" Height="100"/>
+                        <PersonPicture ProfilePicture="/Assets/userIcon.png" Width="100" Height="100"/>
                     </Grid>
 
 
