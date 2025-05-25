@@ -13,8 +13,8 @@
             </ResourceDictionary.MergedDictionaries>
 
             <!-- Converters -->
-            <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
-            <converters:BoolToInvertedVisibilityConverter x:Key="BoolToInvertedVisibilityConverter" />
+            <converters:InverseBooleanConverter x:Key="InverseBooleanConverter" />
+            <converters:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
 
             <!-- Override button hover and pressed state colors using theme colors -->
             <SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="{ThemeResource SystemAccentColorDark1}" />
