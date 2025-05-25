@@ -517,7 +517,7 @@ namespace Duo.ViewModels
                 ISectionService sectionService = (ISectionService)App.ServiceProvider.GetService(typeof(ISectionService))
                     ?? throw new InvalidOperationException("ISectionService not found.");
 
-                User user = await userService.GetUserById(1)
+                User user = userService.GetCurrentUser()
                     ?? throw new InvalidOperationException("User not found.");
                 List<Section> sections = await sectionService.GetByRoadmapId(1)
                     ?? throw new InvalidOperationException("Sections not found.");

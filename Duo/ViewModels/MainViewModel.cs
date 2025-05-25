@@ -9,6 +9,7 @@ using Duo.Commands;
 using DuoClassLibrary.Models;
 using DuoClassLibrary.Services;
 using Windows.System.Threading;
+using DuoClassLibrary.Services.Interfaces;
 
 #pragma warning disable IDE0028, CS8618, CS8602, CS8601, IDE0060
 
@@ -19,7 +20,7 @@ namespace Duo.ViewModels
     /// </summary>
     public partial class MainViewModel : BaseViewModel, IMainViewModel
     {
-        private int CurrentUserId { get; init; } = 1;
+        private int CurrentUserId { get; init; }
 
         private readonly ICourseService courseService;
         private readonly ICoinsService coinsService;
@@ -206,7 +207,7 @@ namespace Duo.ViewModels
         /// <summary>
         /// Initializes a new instance of the <see cref="MainViewModel"/> class.
         /// </summary>
-        public MainViewModel(CoinsServiceProxy serviceProxy, CourseServiceProxy courseServiceProxy, int currentUserId = 1,
+        public MainViewModel(CoinsServiceProxy serviceProxy, CourseServiceProxy courseServiceProxy, int currentUserId,
             ICourseService? courseService = null, ICoinsService? coinsService = null)
         {
             this.CurrentUserId = currentUserId;

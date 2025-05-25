@@ -8,13 +8,14 @@ using Duo.ViewModels;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Navigation;
+using DuoClassLibrary.Services.Interfaces;
 
 namespace Duo.Views
 {
     public sealed partial class MainPage : Page
     {
         private static bool isDialogShown = false;
-        private int CurrentUserId { get; init; } = 1;
+        private int CurrentUserId { get; init; }
 
         public MainPage()
         {
@@ -29,6 +30,11 @@ namespace Duo.Views
 
                 var courseService = new CourseService(courseServiceProxy);
                 var coinsService = new CoinsService(serviceProxy);
+
+                IUserService userService = (IUserService)App.ServiceProvider.GetService(typeof(IUserService))
+                    ?? throw new InvalidOperationException("IUserService not found.");
+
+                CurrentUserId = userService.GetCurrentUser().UserId;
 
                 var vm = new MainViewModel(
                     serviceProxy,

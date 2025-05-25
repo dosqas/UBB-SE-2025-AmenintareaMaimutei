@@ -13,6 +13,7 @@ using DuoClassLibrary.Models;
 using DuoClassLibrary.Services;
 using Duo.ViewModels.Helpers;
 using Windows.System;
+using DuoClassLibrary.Services.Interfaces;
 
 #pragma warning disable IDE0079 // Remove unnecessary suppression
 #pragma warning disable SA1010 // Opening square brackets should be spaced correctly
@@ -61,6 +62,8 @@ namespace Duo.ViewModels
         #endregion
 
         #region Properties
+        public int CurrentUserId { get => currentUserId; }
+
 
         /// <summary>Gets the current course being viewed</summary>
         public Course CurrentCourse { get; }
@@ -266,12 +269,13 @@ namespace Duo.ViewModels
         /// <param name="timerService">The timer service for course progress tracking (optional)</param>
         /// <param name="notificationTimerService">The timer service for notifications (optional)</param>
         /// <exception cref="ArgumentNullException">Thrown when course is null</exception>
-        public CourseViewModel(Course course, int currentUserId = 1, ICourseService? courseService = null,
+        public CourseViewModel(Course course, int currentUserId, ICourseService? courseService = null,
             ICoinsService? coinsService = null, IDispatcherTimerHelper? timerService = null,
             IDispatcherTimerHelper? notificationTimerService = null, INotificationHelper? notificationHelper = null,
             CourseServiceProxy? serviceProxy = null)
         {
             CurrentCourse = course ?? throw new ArgumentNullException(nameof(course));
+
             this.currentUserId = currentUserId;
 
             var httpClient = new System.Net.Http.HttpClient();

@@ -53,7 +53,7 @@ namespace Duo.ViewModels.Roadmap
             try
             {
                 roadmap = await roadmapService.GetByIdAsync(1);
-                user = await userService.GetUserById(1);
+                user = userService.GetCurrentUser();
 
                 ISectionService sectionService = (ISectionService)App.ServiceProvider.GetService(typeof(ISectionService));
                 List<Section> sections = null;

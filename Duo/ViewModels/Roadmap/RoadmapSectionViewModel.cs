@@ -81,7 +81,7 @@ namespace Duo.ViewModels.Roadmap
 
                 IQuizService quizService = (IQuizService)App.ServiceProvider.GetService(typeof(IQuizService));
                 IUserService userService = (IUserService)App.ServiceProvider.GetService(typeof(IUserService));
-                this.user = await userService.GetUserById(1);
+                this.user = userService.GetCurrentUser();
                 section.Quizzes = await quizService.GetAllQuizzesFromSection(this.sectionId);
                 section.Exam = await quizService.GetExamFromSection(this.sectionId);
 

@@ -14,7 +14,7 @@ namespace Duo.Views
     {
         private ModuleViewModel viewModel = null!;
 
-        private int CurrentUserId { get; init; } = 1;
+        private int CurrentUserId { get; set; }
 
         private CourseViewModel ParentVM { get; set; } = null!;
 
@@ -29,6 +29,8 @@ namespace Duo.Views
             {
                 var (module, courseVM) = tuple;
                 ParentVM = courseVM;
+
+                this.CurrentUserId = ParentVM.CurrentUserId;
 
                 var httpClient = new HttpClient
                 {

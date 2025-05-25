@@ -26,7 +26,7 @@ namespace Duo.ViewModels
 
         public ICommand ModuleImageClickCommand { get; set; }
 
-        public ModuleViewModel(Module module, ICourseViewModel courseVM, int userId = 1,
+        public ModuleViewModel(Module module, ICourseViewModel courseVM, int userId,
                     ICourseService? courseServiceOverride = null,
                     ICoinsService? coinsServiceOverride = null)
         {

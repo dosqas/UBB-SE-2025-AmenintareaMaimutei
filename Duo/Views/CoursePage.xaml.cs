@@ -17,7 +17,7 @@ namespace Duo.Views
     {
         private CourseViewModel? viewModel;
 
-        private int CurrentUserId { get; init; } = 1;
+        private int CurrentUserId { get; set; }
 
         public CoursePage()
         {
@@ -39,6 +39,8 @@ namespace Duo.Views
                 default:
                     return;
             }
+
+            this.CurrentUserId = viewModel.CurrentUserId;
 
             this.DataContext = viewModel;
 
