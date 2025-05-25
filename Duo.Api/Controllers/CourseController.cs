@@ -137,7 +137,7 @@ namespace Duo.Api.Controllers
         /// <param name="courseId">The ID of the course.</param>
         /// <returns>True if completed; otherwise, false.</returns>
         [HttpGet("is-completed")]
-        public async Task<IActionResult> IsCompleted([FromForm] int userId, [FromForm] int courseId)
+        public async Task<IActionResult> IsCompleted([FromQuery] int userId, [FromQuery] int courseId)
         {
             var isCompleted = await repository.IsCourseCompletedAsync(userId, courseId);
             return Ok(isCompleted);
@@ -196,9 +196,12 @@ namespace Duo.Api.Controllers
         /// <param name="courseId">The course ID.</param>
         /// <returns>Ok if reward claimed.</returns>
         [HttpPost("claim-completion")]
-        public async Task<IActionResult> ClaimCompletionReward([FromForm] int userId, [FromForm] int courseId)
+        public async Task<IActionResult> ClaimCompletionReward([FromBody] JsonElement body)
         {
-            await repository.ClaimCompletionRewardAsync(userId, courseId);
+            int userId = body.GetProperty("userId").GetInt32();
+            int courseId = body.GetProperty("courseId").GetInt32();
+            int coins = body.GetProperty("coins").GetInt32();
+            await repository.ClaimCompletionRewardAsync(userId, courseId, coins);
             return Ok();
         }
 
@@ -209,9 +212,13 @@ namespace Duo.Api.Controllers
         /// <param name="courseId">The course ID.</param>
         /// <returns>Ok if reward claimed.</returns>
         [HttpPost("claim-time")]
-        public async Task<IActionResult> ClaimTimeReward([FromForm] int userId, [FromForm] int courseId)
+        public async Task<IActionResult> ClaimTimeReward([FromBody] JsonElement body)
         {
-            await repository.ClaimTimeRewardAsync(userId, courseId);
+            int userId = body.GetProperty("userId").GetInt32();
+            int courseId = body.GetProperty("courseId").GetInt32();
+            int timeSpent = body.GetProperty("timeSpent").GetInt32();
+            int coins = body.GetProperty("coins").GetInt32();
+            await repository.ClaimTimeRewardAsync(userId, courseId, coins);
             return Ok();
         }
 
@@ -279,6 +286,14 @@ namespace Duo.Api.Controllers
             return Ok(timeLimit);
         }
 
+        [HttpPost("complete")]
+        public async Task<IActionResult> CompleteCourse([FromBody] JsonElement body)
+        {
+            int userId = body.GetProperty("userId").GetInt32();
+            int courseId = body.GetProperty("courseId").GetInt32();
+            await this.repository.CompleteCourseAsync(userId, courseId);
+            return this.Ok();
+        }
 
         [HttpPost("buyBonusModule")]
         public async Task<IActionResult> BuyBonusModule([FromBody] Dictionary<string, object> data)

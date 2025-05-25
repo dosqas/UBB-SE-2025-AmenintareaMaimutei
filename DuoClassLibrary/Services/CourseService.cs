@@ -107,10 +107,13 @@ namespace DuoClassLibrary.Services
         {
                 await courseServiceProxy.CompleteModule(userId, moduleId);
 
-                if (await courseServiceProxy.IsCourseCompleted(userId, courseId))
-                {
-                    await courseServiceProxy.MarkCourseAsCompleted(userId, courseId);
-                }
+                var completedModules = await courseServiceProxy.GetCompletedModulesCount(userId, courseId);
+                var requiredModules = await courseServiceProxy.GetRequiredModulesCount(courseId);
+
+                if (completedModules == requiredModules)
+                    {
+                        await courseServiceProxy.MarkCourseAsCompleted(userId, courseId);
+                    }
         }
 
         /// <summary>
@@ -261,17 +264,17 @@ namespace DuoClassLibrary.Services
         /// <summary>
         /// Claims the course completion reward if eligible.
         /// </summary>
-        public async Task<bool> ClaimCompletionRewardAsync(int userId, int courseId)
+        public async Task<bool> ClaimCompletionRewardAsync(int userId, int courseId, int coins)
         {
-                return await courseServiceProxy.ClaimCompletionReward(userId, courseId);
+                return await courseServiceProxy.ClaimCompletionReward(userId, courseId, coins);
         }
 
         /// <summary>
         /// Claims a reward if the course was completed within a time limit.
         /// </summary>
-        public async Task<bool> ClaimTimedRewardAsync(int userId, int courseId, int timeSpent)
+        public async Task<bool> ClaimTimedRewardAsync(int userId, int courseId, int timeSpent, int coins)
         {
-                return await courseServiceProxy.ClaimTimedReward(userId, courseId, timeSpent);
+                return await courseServiceProxy.ClaimTimedReward(userId, courseId, timeSpent, coins);
         }
 
         /// <summary>

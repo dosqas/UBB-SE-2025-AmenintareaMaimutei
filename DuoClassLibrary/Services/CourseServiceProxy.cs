@@ -87,12 +87,12 @@ namespace DuoClassLibrary.Services
 
         public async Task<bool> IsCourseCompleted(int userId, int courseId)
         {
-            return await httpClient.GetFromJsonAsync<bool>($"{url}/api/Course/isCompleted?userId={userId}&courseId={courseId}");
+            return await httpClient.GetFromJsonAsync<bool>($"{url}/api/Course/is-completed?userId={userId}&courseId={courseId}");
         }
 
         public async Task MarkCourseAsCompleted(int userId, int courseId)
         {
-            var response = await httpClient.PostAsJsonAsync($"{url}/Course/complete", new { UserId = userId, CourseId = courseId });
+            var response = await httpClient.PostAsJsonAsync($"{url}/api/Course/complete", new { UserId = userId, CourseId = courseId });
             response.EnsureSuccessStatusCode();
         }
 
@@ -147,16 +147,16 @@ namespace DuoClassLibrary.Services
             return await httpClient.GetFromJsonAsync<int>($"{url}/api/Course/requiredModules?courseId={courseId}");
         }
 
-        public async Task<bool> ClaimCompletionReward(int userId, int courseId)
+        public async Task<bool> ClaimCompletionReward(int userId, int courseId, int coins)
         {
-            var response = await httpClient.PostAsJsonAsync($"{url}/api/Course/claimReward", new { UserId = userId, CourseId = courseId });
+            var response = await httpClient.PostAsJsonAsync($"{url}/api/Course/claim-completion", new { UserId = userId, CourseId = courseId, Coins = coins });
             response.EnsureSuccessStatusCode();
             return true;
         }
 
-        public async Task<bool> ClaimTimedReward(int userId, int courseId, int timeSpent)
+        public async Task<bool> ClaimTimedReward(int userId, int courseId, int timeSpent, int coins)
         {
-            var response = await httpClient.PostAsJsonAsync($"{url}/api/Course/claimTimedReward", new { UserId = userId, CourseId = courseId, TimeSpent = timeSpent });
+            var response = await httpClient.PostAsJsonAsync($"{url}/api/Course/claim-time", new { UserId = userId, CourseId = courseId, TimeSpent = timeSpent, Coins = coins });
             response.EnsureSuccessStatusCode();
             return true;
         }

@@ -33,8 +33,8 @@ namespace DuoClassLibrary.Services
         Task<int> GetCompletedModulesCountAsync(int userId, int courseId);
         Task<int> GetRequiredModulesCountAsync(int courseId);
 
-        Task<bool> ClaimCompletionRewardAsync(int userId, int courseId);
-        Task<bool> ClaimTimedRewardAsync(int userId, int courseId, int timeSpent);
+        Task<bool> ClaimCompletionRewardAsync(int userId, int courseId, int coins);
+        Task<bool> ClaimTimedRewardAsync(int userId, int courseId, int timeSpent, int coins);
         Task<int> GetCourseTimeLimitAsync(int courseId);
 
         Task<List<Tag>> GetTagsAsync();

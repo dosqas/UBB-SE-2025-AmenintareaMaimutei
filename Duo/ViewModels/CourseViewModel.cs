@@ -200,7 +200,7 @@ namespace Duo.ViewModels
         public int RequiredModules { get; private set; }
 
         /// <summary>Gets whether all required modules are completed</summary>
-        public bool IsCourseCompleted => CompletedModules >= RequiredModules;
+        public bool IsCourseCompleted => CompletedModules == RequiredModules;
 
         /// <summary>Gets the total time limit for course completion (in seconds)</summary>
         public int TimeLimit { get; private set; }
@@ -690,12 +690,17 @@ namespace Duo.ViewModels
             try
             {
                 await courseService.CompleteModuleAsync(currentUserId, targetModuleId, CurrentCourse.CourseId);
-                await UpdateCompletionStatus(currentUserId);
 
-                if (IsCourseCompleted)
+                Module completedModule = await courseService.GetModuleAsync(targetModuleId);
+                if (!completedModule.IsBonus)
                 {
-                    await CheckForCompletionReward(currentUserId);
-                    await CheckForTimedReward(currentUserId);
+                    await UpdateCompletionStatus(currentUserId);
+
+                    if (IsCourseCompleted)
+                    {
+                        await CheckForCompletionReward(currentUserId);
+                        await CheckForTimedReward(currentUserId);
+                    }
                 }
             }
             catch (Exception e)
@@ -728,7 +733,7 @@ namespace Duo.ViewModels
         {
             try
             {
-                bool rewardClaimed = await courseService.ClaimCompletionRewardAsync(currentUserId, CurrentCourse.CourseId);
+                bool rewardClaimed = await courseService.ClaimCompletionRewardAsync(currentUserId, CurrentCourse.CourseId, CourseCompletionRewardCoins);
                 if (rewardClaimed)
                 {
                     CompletionRewardClaimed = true;
@@ -752,7 +757,7 @@ namespace Duo.ViewModels
             {
                 if (TimeRemaining > 0)
                 {
-                    bool rewardClaimed = await courseService.ClaimTimedRewardAsync(currentUserId, CurrentCourse.CourseId, totalSecondsSpentOnCourse);
+                    bool rewardClaimed = await courseService.ClaimTimedRewardAsync(currentUserId, CurrentCourse.CourseId, totalSecondsSpentOnCourse, TimedCompletionRewardCoins);
                     if (rewardClaimed)
                     {
                         TimedRewardClaimed = true;

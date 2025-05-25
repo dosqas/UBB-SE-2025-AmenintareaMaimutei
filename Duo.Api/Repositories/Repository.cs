@@ -265,9 +265,33 @@ namespace Duo.Api.Repositories
                     ImageClicked = false,
                 };
                 context.UserProgresses.Add(newProgress);
-                await context.SaveChangesAsync();
             }
 
+            await context.SaveChangesAsync();
+            await Task.CompletedTask;
+        }
+
+        public async Task CompleteCourseAsync(int userId, int courseId)
+        {
+            var progress = await context.Enrollments.FirstOrDefaultAsync(c => c.UserId == userId && c.CourseId == courseId);
+            if (progress != null && !progress.IsCompleted)
+            {
+                progress.IsCompleted = true;
+                var courseCompletionProgress = await this.context.CourseCompletions.FirstOrDefaultAsync(cc => cc.UserId == userId && cc.CourseId == courseId);
+                if (courseCompletionProgress == null)
+                {
+                    var courseCompletion = new CourseCompletion
+                    {
+                        UserId = userId,
+                        CourseId = courseId,
+                        CompletionRewardClaimed = false,
+                        TimedRewardClaimed = false,
+                        CompletedAt = DateTime.Now,
+                    };
+                    this.context.CourseCompletions.Add(courseCompletion);
+                }
+            }
+            await context.SaveChangesAsync();
             await Task.CompletedTask;
         }
 
@@ -917,7 +941,7 @@ namespace Duo.Api.Repositories
         /// <param name="userId">The ID of the user.</param>
         /// <param name="courseId">The ID of the course.</param>
         /// <returns>A task that represents the asynchronous operation.</returns>
-        public async Task ClaimCompletionRewardAsync(int userId, int courseId)
+        public async Task ClaimCompletionRewardAsync(int userId, int courseId, int coins)
         {
             var completion = await context.CourseCompletions
                 .FirstOrDefaultAsync(cc => cc.UserId == userId && cc.CourseId == courseId);
@@ -925,6 +949,8 @@ namespace Duo.Api.Repositories
             if (completion != null && !completion.CompletionRewardClaimed)
             {
                 completion.CompletionRewardClaimed = true;
+                User user = await context.Users.FirstOrDefaultAsync(u => u.UserId == userId);
+                user.CoinBalance += coins;
                 await context.SaveChangesAsync();
             }
         }
@@ -935,7 +961,7 @@ namespace Duo.Api.Repositories
         /// <param name="userId">The ID of the user.</param>
         /// <param name="courseId">The ID of the course.</param>
         /// <returns>A task that represents the asynchronous operation.</returns>
-        public async Task ClaimTimeRewardAsync(int userId, int courseId)
+        public async Task ClaimTimeRewardAsync(int userId, int courseId, int coins)
         {
             var completion = await context.CourseCompletions
                 .FirstOrDefaultAsync(cc => cc.UserId == userId && cc.CourseId == courseId);
@@ -943,6 +969,8 @@ namespace Duo.Api.Repositories
             if (completion != null && !completion.TimedRewardClaimed)
             {
                 completion.TimedRewardClaimed = true;
+                User user = await context.Users.FirstOrDefaultAsync(u => u.UserId == userId);
+                user.CoinBalance += coins;
                 await context.SaveChangesAsync();
             }
         }

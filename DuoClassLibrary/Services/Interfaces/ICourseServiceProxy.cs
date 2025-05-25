@@ -29,8 +29,8 @@ namespace DuoClassLibrary.Services.Interfaces
         Task<bool> IsModuleCompleted(int userId, int moduleId);
         Task<int> GetCompletedModulesCount(int userId, int courseId);
         Task<int> GetRequiredModulesCount(int courseId);
-        Task<bool> ClaimCompletionReward(int userId, int courseId);
-        Task<bool> ClaimTimedReward(int userId, int courseId, int timeSpent);
+        Task<bool> ClaimCompletionReward(int userId, int courseId, int coins);
+        Task<bool> ClaimTimedReward(int userId, int courseId, int timeSpent, int coins);
         Task<int> GetCourseTimeLimit(int courseId);
         Task<bool> BuyBonusModule(int userId, int moduleId);
     }

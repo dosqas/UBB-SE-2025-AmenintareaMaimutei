@@ -435,7 +435,7 @@ namespace Duo.Api.Repositories
         /// <param name="userId">The unique identifier of the user.</param>
         /// <param name="courseId">The unique identifier of the course to claim the reward for.</param>
         /// <returns>A task representing the asynchronous operation.</returns>
-        public Task ClaimCompletionRewardAsync(int userId, int courseId);
+        public Task ClaimCompletionRewardAsync(int userId, int courseId, int coins);
 
         /// <summary>
         /// Claims the time reward for a user based on time spent in a specific course asynchronously.
@@ -443,7 +443,7 @@ namespace Duo.Api.Repositories
         /// <param name="userId">The unique identifier of the user.</param>
         /// <param name="courseId">The unique identifier of the course to claim the reward for.</param>
         /// <returns>A task representing the asynchronous operation.</returns>
-        public Task ClaimTimeRewardAsync(int userId, int courseId);
+        public Task ClaimTimeRewardAsync(int userId, int courseId, int coins);
 
         /// <summary>
         /// Retrieves the total time spent by a user in a specific course asynchronously.
@@ -473,6 +473,8 @@ namespace Duo.Api.Repositories
         public Task<List<CourseDto>> GetFilteredCoursesAsync(string searchText, bool filterPremium, bool filterFree, bool filterEnrolled, bool filterNotEnrolled, int userId);
 
         Task<List<Module>> GetModulesByCourseIdAsync(int courseId);
+
+        Task CompleteCourseAsync(int userId, int courseId);
 
         #endregion
 
