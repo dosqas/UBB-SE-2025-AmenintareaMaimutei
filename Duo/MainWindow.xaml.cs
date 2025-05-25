@@ -5,6 +5,9 @@ using Duo.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using DuoClassLibrary.Services.Interfaces;
+using Microsoft.UI;
+using Windows.ApplicationModel;
+using System.IO;
 
 namespace Duo
 {
@@ -27,6 +30,13 @@ namespace Duo
 
             // Handle the Closed event
             this.Closed += MainWindow_Closed;
+
+            IntPtr windowHandle = WinRT.Interop.WindowNative.GetWindowHandle(this);
+            WindowId windowId = Win32Interop.GetWindowIdFromWindow(windowHandle);
+            var appWindow = Microsoft.UI.Windowing.AppWindow.GetFromWindowId(windowId);
+
+            var iconPath = Path.Combine(Package.Current.InstalledLocation.Path, "Assets/icon.ico");
+            appWindow.SetIcon(iconPath);
         }
 
         private void MainWindow_Closed(object sender, WindowEventArgs e)

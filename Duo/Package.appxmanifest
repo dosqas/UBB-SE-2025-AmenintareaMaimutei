@@ -17,7 +17,7 @@
   <Properties>
     <DisplayName>Duo</DisplayName>
     <PublisherDisplayName>crist</PublisherDisplayName>
-    <Logo>Assets\StoreLogo.png</Logo>
+    <Logo>Assets/icon.jpg</Logo>
   </Properties>
 
   <Dependencies>
@@ -37,10 +37,9 @@
         DisplayName="Duo"
         Description="Duo"
         BackgroundColor="transparent"
-        Square150x150Logo="Assets\Square150x150Logo.png"
-        Square44x44Logo="Assets\Square44x44Logo.png">
-        <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png" />
-        <uap:SplashScreen Image="Assets\SplashScreen.png" />
+        Square150x150Logo="Assets/icon.jpg" Square44x44Logo="Assets/icon.jpg">
+        <uap:DefaultTile Wide310x150Logo="Assets/icon.jpg" />
+        <uap:LockScreen BadgeLogo="Assets/icon.jpg" Notification="badge"/>
       </uap:VisualElements>
     </Application>
   </Applications>

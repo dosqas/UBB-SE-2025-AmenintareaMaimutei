@@ -76,7 +76,7 @@ namespace Duo.Api.Controllers
 
                 if (lastLogin.Date < DateTime.Now.Date)
                 {
-                    await repository.AddCoinsToUserWalletAsync(request.UserId, 10); // Example: 10 coins bonus
+                    await repository.AddCoinsToUserWalletAsync(request.UserId, 100);
                     await repository.UpdateUserLastLoginTimeToNowAsync(request.UserId);
                     return Ok();
                 }

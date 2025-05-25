@@ -11,22 +11,13 @@
 
     <ScrollViewer>
         <Grid Padding="30">
-
-         
-            
-
             <StackPanel Spacing="20">
-
                 <!-- Avatar and Basic Info -->
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Spacing="20">
-                    <Grid Width="100" Height="100" Tapped="OnProfileImageClick">
-                        <Ellipse Fill="Gray"/>
-                        <Ellipse>
-                            <Ellipse.Fill>
-                                <ImageBrush x:Name="ProfileImageBrush" Stretch="UniformToFill"/>
-                            </Ellipse.Fill>
-                        </Ellipse>
+                    <Grid Width="100" Height="100">
+                        <PersonPicture ProfilePicture="Assets/userIcon.png" Width="100" Height="100"/>
                     </Grid>
+
 
                     <StackPanel>
                         <TextBlock x:Name="UsernameText" Text="Username" FontSize="20" FontWeight="Bold" />

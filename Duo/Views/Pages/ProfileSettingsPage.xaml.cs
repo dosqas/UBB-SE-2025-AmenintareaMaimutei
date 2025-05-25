@@ -56,7 +56,6 @@ namespace DuolingoNou.Views.Pages
 
                             BitmapImage bitmap = new BitmapImage();
                             await bitmap.SetSourceAsync(stream);
-                            ProfileImageBrush.ImageSource = bitmap;
                         }
                     }
                     catch (FormatException)
@@ -122,7 +121,6 @@ namespace DuolingoNou.Views.Pages
                 using IRandomAccessStream stream = await file.OpenAsync(FileAccessMode.Read);
                 BitmapImage bitmap = new BitmapImage();
                 await bitmap.SetSourceAsync(stream);
-                ProfileImageBrush.ImageSource = bitmap;
 
                 using (DataReader reader = new DataReader(stream.GetInputStreamAt(0)))
                 {

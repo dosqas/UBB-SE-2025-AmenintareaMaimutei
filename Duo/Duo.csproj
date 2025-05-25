@@ -15,9 +15,13 @@
 		<EnableWindowsTargeting>true</EnableWindowsTargeting>
 	</PropertyGroup>
 	<ItemGroup>
+	  <Compile Remove="Data\**" />
 	  <Compile Remove="Repositories\**" />
+	  <EmbeddedResource Remove="Data\**" />
 	  <EmbeddedResource Remove="Repositories\**" />
+	  <None Remove="Data\**" />
 	  <None Remove="Repositories\**" />
+	  <Page Remove="Data\**" />
 	  <Page Remove="Repositories\**" />
 	</ItemGroup>
 
@@ -64,22 +68,6 @@
 		</PackageReference>
 	</ItemGroup>
 	<ItemGroup>
-		<Folder Include="Data\Queries\Category\GetByName\" />
-		<Folder Include="Data\Queries\Comment\DeleteComment\" />
-		<Folder Include="Data\Queries\Comment\GetAll\" />
-		<Folder Include="Data\Queries\Comment\GetCommentByID\" />
-		<Folder Include="Data\Queries\Comment\IncrementLikeCount\" />
-		<Folder Include="Data\Queries\Comment\Update\" />
-		<Folder Include="Data\Queries\Post\GetAllPosts\" />
-		<Folder Include="Data\Queries\Post\GetAll\" />
-		<Folder Include="Data\Queries\Post\Search\" />
-		<Folder Include="Data\Queries\Hashtag\GetHashtagByText\" />
-		<Folder Include="Data\Queries\PostHashtag\AddHashtagToPost\" />
-		<Folder Include="Data\Queries\PostHashtag\DeleteHashtagFromPost\" />
-		<Folder Include="Data\Queries\PostHashtag\GetHashtagsForPost\" />
-		<Folder Include="Repositories\Interfaces\" />
-	</ItemGroup>
-	<ItemGroup>
 	  <ProjectReference Include="..\DuoClassLibrary\DuoClassLibrary.csproj" />
 	</ItemGroup>
 	<ItemGroup>
@@ -119,14 +107,24 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <PRIResource Remove="Repositories\**" />
-	</ItemGroup>
-
-	<ItemGroup>
 	  <None Remove="stylecop.json" />
 	</ItemGroup>
 
 	<ItemGroup>
 	  <AdditionalFiles Include="stylecop.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PRIResource Remove="Data\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PRIResource Remove="Repositories\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Update="Assets\userIcon.png">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
 	</ItemGroup>
 </Project>

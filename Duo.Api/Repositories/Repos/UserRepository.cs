@@ -53,6 +53,7 @@ namespace Duo.Api.Repositories.Repos
             var existingUser = await _context.Users.FindAsync(user.UserId);
             if (existingUser != null)
             {
+                user.CoinBalance = existingUser.CoinBalance;
                 _context.Entry(existingUser).CurrentValues.SetValues(user);
                 await _context.SaveChangesAsync();
             }
