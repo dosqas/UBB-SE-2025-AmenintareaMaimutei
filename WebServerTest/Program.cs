@@ -48,11 +48,14 @@ builder.Services.AddScoped<ICommentService, CommentService>();
 builder.Services.AddScoped<IRoadmapService, RoadmapService>();
 builder.Services.AddScoped<ISectionService, SectionService>();
 builder.Services.AddScoped<IQuizService, QuizService>();
+builder.Services.AddScoped<IExerciseService, ExerciseService>();
 
 // Register service proxies
 builder.Services.AddScoped<IRoadmapServiceProxy, RoadmapServiceProxy>();
 builder.Services.AddScoped<ISectionServiceProxy, SectionServiceProxy>();
 builder.Services.AddScoped<IQuizServiceProxy, QuizServiceProxy>();
+builder.Services.AddScoped<IExerciseServiceProxy, ExerciseServiceProxy>();
+
 
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<DataContext>();

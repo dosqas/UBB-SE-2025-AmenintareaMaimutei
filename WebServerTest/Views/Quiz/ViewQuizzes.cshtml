@@ -1,0 +1,163 @@
+﻿@model ManageQuizViewModel
+@{
+    ViewData["Title"] = "Manage Quizzes";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid px-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Manage Quizzes</h2>
+           <a asp-controller="Admin"
+                asp-action="Index"
+                 class="btn btn-outline-secondary btn-sm">
+                   ← Back
+            
+        </a>
+    </div>
+
+    @if (TempData["Warning"] != null)
+    {
+        <div class="alert alert-warning">
+            @TempData["Warning"]
+        </div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["Error"]
+        </div>
+    }
+
+
+    <ul class="list-group mb-4">
+        @foreach (var quiz in Model.Quizzes)
+        {
+            var isSelected = Model.SelectedQuizId == quiz.Id;
+            <li class="list-group-item d-flex justify-content-between align-items-center @(isSelected ? "active" : "bg-dark text-light")">
+                <a asp-action="ViewQuizzes"
+                   asp-route-selectedQuizId="@quiz.Id"
+                   class="flex-grow-1 text-decoration-none @(isSelected ? "text-white" : "text-light")">
+                    Quiz #@quiz.Id
+                </a>
+                <form asp-action="DeleteQuiz" method="post" class="ms-2">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="id" value="@quiz.Id" />
+                    <button class="btn btn-sm btn-outline-danger">Remove</button>
+                </form>
+            </li>
+        }
+    </ul>
+
+    <h5 class="mb-3">Selected Exercises</h5>
+    <div class="border rounded p-4 mb-3 dark-box" style="min-height:200px">
+        @if (!Model.SelectedQuizId.HasValue)
+        {
+            <em>Select a quiz above to see its exercises…</em>
+        }
+        else if (!Model.AssignedExercises.Any())
+        {
+            <p><em>No exercises assigned.</em></p>
+        }
+        else
+        {
+            <ul class="list-group">
+                @foreach (var ex in Model.AssignedExercises)
+                {
+                    <li class="list-group-item bg-dark text-light d-flex justify-content-between">
+                        Exercise #@ex.ExerciseId
+                        <form asp-action="RemoveExercise" method="post">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="quizId" value="@Model.SelectedQuizId" />
+                            <input type="hidden" name="exerciseId" value="@ex.ExerciseId" />
+                            <button class="btn btn-sm btn-outline-danger">Remove</button>
+                        </form>
+                    </li>
+                }
+            </ul>
+        }
+    </div>
+
+    <div class="text-end mb-4">
+        <button class="btn btn-primary btn-sm"
+                data-bs-toggle="modal"
+                data-bs-target="#addExerciseModal"
+        @(Model.SelectedQuizId.HasValue ? "" : "disabled")>
+            Add Exercise
+        </button>
+    </div>
+</div>
+
+<div class="modal fade" id="addExerciseModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content bg-dark text-light">
+            <div class="modal-header">
+
+                <h5 class="modal-title">Select Exercise to Add</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+
+            <form asp-action="AddExercise" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="quizId" value="@Model.SelectedQuizId" />
+
+                <div class="modal-body">
+                    @if (!Model.AvailableExercises.Any())
+                    {
+                        <p><em>No more exercises available.</em></p>
+                    }
+                    else
+                    {
+                        @foreach (var ex in Model.AvailableExercises)
+                        {
+                            <div class="form-check mb-2">
+                                <input class="form-check-input"
+                                       type="radio"
+                                       name="exerciseId"
+                                       id="ex@ex.ExerciseId"
+                                       value="@ex.ExerciseId"
+                                       required />
+                                <label class="form-check-label text-light"
+                                       for="ex@ex.ExerciseId">
+                                    Exercise #@ex.ExerciseId
+                                </label>
+                            </div>
+                        }
+                    }
+                </div>
+
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary"
+                            data-bs-dismiss="modal">
+                        Cancel
+                    </button>
+                    <button type="submit" class="btn btn-success"
+                    @(Model.AvailableExercises.Any() ? "" : "disabled")>
+                        Add
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        body {
+            background: #121212;
+            color: #f8f9fa;
+        }
+
+        .dark-box {
+            background: #1e1e1e;
+            border-color: #444;
+            color: #f8f9fa;
+        }
+
+        .list-group-item.active {
+            background-color: #0d6efd;
+            color: white;
+        }
+    </style>
+}
