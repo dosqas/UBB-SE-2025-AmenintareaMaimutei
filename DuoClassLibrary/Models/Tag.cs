@@ -31,7 +31,7 @@ namespace DuoClassLibrary.Models
                 if (isSelected != value)
                 {
                     isSelected = value;
-                    OnPropertyChanged(nameof(isSelected));
+                    OnPropertyChanged();
                 }
             }
         }
