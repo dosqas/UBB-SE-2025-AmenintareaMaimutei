@@ -5,6 +5,8 @@ using DuoClassLibrary.Models.Roadmap;
 using System.Collections.Generic;
 using WebServerTest.Models;
 using DuoClassLibrary.Services.Interfaces;
+using DuoClassLibrary.Models;
+using DuoClassLibrary.Models.Sections;
 
 namespace DuoWebApp.Controllers
 {
@@ -25,9 +27,21 @@ namespace DuoWebApp.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var roadmap = await _roadmapService.GetByIdAsync(1);
-            var user = await _userService.GetUserById(1);
-            var sections = await _sectionService.GetByRoadmapId(roadmap.Id);
+            Roadmap roadmap;
+            User user;
+            List<Section> sections;
+            try
+            {
+                roadmap = await _roadmapService.GetByIdAsync(1);
+                var userId = HttpContext.Session.GetInt32("UserId");
+                user = await _userService.GetUserById(userId.Value);
+                sections = await _sectionService.GetByRoadmapId(roadmap.Id);
+            }
+            catch (Exception ex)
+            {
+                return View(new List<SectionUnlockViewModel>());
+            }
+            
 
             int completedSections = user.NumberOfCompletedSections;
 

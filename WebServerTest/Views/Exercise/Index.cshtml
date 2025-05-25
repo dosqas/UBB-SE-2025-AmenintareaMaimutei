@@ -1,0 +1,50 @@
+@{
+    ViewData["Title"] = "Exercise Types";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <h1 class="mb-4">Exercise Types</h1>
+    
+    <div class="row row-cols-1 row-cols-md-2 g-4">
+        <div class="col">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Multiple Choice</h5>
+                    <p class="card-text">Answer questions by selecting one correct option from multiple choices.</p>
+                    <a href="@Url.Action("MultipleChoiceExercise", "Exercise")" class="btn btn-primary">Try Exercise</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Fill in the Blanks</h5>
+                    <p class="card-text">Complete sentences by filling in missing words or phrases.</p>
+                    <a href="@Url.Action("FillBlanksExercise", "Exercise")" class="btn btn-primary">Try Exercise</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Flashcards</h5>
+                    <p class="card-text">Practice with interactive flashcards showing questions and answers.</p>
+                    <a href="@Url.Action("FlashcardExercise", "Exercise")" class="btn btn-primary">Try Exercise</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Association</h5>
+                    <p class="card-text">Match items from two different lists together correctly.</p>
+                    <a href="@Url.Action("AssociationExercise", "Exercise")" class="btn btn-primary">Try Exercise</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 
