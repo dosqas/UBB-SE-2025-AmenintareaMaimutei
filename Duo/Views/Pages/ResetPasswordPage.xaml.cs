@@ -106,5 +106,10 @@ namespace DuolingoNou.Views.Pages
                 Frame.Navigate(typeof(LoginPage));
             }
         }
+
+        private void OnBackClick(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(LoginPage));
+        }
     }
 }

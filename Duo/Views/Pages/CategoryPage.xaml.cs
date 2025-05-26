@@ -22,6 +22,7 @@ namespace Duo.Views.Pages
             try
             {
                 this.InitializeComponent();
+                this.NavigationCacheMode = Microsoft.UI.Xaml.Navigation.NavigationCacheMode.Required;
                 _ = InitializeAsync();
             }
             catch (Exception ex)
@@ -112,6 +113,9 @@ namespace Duo.Views.Pages
             {
                 switch (selectedItem.Tag)
                 {
+                    case "Profile":
+                        contentFrame.Navigate(typeof(ProfileSettingsPage));
+                        break;
                     case "Settings":
                         contentFrame.Navigate(typeof(ProfileSettingsPage));
                         break;

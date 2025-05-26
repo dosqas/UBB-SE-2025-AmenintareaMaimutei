@@ -11,6 +11,7 @@ using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using DuoClassLibrary.Services.Interfaces;
+using Microsoft.UI.Xaml.Navigation;
 
 namespace Duo.Views.Pages
 {
@@ -64,6 +65,19 @@ namespace Duo.Views.Pages
             Frame.Navigate(typeof(SignUpPage));
         }
 
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+
+            // Clear any cached/back-stacked CategoryPage so we get a fresh one next time
+            var navFrame = this.Frame;
+            for (int i = navFrame.BackStack.Count - 1; i >= 0; i--)
+            {
+                if (navFrame.BackStack[i].SourcePageType == typeof(CategoryPage))
+                    navFrame.BackStack.RemoveAt(i);
+            }
+        }
+
         /// <summary>
         /// Handles the login button click.
         /// </summary>
@@ -86,7 +100,7 @@ namespace Duo.Views.Pages
                 await _userService.SetUser(ViewModel.LoggedInUser.UserName);
                 await App.userService.SetUser(ViewModel.LoggedInUser.UserName);
 
-                Frame.Navigate(typeof(CategoryPage));
+                App.MainAppWindow.Content = new Duo.Views.Pages.CategoryPage();
             }
             else
             {

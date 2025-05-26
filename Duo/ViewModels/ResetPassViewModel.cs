@@ -211,20 +211,21 @@ namespace Duo.ViewModels
 
             try
             {
-                bool isCodeSent = await _forgotPassService.SendVerificationCode(email);
+                string code = await _forgotPassService.SendVerificationCode(email);
 
-                if (isCodeSent)
+                if (!string.IsNullOrEmpty(code))
                 {
                     StatusMessage = "Verification code sent. Please check your email.";
                     EmailPanelVisible = false;
                     CodePanelVisible = true;
+                    VerificationCode = code;
+                    return true;
                 }
                 else
                 {
                     StatusMessage = "Failed to send verification code. Please try again.";
+                    return false;
                 }
-
-                return isCodeSent;
             }
             catch (Exception ex)
             {

@@ -31,12 +31,12 @@ namespace Duo.Services
         /// </summary>
         /// <param name="email">The email address to send the code to.</param>
         /// <returns>True if the email was sent successfully; otherwise, false.</returns>
-        public async Task<bool> SendVerificationCode(string email)
+        public async Task<string> SendVerificationCode(string email)
         {
             var user = await _userHelperService.GetUserByEmail(email);
             if (user == null)
             {
-                return false;
+                return null;
             }
 
             _userEmail = email;
@@ -52,7 +52,7 @@ namespace Duo.Services
             // For now, just simulate an API call
             await Task.Delay(VerificationConstants.VerificationCodeSendingDelayMilliseconds);
 
-            return true;
+            return _verificationCode;
         }
 
         /// <summary>
