@@ -57,7 +57,8 @@
                 <components:QuizAdminButton Text="Next Exercise"
                             x:Name="NextExerciseButton"
                              Click="NextQuiz_Click"
-                             HorizontalAlignment="Right"/>
+                             HorizontalAlignment="Right"
+                             IsEnabled="False"/>
             </StackPanel>
         </ScrollViewer>
     </Grid>

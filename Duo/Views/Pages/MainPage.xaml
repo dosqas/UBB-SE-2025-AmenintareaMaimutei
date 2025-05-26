@@ -9,9 +9,10 @@
     mc:Ignorable="d">
 
     <Grid>
-        <TextBlock Text="Main Page" 
-                   HorizontalAlignment="Center" 
-                   VerticalAlignment="Center"
-                   FontSize="24"/>
+        <TextBlock
+            x:Name="WelcomeTextBlock"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            FontSize="24"/>
     </Grid>
 </Page>

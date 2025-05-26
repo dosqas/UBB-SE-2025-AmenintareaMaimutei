@@ -6,6 +6,8 @@ using Microsoft.UI.Xaml.Controls;
 using DuoClassLibrary.Models;
 using Duo.ViewModels;
 using Microsoft.UI.Xaml.Navigation;
+using System.Runtime.InteropServices;
+using System.Collections.Generic;
 
 #pragma warning disable CS8602
 #pragma warning disable IDE0059
@@ -16,6 +18,8 @@ namespace Duo.Views
     public sealed partial class CoursePage : Page
     {
         private CourseViewModel? viewModel;
+        private readonly Queue<string> _notificationQueue = new();
+        private bool _isNotificationDialogOpen = false;
 
         private int CurrentUserId { get; set; }
 
@@ -44,6 +48,18 @@ namespace Duo.Views
 
             this.DataContext = viewModel;
 
+            viewModel.PropertyChanged += async (s, args) =>
+            {
+                if (args.PropertyName == nameof(viewModel.ShowNotification)
+                 && viewModel.ShowNotification)
+                {
+                    viewModel.ShowNotification = false;
+                    EnqueueNotification(viewModel.NotificationMessage);
+
+                    await SafeShowNotificationDialog(viewModel.NotificationMessage);
+                }
+            };
+
             ModulesListView.ItemClick += ModulesListView_ItemClick;
 
             DispatcherQueue.TryEnqueue(async () =>
@@ -53,7 +69,8 @@ namespace Duo.Views
                     Console.WriteLine("Starting InitializeAsync");
                     await viewModel.InitializeAsync(CurrentUserId);
                     Console.WriteLine("Finished InitializeAsync");
-                    viewModel.StartCourseProgressTimer();
+                    if (viewModel.IsEnrolled && !viewModel.IsCourseCompleted)
+                        viewModel.StartCourseProgressTimer();
                 }
                 catch (Exception ex)
                 {
@@ -77,6 +94,15 @@ namespace Duo.Views
             await ShowErrorMessage(e.Title, e.Message);
         }
 
+
+        private void EnqueueNotification(string message)
+        {
+            _notificationQueue.Enqueue(message);
+
+            if (!_isNotificationDialogOpen)
+                _ = ProcessNextNotificationAsync();
+        }
+
         /// <summary>
         /// Shows a ContentDialog with an error message.
         /// </summary>
@@ -91,6 +117,37 @@ namespace Duo.Views
             };
 
             await dialog.ShowAsync();
+        }
+
+        private async Task ProcessNextNotificationAsync()
+        {
+            if (_notificationQueue.Count == 0)
+                return;
+
+            _isNotificationDialogOpen = true;
+            string msg = _notificationQueue.Dequeue();
+
+            try
+            {
+                var dlg = new ContentDialog
+                {
+                    XamlRoot = this.XamlRoot,
+                    Title = "Notification",
+                    Content = msg,
+                    CloseButtonText = "OK"
+                };
+                await dlg.ShowAsync();
+            }
+            catch (COMException)
+            {
+            }
+            finally
+            {
+                _isNotificationDialogOpen = false;
+
+                if (_notificationQueue.Count > 0)
+                    await ProcessNextNotificationAsync();
+            }
         }
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
@@ -137,5 +194,32 @@ namespace Duo.Views
                 viewModel.RaiseErrorMessage("Module Locked", "You need to complete the previous modules to unlock this one.");
             }
         }
+
+        private async Task SafeShowNotificationDialog(string message)
+        {
+            if (_isNotificationDialogOpen)
+                return;
+
+            _isNotificationDialogOpen = true;
+            try
+            {
+                var dlg = new ContentDialog
+                {
+                    XamlRoot = this.XamlRoot,
+                    Title = "Notification",
+                    Content = message,
+                    CloseButtonText = "OK"
+                };
+                await dlg.ShowAsync();
+            }
+            catch (COMException)
+            {
+            }
+            finally
+            {
+                _isNotificationDialogOpen = false;
+            }
+        }
+
     }
 }

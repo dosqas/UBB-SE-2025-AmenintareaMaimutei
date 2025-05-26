@@ -135,6 +135,8 @@ namespace Duo.Views.Pages
         {
             try
             {
+                NextExerciseButton.IsEnabled = false;
+
                 if (ViewModel == null || ViewModel.Exercises == null)
                 {
                     _ = ShowErrorMessage("Load Exercise Error", "ViewModel or Exercises collection is not initialized.");
@@ -354,6 +356,10 @@ namespace Duo.Views.Pages
             catch (Exception ex)
             {
                 await ShowErrorMessage("Show Feedback Error", $"Failed to show feedback popup.\nDetails: {ex.Message}");
+            }
+            finally
+            {
+                NextExerciseButton.IsEnabled = true;
             }
         }
 

@@ -588,6 +588,9 @@ namespace Duo.ViewModels
         {
             try
             {
+                if (IsCourseCompleted || IsCourseTimerRunning)
+                    return;
+
                 if (!IsCourseTimerRunning && IsEnrolled)
                 {
                     IsCourseTimerRunning = true;
@@ -698,6 +701,8 @@ namespace Duo.ViewModels
 
                     if (IsCourseCompleted)
                     {
+                        courseProgressTimer?.Stop();
+                        IsCourseTimerRunning = false;
                         await CheckForCompletionReward(currentUserId);
                         await CheckForTimedReward(currentUserId);
                     }
