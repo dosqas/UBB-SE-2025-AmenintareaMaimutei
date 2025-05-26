@@ -35,8 +35,8 @@ namespace Duo
             WindowId windowId = Win32Interop.GetWindowIdFromWindow(windowHandle);
             var appWindow = Microsoft.UI.Windowing.AppWindow.GetFromWindowId(windowId);
 
-            var iconPath = Path.Combine(Package.Current.InstalledLocation.Path, "Assets/icon.ico");
-            appWindow.SetIcon(iconPath);
+            //var iconPath = Path.Combine(Package.Current.InstalledLocation.Path, "/Assets/icon.ico");
+            //appWindow.SetIcon(iconPath);
         }
 
         private void MainWindow_Closed(object sender, WindowEventArgs e)

@@ -1,4 +1,4 @@
-﻿namespace Duo.Web.Controllers
+﻿namespace WebServerTest.Controllers
 {
     public class ExerciseDto
     {

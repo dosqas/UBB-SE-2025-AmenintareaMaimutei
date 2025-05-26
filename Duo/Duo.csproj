@@ -120,6 +120,7 @@
 
 	<ItemGroup>
 	  <PRIResource Remove="Repositories\**" />
+
 	</ItemGroup>
 
 	<ItemGroup>

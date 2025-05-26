@@ -1,12 +1,13 @@
-﻿using WebServerTest.Models;
+﻿using Duo.Web.ViewModels;
 using DuoClassLibrary.Models.Exercises;
 using DuoClassLibrary.Models.Quizzes;
 using DuoClassLibrary.Models.Quizzes.API;
 using DuoClassLibrary.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
+using WebServerTest.Controllers;
 
-namespace Duo.Web.Controllers
+namespace WebServerTest.Controllers
 {
     public class ExamController : Controller
     {
@@ -189,7 +190,7 @@ namespace Duo.Web.Controllers
                 var vm = new ExamSolverViewModel
                 {
                     ExamId = quiz.Id,
-                    ExamTitle = "Final Exam" ,
+                    ExamTitle = "Final Exam",
                     AllExercises = quiz.Exercises.ToList(),
                     CurrentExerciseIndex = idx,
                     CurrentExercise = quiz.Exercises[idx],
@@ -389,7 +390,7 @@ namespace Duo.Web.Controllers
                     IsPassedText = isPassed ? "Final Exam passed!" : "You need to redo this one.",
                     IsPassed = isPassed
                 };
-                
+
                 if (isPassed && examId > 0)
                 {
                     var quiz = await _quizService.GetExamByIdAsync(examId);

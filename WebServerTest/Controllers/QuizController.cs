@@ -11,7 +11,7 @@ using DuoClassLibrary.Services;
 using Microsoft.Extensions.Logging;
 using DuoClassLibrary.Services.Interfaces;
 
-namespace Duo.Web.Controllers
+namespace WebServerTest.Controllers
 {
     public class QuizController : Controller
     {

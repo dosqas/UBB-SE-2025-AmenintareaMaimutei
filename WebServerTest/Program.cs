@@ -6,8 +6,17 @@ using DuoClassLibrary.Repositories.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Duo.Services;
+using Microsoft.AspNetCore.Mvc.Razor;
+using Duo.Api.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Load API base URL from configuration
+var apiBase = builder.Configuration["Api:BaseUrl"];
+if (string.IsNullOrWhiteSpace(apiBase))
+{
+    throw new InvalidOperationException("Missing Api:BaseUrl in appsettings.json");
+}
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
@@ -15,7 +24,6 @@ builder.Services.AddDbContext<DataContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-// Add HttpClient
 builder.Services.AddHttpClient();
 
 // Configure session
@@ -75,6 +83,7 @@ else
     app.UseHsts();
 }
 
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
@@ -86,8 +95,19 @@ app.UseSession();
 app.UseAuthorization();
 
 app.MapControllerRoute(
+    name: "exam",
+    pattern: "Exam/{action=Index}/{id?}",
+    defaults: new { controller = "Exam" });
+
+app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+app.MapControllerRoute(
+    name: "quiz",
+    pattern: "Quiz/{action}/{id}",
+    defaults: new { controller = "Quiz" });
+
 app.MapRazorPages();
 
 app.Run();

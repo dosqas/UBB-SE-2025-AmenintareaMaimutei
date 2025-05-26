@@ -32,8 +32,4 @@
     <ProjectReference Include="..\DuoClassLibrary\DuoClassLibrary.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Views\NewFolder\" />
-  </ItemGroup>
-
 </Project>

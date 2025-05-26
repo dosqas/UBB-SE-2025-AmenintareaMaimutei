@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 
-namespace Duo.Web.Views.Quiz
+namespace WebServerTest.Views.Quiz
 {
     public class Solve : PageModel
     {

@@ -2,7 +2,6 @@
 using DuoClassLibrary.Models.Exercises;
 using System.Collections.Generic;
 
-
 public class ManageQuizViewModel
 {
     public List<Quiz> Quizzes { get; set; } = new();

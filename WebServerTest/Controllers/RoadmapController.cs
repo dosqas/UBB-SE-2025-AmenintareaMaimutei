@@ -8,7 +8,7 @@ using DuoClassLibrary.Services.Interfaces;
 using DuoClassLibrary.Models;
 using DuoClassLibrary.Models.Sections;
 
-namespace DuoWebApp.Controllers
+namespace WebServerTest.Controllers
 {
     public class RoadmapController : Controller
     {
