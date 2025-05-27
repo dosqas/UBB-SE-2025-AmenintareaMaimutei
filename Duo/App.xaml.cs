@@ -184,6 +184,9 @@ namespace Duo
                     return new RoadmapService(proxy);
                 });
 
+            // Login
+            services.AddSingleton<ILoginService, LoginService>();
+
             services.AddSingleton<IExerciseViewFactory, ExerciseViewFactory>();
 
             services.AddTransient<FillInTheBlankExerciseViewModel>();
@@ -197,6 +200,8 @@ namespace Duo
             services.AddSingleton<RoadmapMainPageViewModel>();
             services.AddTransient<RoadmapSectionViewModel>();
             services.AddSingleton<RoadmapQuizPreviewViewModel>();
+
+            services.AddSingleton<MainPageViewModel>();
         }
 
         /// <summary>

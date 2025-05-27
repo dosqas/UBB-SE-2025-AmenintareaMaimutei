@@ -1,4 +1,7 @@
+using Duo.ViewModels;
+using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using System.Diagnostics;
 
 namespace Duo.Views.Pages
 {
@@ -9,6 +12,15 @@ namespace Duo.Views.Pages
             this.InitializeComponent();
             var userName = App.CurrentUser?.UserName ?? "User";
             WelcomeTextBlock.Text = $"Welcome, {userName}!";
+        }
+
+        /// <summary>
+        /// Logout button handler
+        /// </summary>
+        public void LogoutButton_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+        {
+            ((MainPageViewModel)App.ServiceProvider.GetService(typeof(MainPageViewModel))).HandleLogoutClick();
+            App.MainAppWindow.Content = new Duo.Views.Pages.LoginPage();
         }
     }
 }

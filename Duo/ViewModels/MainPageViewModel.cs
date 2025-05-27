@@ -1,6 +1,9 @@
 using System;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using Duo.ViewModels.Base;
+using DuoClassLibrary.Services;
+using DuoClassLibrary.Services.Interfaces;
 using Microsoft.UI.Xaml.Controls;
 
 namespace Duo.ViewModels
@@ -59,6 +62,27 @@ namespace Duo.ViewModels
             {
                 Debug.WriteLine($"Error in navigation selection: {ex.Message}");
                 RaiseErrorMessage("Navigation Failed", ex.Message);
+            }
+        }
+
+        public async Task HandleLogoutClick()
+        {
+            try
+            {
+                // Logic to handle logout, e.g., clearing user session, navigating to login page, etc.
+                var CurrentUser = App.CurrentUser;
+                if (CurrentUser == null)
+                {
+                    RaiseErrorMessage("Logout Error", "No user is currently logged in.");
+                    return;
+                }
+                await ((ILoginService)App.ServiceProvider.GetService(typeof(ILoginService))).UpdateUserStatusOnLogout(CurrentUser);
+                App.userService.ClearCurrentUser();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error during logout: {ex.Message}");
+                RaiseErrorMessage("Logout Failed", ex.Message);
             }
         }
     }
