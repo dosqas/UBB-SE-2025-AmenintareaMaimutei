@@ -108,9 +108,7 @@ namespace Duo
                 ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true
             };
 
-            var httpClient = new HttpClient(handler);
-
-            services.AddSingleton<HttpClient>();
+            services.AddSingleton<HttpClient>(sp => new HttpClient(handler));
 
             // Course
             services.AddSingleton<ICourseServiceProxy>(sp =>
