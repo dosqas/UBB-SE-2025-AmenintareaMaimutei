@@ -74,24 +74,6 @@ namespace DuoClassLibrary.Services
             await sectionServiceProxy.UpdateSection(section);
         }
 
-        public async Task<bool> TrackCompletion(int sectionId, bool isCompleted)
-        {
-            return await sectionServiceProxy.TrackCompletion(sectionId, isCompleted);
-        }
-
-        public async Task<bool> ValidateDependencies(int sectionId)
-        {
-            var dependencies = await sectionServiceProxy.GetSectionDependencies(sectionId);
-            foreach (var dependency in dependencies)
-            {
-                if (!dependency.IsCompleted)
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
-
         public async Task<bool> IsSectionCompleted(int userId, int sectionId)
         {
             bool result = await this.sectionServiceProxy.IsSectionCompleted(userId, sectionId);

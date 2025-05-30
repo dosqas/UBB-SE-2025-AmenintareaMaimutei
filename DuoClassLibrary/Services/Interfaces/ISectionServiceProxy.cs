@@ -13,8 +13,6 @@ namespace DuoClassLibrary.Services.Interfaces
         Task<Section> GetSectionById(int sectionId);
         Task<int> LastOrderNumberFromRoadmap(int roadmapId);
         Task UpdateSection(Section section);
-        Task<bool> TrackCompletion(int sectionId, bool isCompleted);
-        Task<List<SectionDependency>> GetSectionDependencies(int sectionId);
         Task<bool> IsSectionCompleted(int userId, int sectionId);
         Task CompleteSection(int userId, int sectionId);
     }

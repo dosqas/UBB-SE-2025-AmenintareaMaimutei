@@ -22,8 +22,8 @@ namespace DuoClassLibrary.Repositories.Proxies
         {
             try
             {
-                System.Diagnostics.Debug.WriteLine($"Attempting to connect to API at: {Enviroment.BaseUrl}user");
-                var response = await _httpClient.GetAsync(Enviroment.BaseUrl + "User");
+                System.Diagnostics.Debug.WriteLine($"Attempting to connect to API at: {Constants.Environment.BaseUrl}user");
+                var response = await _httpClient.GetAsync(Constants.Environment.BaseUrl + "User");
 
                 if (!response.IsSuccessStatusCode)
                 {
@@ -44,12 +44,12 @@ namespace DuoClassLibrary.Repositories.Proxies
             catch (TaskCanceledException ex)
             {
                 Console.WriteLine($"Request timed out: {ex.Message}");
-                throw new Exception($"Request to API timed out. Please check if the API is running at {Enviroment.BaseUrl}", ex);
+                throw new Exception($"Request to API timed out. Please check if the API is running at {Constants.Environment.BaseUrl}", ex);
             }
             catch (HttpRequestException ex)
             {
                 Console.WriteLine($"HTTP Request Error: {ex.Message}");
-                throw new Exception($"Failed to connect to the API. Please make sure the API is running at {Enviroment.BaseUrl}. Error: {ex.Message}", ex);
+                throw new Exception($"Failed to connect to the API. Please make sure the API is running at {Constants.Environment.BaseUrl}. Error: {ex.Message}", ex);
             }
             catch (Exception ex)
             {
@@ -60,7 +60,7 @@ namespace DuoClassLibrary.Repositories.Proxies
 
         public async Task<User> GetUser(int id)
         {
-            var response = await _httpClient.GetAsync($"{Enviroment.BaseUrl}User/{id}");
+            var response = await _httpClient.GetAsync($"{Constants.Environment.BaseUrl}User/{id}");
 
             if (!response.IsSuccessStatusCode)
             {
@@ -79,7 +79,7 @@ namespace DuoClassLibrary.Repositories.Proxies
         public async Task<int> CreateUser(User user)
         {
             var jsonContent = new StringContent(JsonSerializer.Serialize(user), Encoding.UTF8, "application/json");
-            var response = await _httpClient.PostAsync(Enviroment.BaseUrl + "User", jsonContent);
+            var response = await _httpClient.PostAsync(Constants.Environment.BaseUrl + "User", jsonContent);
 
             if (!response.IsSuccessStatusCode)
             {
@@ -93,7 +93,7 @@ namespace DuoClassLibrary.Repositories.Proxies
         public async Task UpdateUser(User user)
         {
             var jsonContent = new StringContent(JsonSerializer.Serialize(user), Encoding.UTF8, "application/json");
-            var response = await _httpClient.PutAsync($"{Enviroment.BaseUrl}User/{user.UserId}", jsonContent);
+            var response = await _httpClient.PutAsync($"{Constants.Environment.BaseUrl}User/{user.UserId}", jsonContent);
 
             if (!response.IsSuccessStatusCode)
             {
@@ -103,7 +103,7 @@ namespace DuoClassLibrary.Repositories.Proxies
 
         public async Task DeleteUser(int id)
         {
-            var response = await _httpClient.DeleteAsync($"{Enviroment.BaseUrl}User/{id}");
+            var response = await _httpClient.DeleteAsync($"{Constants.Environment.BaseUrl}User/{id}");
 
             if (!response.IsSuccessStatusCode)
             {
@@ -119,7 +119,7 @@ namespace DuoClassLibrary.Repositories.Proxies
                 throw new ArgumentNullException(nameof(user));
             }
 
-            var response = await _httpClient.PutAsJsonAsync($"{Enviroment.BaseUrl}/update", user);
+            var response = await _httpClient.PutAsJsonAsync($"{Constants.Environment.BaseUrl}/update", user);
             response.EnsureSuccessStatusCode();
         }
 
@@ -134,7 +134,7 @@ namespace DuoClassLibrary.Repositories.Proxies
             user.NumberOfCompletedSections = newNrOfSectionsCompleted;
             user.NumberOfCompletedQuizzesInSection = newNrOfQuizzesInSectionCompleted;
 
-            var response = await _httpClient.PutAsJsonAsync($"{Enviroment.BaseUrl}/update", user);
+            var response = await _httpClient.PutAsJsonAsync($"{Constants.Environment.BaseUrl}/update", user);
             response.EnsureSuccessStatusCode();
         }
 

@@ -42,13 +42,13 @@ namespace DuoClassLibrary.Services
             }
         }
 
-        public async Task<Hashtag> GetHashtagByName(string hashtagName)
+        public async Task<Hashtag?> GetHashtagByName(string hashtagName)
         {
             
             try
             {
                 var hashtags = await _hashtagRepository.GetHashtags();
-                return hashtags.Where(hashtag =>hashtag.Tag == hashtagName).ToList().First();
+                return hashtags.Where(hashtag =>hashtag.Tag == hashtagName).FirstOrDefault();
             }
             catch (Exception caughtException)
             {
@@ -56,12 +56,12 @@ namespace DuoClassLibrary.Services
             }
         }
 
-        public async Task<Hashtag> GetHashtagByText(string textToSearchBy)
+        public async Task<Hashtag?> GetHashtagByText(string textToSearchBy)
         {
             try
             {
                 var hashtags = await _hashtagRepository.GetHashtags();
-                return hashtags.Where(hashtag => hashtag.Tag.Contains(textToSearchBy)).ToList().First();
+                return hashtags.Where(hashtag => hashtag.Tag.Contains(textToSearchBy)).FirstOrDefault();
             }
             catch (Exception caughtException)
             {

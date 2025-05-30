@@ -459,13 +459,24 @@ namespace DuoClassLibrary.Services
                     {
                         try
                         {
+                            int hashtagId;
                             Hashtag? existingHashtag = await _hashtagService.GetHashtagByText(hashtagName);
-                            Hashtag hashtag = await _hashtagService.CreateHashtag(hashtagName);
-                            
-                            bool addSuccess = await _hashtagService.AddHashtagToPost(createdPostId, hashtag.Id);
+
+                            if(existingHashtag == null)
+                            {
+                                Hashtag hashtag = await _hashtagService.CreateHashtag(hashtagName);
+                                hashtagId = hashtag.Id;
+                            }
+                            else 
+                            {
+                                hashtagId = existingHashtag.Id;
+                            }
+
+                            bool addSuccess = await _hashtagService.AddHashtagToPost(createdPostId, hashtagId);
                         }
                         catch (Exception ex)
                         {
+                            string message = ex.Message;
                         }
                     }
                 }

@@ -15,7 +15,7 @@ public class CommentRepositoryProxi : ICommentRepository, IDisposable
 
     public async Task<Comment?> GetCommentById(int commentId)
     {
-        var response = await _httpClient.GetAsync(Enviroment.BaseUrl + $"api/Comment/{commentId}");
+        var response = await _httpClient.GetAsync(DuoClassLibrary.Constants.Environment.BaseUrl + $"Comment/{commentId}");
         if (!response.IsSuccessStatusCode)
             throw new Exception($"Failed to fetch comment. Status code: {response.StatusCode}");
         var jsonResponse = await response.Content.ReadAsStringAsync();
@@ -26,7 +26,7 @@ public class CommentRepositoryProxi : ICommentRepository, IDisposable
     {
         try
         {
-            var url = Enviroment.BaseUrl + $"api/Comment/ByPost/{postId}";
+            var url = DuoClassLibrary.Constants.Environment.BaseUrl + $"Comment/ByPost/{postId}";
             
             var response = await _httpClient.GetAsync(url);
             var responseContent = await response.Content.ReadAsStringAsync();
@@ -74,7 +74,7 @@ public class CommentRepositoryProxi : ICommentRepository, IDisposable
     public async Task<int> CreateComment(Comment comment)
     {
         var jsonContent = new StringContent(JsonSerializer.Serialize(comment), Encoding.UTF8, "application/json");
-        var response = await _httpClient.PostAsync(Enviroment.BaseUrl + "api/comment", jsonContent);
+        var response = await _httpClient.PostAsync(DuoClassLibrary.Constants.Environment.BaseUrl + "comment", jsonContent);
         if (!response.IsSuccessStatusCode)
             throw new Exception($"Failed to create comment. Status code: {response.StatusCode}");
         var result = await response.Content.ReadAsStringAsync();
@@ -83,14 +83,14 @@ public class CommentRepositoryProxi : ICommentRepository, IDisposable
 
     public async Task DeleteComment(int id)
     {
-        var response = await _httpClient.DeleteAsync(Enviroment.BaseUrl + $"api/comment/{id}");
+        var response = await _httpClient.DeleteAsync(DuoClassLibrary.Constants.Environment.BaseUrl + $"comment/{id}");
         if (!response.IsSuccessStatusCode)
             throw new Exception($"Failed to delete comment. Status code: {response.StatusCode}");
     }
 
     public async Task<List<Comment>> GetRepliesByCommentId(int parentCommentId)
     {
-        var response = await _httpClient.GetAsync(Enviroment.BaseUrl + $"api/comment/Replies/{parentCommentId}");
+        var response = await _httpClient.GetAsync(DuoClassLibrary.Constants.Environment.BaseUrl + $"comment/Replies/{parentCommentId}");
         if (!response.IsSuccessStatusCode)
             throw new Exception($"Failed to fetch replies. Status code: {response.StatusCode}");
         var jsonResponse = await response.Content.ReadAsStringAsync();
@@ -100,14 +100,14 @@ public class CommentRepositoryProxi : ICommentRepository, IDisposable
 
     public async Task IncrementLikeCount(int commentId)
     {
-        var response = await _httpClient.PostAsync(Enviroment.BaseUrl + $"api/comment/Like/{commentId}", null);
+        var response = await _httpClient.PostAsync(DuoClassLibrary.Constants.Environment.BaseUrl + $"comment/Like/{commentId}", null);
         if (!response.IsSuccessStatusCode)
             throw new Exception($"Failed to like comment. Status code: {response.StatusCode}");
     }
 
     public async Task<int> GetCommentsCountForPost(int postId)
     {
-        var response = await _httpClient.GetAsync(Enviroment.BaseUrl + $"api/comment/Count/{postId}");
+        var response = await _httpClient.GetAsync(DuoClassLibrary.Constants.Environment.BaseUrl + $"comment/Count/{postId}");
         if (!response.IsSuccessStatusCode)
             throw new Exception($"Failed to fetch comment count. Status code: {response.StatusCode}");
         var result = await response.Content.ReadAsStringAsync();

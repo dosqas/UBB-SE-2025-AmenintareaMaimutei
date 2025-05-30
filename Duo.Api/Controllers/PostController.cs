@@ -5,7 +5,7 @@ using Duo.Api.Models;
 namespace Duo.Api.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class PostController : ControllerBase
     {
         private readonly IPostRepository _postRepository;

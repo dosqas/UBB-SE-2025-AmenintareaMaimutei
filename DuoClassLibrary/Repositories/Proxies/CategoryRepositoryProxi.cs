@@ -14,7 +14,7 @@ public class CategoryRepositoryProxi : ICategoryRepository, IDisposable
 
     public async Task<List<Category>> GetCategoriesAsync()
     {
-        var response = await _httpClient.GetAsync(Enviroment.BaseUrl + "category");
+        var response = await _httpClient.GetAsync(DuoClassLibrary.Constants.Environment.BaseUrl + "category");
 
         if (!response.IsSuccessStatusCode)
         {

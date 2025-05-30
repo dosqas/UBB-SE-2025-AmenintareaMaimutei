@@ -5,7 +5,7 @@ using Duo.Api.Models;
 namespace Duo.Api.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class HashtagController : ControllerBase
     {
         private readonly IHashtagRepository _hashtagRepository;

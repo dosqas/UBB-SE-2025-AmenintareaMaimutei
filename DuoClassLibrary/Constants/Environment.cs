@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace DuoClassLibrary.Constants
 {
-    internal class Enviroment
+    internal class Environment
     {
-        public const string BaseUrl = "https://localhost:7174/";
+        public const string BaseUrl = "https://localhost:7174/api/";
     }
 }

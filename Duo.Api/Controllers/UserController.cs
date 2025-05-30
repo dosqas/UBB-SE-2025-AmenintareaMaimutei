@@ -18,7 +18,7 @@ namespace Duo.Api.Controllers
     /// </remarks>
     /// <param name="userRepository">The user repository instance for data access.</param>
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     [ExcludeFromCodeCoverage]
     public class UserController : ControllerBase
     {

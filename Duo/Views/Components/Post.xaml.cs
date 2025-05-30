@@ -344,7 +344,7 @@ namespace Duo.Views.Components
                                 
                                 if (existingHashtag == null)
                                 {
-                                    var newHashtag = hashtagService.CreateHashtag(hashtag);
+                                    var newHashtag = await hashtagService.CreateHashtag(hashtag);
                                     await hashtagService.AddHashtagToPost(this.PostId, newHashtag.Id);
                                 }
                                 else

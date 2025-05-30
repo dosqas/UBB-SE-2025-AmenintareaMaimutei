@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text;
 using System.Threading.Tasks;
+using DuoClassLibrary.Constants;
 using DuoClassLibrary.Models.Roadmap;
 using DuoClassLibrary.Services.Interfaces;
 
@@ -13,7 +14,7 @@ namespace DuoClassLibrary.Services
     public class RoadmapServiceProxy : IRoadmapService, IRoadmapServiceProxy
     {
         private readonly HttpClient httpClient;
-        private readonly string url = "https://localhost:7174/";
+        private readonly string url = Constants.Environment.BaseUrl;
 
         public RoadmapServiceProxy(HttpClient httpClient)
         {
@@ -52,7 +53,7 @@ namespace DuoClassLibrary.Services
         // }
         public async Task<Roadmap> GetByIdAsync(int roadmapId)
         {
-            var response = await httpClient.GetAsync($"{url}api/Roadmaps/{roadmapId}");
+            var response = await httpClient.GetAsync($"{url}Roadmaps/{roadmapId}");
             response.EnsureSuccessStatusCode();
 
             var roadmap = await response.Content.ReadFromJsonAsync<Roadmap>();

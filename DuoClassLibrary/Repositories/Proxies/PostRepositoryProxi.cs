@@ -15,7 +15,7 @@ public class PostRepositoryProxi : IPostRepository, IDisposable
 
     public async Task<List<Post>> GetPosts()
     {
-        var response = await _httpClient.GetAsync(Enviroment.BaseUrl + "post");
+        var response = await _httpClient.GetAsync(DuoClassLibrary.Constants.Environment.BaseUrl + "post");
 
         if (!response.IsSuccessStatusCode)
         {
@@ -34,7 +34,7 @@ public class PostRepositoryProxi : IPostRepository, IDisposable
     public async Task<int> CreatePost(Post post)
     {
         var jsonContent = new StringContent(JsonSerializer.Serialize(post), Encoding.UTF8, "application/json");
-        var response = await _httpClient.PostAsync(Enviroment.BaseUrl + "post", jsonContent);
+        var response = await _httpClient.PostAsync(DuoClassLibrary.Constants.Environment.BaseUrl + "post", jsonContent);
 
         if (!response.IsSuccessStatusCode)
         {
@@ -48,7 +48,7 @@ public class PostRepositoryProxi : IPostRepository, IDisposable
     public async Task UpdatePost(Post post)
     {
         var jsonContent = new StringContent(JsonSerializer.Serialize(post), Encoding.UTF8, "application/json");
-        var response = await _httpClient.PutAsync($"{Enviroment.BaseUrl}post/{post.Id}", jsonContent);
+        var response = await _httpClient.PutAsync($"{DuoClassLibrary.Constants.Environment.BaseUrl}post/{post.Id}", jsonContent);
 
         if (!response.IsSuccessStatusCode)
         {
@@ -58,7 +58,7 @@ public class PostRepositoryProxi : IPostRepository, IDisposable
 
     public async Task DeletePost(int id)
     {
-        var response = await _httpClient.DeleteAsync($"{Enviroment.BaseUrl}post/{id}");
+        var response = await _httpClient.DeleteAsync($"{DuoClassLibrary.Constants.Environment.BaseUrl}post/{id}");
 
         if (!response.IsSuccessStatusCode)
         {

@@ -6,7 +6,7 @@ using Duo.Api.Models;
 namespace Duo.Api.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class CategoryController : ControllerBase
     {
         private readonly ICategoryRepository _categoryRepository;

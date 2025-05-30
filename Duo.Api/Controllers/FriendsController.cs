@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Duo.Api.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class FriendsController : ControllerBase
     {
         private readonly IFriendsRepository _friendsRepository;

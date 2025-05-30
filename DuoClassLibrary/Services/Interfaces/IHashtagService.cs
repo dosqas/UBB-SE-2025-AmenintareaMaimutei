@@ -5,7 +5,7 @@ namespace DuoClassLibrary.Services.Interfaces
 {
     public interface IHashtagService
     {
-        Task<Hashtag> GetHashtagByText(string textToSearchBy);
+        Task<Hashtag?> GetHashtagByText(string textToSearchBy);
         Task<Hashtag> CreateHashtag(string newHashtagTag);
         Task<List<Hashtag>> GetHashtagsByPostId(int postId);
         Task<bool> AddHashtagToPost(int postId, int hashtagId);

@@ -21,7 +21,7 @@ namespace DuoClassLibrary.Repositories.Proxies
         public async Task<int> CreateHashtag(Hashtag hashtag)
         {
             var jsonContent = new StringContent(JsonSerializer.Serialize(hashtag), Encoding.UTF8, "application/json");
-            var response = await _httpClient.PostAsync(Enviroment.BaseUrl + "hashtag", jsonContent);
+            var response = await _httpClient.PostAsync(Constants.Environment.BaseUrl + "hashtag", jsonContent);
 
             if (!response.IsSuccessStatusCode)
             {
@@ -39,7 +39,7 @@ namespace DuoClassLibrary.Repositories.Proxies
 
         public async Task<List<Hashtag>> GetHashtags()
         {
-            var response = await _httpClient.GetAsync(Enviroment.BaseUrl + "hashtag");
+            var response = await _httpClient.GetAsync(Constants.Environment.BaseUrl + "hashtag");
             if (!response.IsSuccessStatusCode)
             {
                 throw new Exception($"Failed to fetch hashtags. Status code: {response.StatusCode}");
@@ -57,7 +57,7 @@ namespace DuoClassLibrary.Repositories.Proxies
         {
             var postHashtag = new PostHashtags { PostId = postId, HashtagId = hashtagId };
             var jsonContent = new StringContent(JsonSerializer.Serialize(postHashtag), Encoding.UTF8, "application/json");
-            var response = await _httpClient.PostAsync($"{Enviroment.BaseUrl}hashtag/posthashtag", jsonContent);
+            var response = await _httpClient.PostAsync($"{Constants.Environment.BaseUrl}hashtag/posthashtag", jsonContent);
 
             if (!response.IsSuccessStatusCode)
             {
@@ -68,7 +68,7 @@ namespace DuoClassLibrary.Repositories.Proxies
         public async Task RemoveHashtagFromPost(int postId, int hashtagId)
         {
             var postHashtag = new PostHashtags { PostId = postId, HashtagId = hashtagId };
-            var request = new HttpRequestMessage(HttpMethod.Delete, $"{Enviroment.BaseUrl}hashtag/posthashtag");
+            var request = new HttpRequestMessage(HttpMethod.Delete, $"{Constants.Environment.BaseUrl}hashtag/posthashtag");
             request.Content = new StringContent(JsonSerializer.Serialize(postHashtag), Encoding.UTF8, "application/json");
             
             var response = await _httpClient.SendAsync(request);
@@ -81,7 +81,7 @@ namespace DuoClassLibrary.Repositories.Proxies
 
         public async Task<List<PostHashtags>> GetAllPostHashtags()
         {
-            var response = await _httpClient.GetAsync(Enviroment.BaseUrl + "hashtag/posthashtags");
+            var response = await _httpClient.GetAsync(Constants.Environment.BaseUrl + "hashtag/posthashtags");
 
             if (!response.IsSuccessStatusCode)
             {

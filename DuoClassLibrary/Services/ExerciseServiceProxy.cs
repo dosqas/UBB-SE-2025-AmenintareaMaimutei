@@ -7,6 +7,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using DuoClassLibrary.Constants;
 using DuoClassLibrary.Helpers;
 using DuoClassLibrary.Models.Exercises;
 using DuoClassLibrary.Models.Exercises.DTO;
@@ -16,7 +17,7 @@ namespace DuoClassLibrary.Services
     public class ExerciseServiceProxy : IExerciseServiceProxy
     {
         private readonly HttpClient httpClient;
-        private string url = "https://localhost:7174/";
+        private string url = Constants.Environment.BaseUrl;
 
         public ExerciseServiceProxy(HttpClient httpClient)
         {
@@ -45,7 +46,7 @@ namespace DuoClassLibrary.Services
                     "FillInTheBlank" => JsonSerializer.Serialize((FillInTheBlankExercise)exercise, options),
                     _ => throw new NotSupportedException($"Exercise type '{exercise.Type}' is not supported.")
                 };
-                var response = await httpClient.PostAsync($"{url}api/Exercise", new StringContent(jsonExercise, Encoding.UTF8, "application/json"));
+                var response = await httpClient.PostAsync($"{url}Exercise", new StringContent(jsonExercise, Encoding.UTF8, "application/json"));
                 response.EnsureSuccessStatusCode();
 
                 // Deserialize the response to get the Id
@@ -74,7 +75,7 @@ namespace DuoClassLibrary.Services
 
         public async Task DeleteExercise(int exerciseId)
         {
-            var response = await httpClient.DeleteAsync($"{url}api/Exercise/{exerciseId}");
+            var response = await httpClient.DeleteAsync($"{url}Exercise/{exerciseId}");
             response.EnsureSuccessStatusCode();
         }
 
@@ -82,7 +83,7 @@ namespace DuoClassLibrary.Services
         {
             try
             {
-                var response = await httpClient.GetAsync($"{url}api/Exercise");
+                var response = await httpClient.GetAsync($"{url}Exercise");
                 response.EnsureSuccessStatusCode();
 
                 string responseJson = await response.Content.ReadAsStringAsync();
@@ -131,7 +132,7 @@ namespace DuoClassLibrary.Services
 
         public async Task<List<Exercise>> GetAllExercisesFromExam(int examId)
         {
-            var response = await httpClient.GetAsync($"{url}api/Exercise/exam/{examId}");
+            var response = await httpClient.GetAsync($"{url}Exercise/exam/{examId}");
             response.EnsureSuccessStatusCode();
             string responseJson = await response.Content.ReadAsStringAsync();
             var exercises = JsonSerializationUtil.DeserializeExerciseList(responseJson);
@@ -140,7 +141,7 @@ namespace DuoClassLibrary.Services
 
         public async Task<List<Exercise>> GetAllExercisesFromQuiz(int quizId)
         {
-            var response = await httpClient.GetAsync($"{url}api/Exercise/quiz/{quizId}");
+            var response = await httpClient.GetAsync($"{url}Exercise/quiz/{quizId}");
             response.EnsureSuccessStatusCode();
             string responseJson = await response.Content.ReadAsStringAsync();
             var exercises = JsonSerializationUtil.DeserializeExerciseList(responseJson);
@@ -149,7 +150,7 @@ namespace DuoClassLibrary.Services
 
         public async Task<Exercise?> GetExerciseById(int exerciseId)
         {
-            var response = await httpClient.GetAsync($"{url}api/Exercise/{exerciseId}");
+            var response = await httpClient.GetAsync($"{url}Exercise/{exerciseId}");
             response.EnsureSuccessStatusCode();
             var exercise = await response.Content.ReadFromJsonAsync<Exercise>();
             return exercise ?? throw new InvalidOperationException("Exercise not found.");
