@@ -90,12 +90,12 @@ namespace WebServerTest.Controllers
                         .Select(q => new QuizUnlockViewModel 
                         { 
                             Quiz = q, 
-                            IsUnlocked = false, 
+                            IsUnlocked = true, 
                             IsCompleted = true 
                         })
                         .ToList();
-                    isExamUnlocked = false;
-                    isSectionCompleted = true;
+                    isExamUnlocked = true;
+                    isSectionUnlocked = true;
                 }
                 else if (isPreviousSectionCompleted || i == 0)
                 {

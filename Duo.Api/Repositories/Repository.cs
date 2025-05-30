@@ -721,8 +721,17 @@ namespace Duo.Api.Repositories
         /// <returns> A task representing the async operation.</returns>
         public async Task CompleteQuizForUser(QuizCompletions completedQuiz)
         {
-            this.context.QuizCompletions.Add(completedQuiz);
-            await this.context.SaveChangesAsync();
+            // Check if the quiz completion already exists
+            var existing = await this.context.QuizCompletions
+                .FindAsync(completedQuiz.UserId, completedQuiz.QuizId);
+
+            if (existing == null)
+            {
+                // Only add if it doesn't already exist
+                this.context.QuizCompletions.Add(completedQuiz);
+                await this.context.SaveChangesAsync();
+            }
+            // If it already exists, we don't need to do anything - the quiz is already marked as completed
         }
 
         /// <summary>
@@ -1229,8 +1238,17 @@ namespace Duo.Api.Repositories
         /// <returns> A task representing the async operation. </returns>
         public async Task CompleteExamForUser(ExamCompletions completedExam)
         {
-            this.context.ExamCompletions.Add(completedExam);
-            await this.context.SaveChangesAsync();
+            // Check if the exam completion already exists
+            var existing = await this.context.ExamCompletions
+                .FindAsync(completedExam.UserId, completedExam.ExamId);
+
+            if (existing == null)
+            {
+                // Only add if it doesn't already exist
+                this.context.ExamCompletions.Add(completedExam);
+                await this.context.SaveChangesAsync();
+            }
+            // If it already exists, we don't need to do anything - the exam is already marked as completed
         }
 
         /// <summary>
@@ -1345,8 +1363,17 @@ namespace Duo.Api.Repositories
         /// <returns> A task representing the asynchronous operation. The task completes once the sectionCompletion is added. </returns>
         public async Task CompleteSectionForUser(SectionCompletions completedSection)
         {
-            this.context.SectionCompletions.Add(completedSection);
-            await this.context.SaveChangesAsync();
+            // Check if the section completion already exists
+            var existing = await this.context.SectionCompletions
+                .FindAsync(completedSection.UserId, completedSection.SectionId);
+
+            if (existing == null)
+            {
+                // Only add if it doesn't already exist
+                this.context.SectionCompletions.Add(completedSection);
+                await this.context.SaveChangesAsync();
+            }
+            // If it already exists, we don't need to do anything - the section is already marked as completed
         }
 
         /// <summary>
