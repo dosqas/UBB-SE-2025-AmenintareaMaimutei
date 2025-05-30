@@ -20,7 +20,7 @@
     <ul class="list-group" id="examList">
         @foreach (var exam in exams)
         {
-            <li class="list-group-item d-flex justify-content-between align-items-center bg-dark text-light">
+            <li class="list-group-item d-flex justify-content-between align-items-center">
                 <span class="exam-item" data-id="@exam.Id" style="cursor: pointer;">Exam #@exam.Id</span>
                 <form asp-action="Delete" asp-controller="Exam" method="post" class="m-0">
                     <input type="hidden" name="id" value="@exam.Id" />
@@ -32,7 +32,7 @@
 
     <div class="mt-4">
         <h5>Selected Exercises</h5>
-        <div class="border rounded p-4 dark-box" style="min-height: 200px;" id="selectedExercisesBox">
+        <div class="border rounded p-4 light-box" style="min-height: 200px;" id="selectedExercisesBox">
             <p class="text-muted">Select an exam to view exercises.</p>
         </div>
         <div class="text-end mt-3">
@@ -44,16 +44,16 @@
 <!-- Modal -->
 <div class="modal fade" id="exerciseModal" tabindex="-1" aria-labelledby="exerciseModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
-        <div class="modal-content bg-dark text-light">
+        <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exerciseModalLabel">Select Exercise</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <ul class="list-group" id="exerciseList">
                     @foreach (var ex in exercises)
                     {
-                        <li class="list-group-item bg-dark text-light exercise-item" data-id="@ex.ExerciseId" data-name="@ex.Question">
+                        <li class="list-group-item exercise-item" data-id="@ex.ExerciseId" data-name="@ex.Question">
                             Exercise #@ex.ExerciseId – @ex.Question
                         </li>
                     }
@@ -69,19 +69,18 @@
 
 @section Styles {
     <style>
-        body {
-            background-color: #121212;
-            color: #f8f9fa;
-        }
-
-        .dark-box {
-            background-color: #1e1e1e;
-            border-color: #444;
-            color: #f8f9fa;
+        .light-box {
+            background-color: #f8f9fa;
+            border-color: #dee2e6;
+            color: #333;
         }
 
         .list-group-item {
-            color: #f8f9fa;
+            transition: background-color 0.2s;
+        }
+
+        .list-group-item:hover {
+            background-color: #f8f9fa;
         }
 
         .btn-outline-danger {
@@ -95,7 +94,7 @@
             }
 
         .btn-outline-secondary {
-            color: #adb5bd;
+            color: #6c757d;
             border-color: #6c757d;
         }
 
@@ -114,7 +113,8 @@
             }
 
         .exercise-item.active {
-            background-color: #343a40;
+            background-color: #0d6efd;
+            color: white;
         }
     </style>
 }

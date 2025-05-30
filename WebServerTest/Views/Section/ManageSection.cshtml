@@ -23,7 +23,7 @@
                 {
                     foreach (var s in Model)
                     {
-                        <li class="list-group-item d-flex justify-content-between align-items-center bg-dark text-light section-item" 
+                        <li class="list-group-item d-flex justify-content-between align-items-center section-item" 
                             data-section-id="@s.Id" 
                             style="cursor: pointer;">
                             <span class="section-title">@s.Title</span>
@@ -43,7 +43,7 @@
         <div class="col-md-6">
             <div class="mt-4">
                 <h5>Section Quizzes</h5>
-                <div id="quizzesContainer" class="border rounded p-4 dark-box" style="min-height: 200px;">
+                <div id="quizzesContainer" class="border rounded p-4 light-box" style="min-height: 200px;">
                     <div class="text-muted">Select a section to view its quizzes</div>
                 </div>
             </div>
@@ -69,7 +69,7 @@
                 const sectionTitle = $(this).find('.section-title').text();
 
                 // Show loading state
-                $('#quizzesContainer').html('<div class="text-center"><div class="spinner-border text-light" role="status"></div></div>');
+                $('#quizzesContainer').html('<div class="text-center"><div class="spinner-border text-primary" role="status"></div></div>');
 
                 // Fetch quizzes for the selected section
                 $.get(`/Section/GetSectionQuizzes/${sectionId}`, function(quizzes) {
@@ -78,7 +78,7 @@
                         html += '<ul class="list-group">';
                         quizzes.forEach(quiz => {
                             html += `
-                                <li class="list-group-item bg-dark text-light">
+                                <li class="list-group-item">
                                     <div class="d-flex justify-content-between align-items-center">
                                         <span>${quiz.title || 'Quiz ' + quiz.id}</span>
                                         <span class="badge bg-primary rounded-pill">${quiz.orderNumber || 'N/A'}</span>
@@ -100,28 +100,23 @@
 
 @section Styles {
 <style>
-    body {
-        background-color: #121212;
-        color: #f8f9fa;
-    }
-
-    .dark-box {
-        background-color: #1e1e1e;
-        border-color: #444;
-        color: #f8f9fa;
+    .light-box {
+        background-color: #f8f9fa;
+        border-color: #dee2e6;
+        color: #333;
     }
 
     .list-group-item {
-        color: #f8f9fa;
         transition: background-color 0.2s;
     }
 
     .list-group-item:hover {
-        background-color: #2d2d2d !important;
+        background-color: #f8f9fa !important;
     }
 
     .list-group-item.active {
         background-color: #0d6efd !important;
+        color: white;
         border-color: #0d6efd;
     }
 
@@ -136,7 +131,7 @@
     }
 
     .btn-outline-secondary {
-        color: #adb5bd;
+        color: #6c757d;
         border-color: #6c757d;
     }
 

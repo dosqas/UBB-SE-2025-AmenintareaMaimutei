@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using DuoClassLibrary.Services;
 using Microsoft.Extensions.Logging;
 using DuoClassLibrary.Services.Interfaces;
+using Microsoft.AspNetCore.Http;
 
 namespace WebServerTest.Controllers
 {
@@ -264,6 +265,14 @@ namespace WebServerTest.Controllers
         {
             try
             {
+                // Get user ID from session
+                var userIdFromSession = HttpContext.Session.GetInt32("UserId");
+                if (userIdFromSession == null)
+                {
+                    return RedirectToAction("Login", "Account");
+                }
+                int userId = userIdFromSession.Value;
+
                 int correctAnswers = TempData["CorrectAnswers"] as int? ?? 0;
                 int totalQuestions = TempData["TotalQuestions"] as int? ?? 0;
                 int quizId = TempData["QuizId"] as int? ?? 0;
@@ -288,10 +297,10 @@ namespace WebServerTest.Controllers
                         var section = await _sectionService.GetSectionById(quiz.SectionId.Value);
                         if (section != null)
                         {
-                            var user = await _userService.GetUserById(1);
+                            var user = await _userService.GetUserById(userId);
                             var quizzesInSection = (await _quizService.GetAllQuizzesFromSection(section.Id)).ToList();
 
-                            await _quizService.CompleteQuiz(1, quizId);
+                            await _quizService.CompleteQuiz(userId, quizId);
                         }
                     }
                 }

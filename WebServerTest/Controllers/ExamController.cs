@@ -1,11 +1,11 @@
-﻿using Duo.Web.ViewModels;
-using DuoClassLibrary.Models.Exercises;
+﻿using DuoClassLibrary.Models.Exercises;
 using DuoClassLibrary.Models.Quizzes;
 using DuoClassLibrary.Models.Quizzes.API;
 using DuoClassLibrary.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 using WebServerTest.Controllers;
+using WebServerTest.Models;
 
 namespace WebServerTest.Controllers
 {
@@ -375,6 +375,14 @@ namespace WebServerTest.Controllers
         {
             try
             {
+                // Get user ID from session
+                var userIdFromSession = HttpContext.Session.GetInt32("UserId");
+                if (userIdFromSession == null)
+                {
+                    return RedirectToAction("Login", "Account");
+                }
+                int userId = userIdFromSession.Value;
+
                 int correctAnswers = TempData["CorrectAnswers"] as int? ?? 0;
                 int totalQuestions = TempData["TotalQuestions"] as int? ?? 0;
                 int examId = TempData["ExamId"] as int? ?? 0;
@@ -396,8 +404,8 @@ namespace WebServerTest.Controllers
                     var quiz = await _quizService.GetExamByIdAsync(examId);
                     if (quiz?.SectionId != null)
                     {
-                        await _quizService.CompleteExamAsync(1, examId);
-                        await _sectionService.CompleteSection(1, quiz.SectionId.Value);
+                        await _quizService.CompleteExamAsync(userId, examId);
+                        await _sectionService.CompleteSection(userId, quiz.SectionId.Value);
                     }
                 }
 

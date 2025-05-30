@@ -30,16 +30,27 @@ namespace WebServerTest.Controllers
             Roadmap roadmap;
             User user;
             List<Section> sections;
+            int userId;
+            
             try
             {
                 roadmap = await _roadmapService.GetByIdAsync(1);
-                var userId = HttpContext.Session.GetInt32("UserId");
-                user = await _userService.GetUserById(userId.Value);
+                var userIdFromSession = HttpContext.Session.GetInt32("UserId");
+                
+                if (userIdFromSession == null)
+                {
+                    // If no user session, redirect to login
+                    return RedirectToAction("Login", "Account");
+                }
+                
+                userId = userIdFromSession.Value;
+                user = await _userService.GetUserById(userId);
                 sections = await _sectionService.GetByRoadmapId(roadmap.Id);
             }
             catch (Exception ex)
             {
-                return View(new List<SectionUnlockViewModel>());
+                // Log the error and redirect to login instead of showing empty view
+                return RedirectToAction("Login", "Account");
             }
             
 
@@ -58,7 +69,7 @@ namespace WebServerTest.Controllers
                 for (int j = 0; j < quizzes.Count; j++)
                 {
                     var quiz = quizzes[j];
-                    var IsCompleted = await _quizService.IsQuizCompleted(1, quiz.Id);
+                    var IsCompleted = await _quizService.IsQuizCompleted(userId, quiz.Id);
                     if(IsCompleted)
                     {
                         completedQuizzes++;
@@ -67,9 +78,9 @@ namespace WebServerTest.Controllers
 
                 List<QuizUnlockViewModel> quizViewModels;
                 bool isExamUnlocked;
-                var isSectionCompleted = await _sectionService.IsSectionCompleted(1, section.Id);
-                var isPreviousSectionCompleted = i > 0 && await _sectionService.IsSectionCompleted(1, sections[i - 1].Id);
-                var isThisExamCompleted = await _quizService.IsExamCompleted(1, section.Exam.Id);
+                var isSectionCompleted = await _sectionService.IsSectionCompleted(userId, section.Id);
+                var isPreviousSectionCompleted = i > 0 && await _sectionService.IsSectionCompleted(userId, sections[i - 1].Id);
+                var isThisExamCompleted = await _quizService.IsExamCompleted(userId, section.Exam.Id);
 
 
 
@@ -115,7 +126,7 @@ namespace WebServerTest.Controllers
                 }
 
                 var exam = await _quizService.GetExamFromSection(section.Id);
-                bool isExamCompleted = await _quizService.IsExamCompleted(1, exam.Id);
+                bool isExamCompleted = await _quizService.IsExamCompleted(userId, exam.Id);
 
                 sectionViewModels.Add(new SectionUnlockViewModel
                 {

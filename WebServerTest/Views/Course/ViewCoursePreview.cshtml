@@ -1,6 +1,6 @@
 ﻿@model CoursePreviewViewModel
 
-<div class="container py-4 text-white bg-dark rounded">
+<div class="container py-4">
     <!-- Notification Banner -->
     @if (Model.ShowNotification)
     {
@@ -12,7 +12,7 @@
     <!-- Timer + Progress + Coins -->
     <div class="d-flex justify-content-between align-items-start mb-4">
         <!-- Timer -->
-        <div class="bg-secondary rounded px-3 py-2 d-flex align-items-center">
+        <div class="bg-light border rounded px-3 py-2 d-flex align-items-center">
             <span class="me-2">⏱️</span>
             <strong>@Model.FormattedTimeRemaining</strong>
         </div>
@@ -25,7 +25,7 @@
         </div>
 
         <!-- Coin Balance -->
-        <div class="bg-secondary rounded px-3 py-2 d-flex align-items-center">
+        <div class="bg-light border rounded px-3 py-2 d-flex align-items-center">
             <strong>@Model.CoinBalance</strong>
             <span class="ms-2">🪙</span>
         </div>
@@ -44,7 +44,7 @@
 
     <!-- Enroll Button -->
     <div class="mb-4 d-flex align-items-center">
-        <a asp-controller="Course" asp-action="ViewCourses" class="btn btn-outline-light me-3">Back</a>
+        <a asp-controller="Course" asp-action="ViewCourses" class="btn btn-outline-secondary me-3">Back</a>
 
         @if (!Model.IsEnrolled)
         {
@@ -55,7 +55,7 @@
             </form>
             @if (Model.Course.Cost > 0)
             {
-                <div class="bg-secondary rounded px-3 py-2 d-flex align-items-center">
+                <div class="bg-light border rounded px-3 py-2 d-flex align-items-center">
                     <strong>@Model.Course.Cost</strong><span class="ms-2">🪙</span>
                 </div>
             }
@@ -66,14 +66,14 @@
         }
     </div>
 
-    <hr class="border-light" />
+    <hr />
 
     <!-- Modules List -->
     <h2 class="fw-bold">Modules</h2>
     <ul class="list-group list-group-flush">
         @foreach (var moduleViewModel in Model.Modules)
         {
-            <li class="list-group-item bg-dark border-secondary text-white mb-2 rounded" onclick="onModuleClick('@moduleViewModel.Module.ModuleId', '@moduleViewModel.IsUnlocked')">
+            <li class="list-group-item bg-light border mb-2 rounded" onclick="onModuleClick('@moduleViewModel.Module.ModuleId', '@moduleViewModel.IsUnlocked')">
                 <div class="d-flex justify-content-between align-items-start">
                     <div>
                         @if (!moduleViewModel.IsUnlocked)

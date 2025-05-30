@@ -9,10 +9,10 @@
     </div>
 
     <h5>Subject</h5>
-    <input type="text" id="subjectInput" class="form-control bg-dark text-light border-dark mb-4" placeholder="Enter section subject" />
+    <input type="text" id="subjectInput" class="form-control mb-4" placeholder="Enter section subject" />
 
     <h5>Selected Quizzes</h5>
-    <div class="border rounded p-4 mb-4 dark-box" id="selectedQuizzesContainer" style="min-height: 150px;">
+    <div class="border rounded p-4 mb-4 light-box" id="selectedQuizzesContainer" style="min-height: 150px;">
         <!-- Selected quizzes go here -->
     </div>
     <div class="text-end mb-4">
@@ -20,7 +20,7 @@
     </div>
 
     <h5>Final Exam</h5>
-    <div class="border rounded p-4 mb-4 dark-box" id="selectedExamContainer" style="min-height: 150px;">
+    <div class="border rounded p-4 mb-4 light-box" id="selectedExamContainer" style="min-height: 150px;">
         <!-- Selected exam goes here -->
     </div>
     <div class="text-end mb-4">
@@ -36,16 +36,16 @@
 <!-- Quiz Modal -->
 <div class="modal fade" id="quizModal" tabindex="-1" aria-labelledby="quizModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
-        <div class="modal-content bg-dark text-light">
+        <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="quizModalLabel">Select Quiz</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <ul class="list-group" id="quiz-list-modal">
                     @foreach (var quiz in ViewBag.Quizzes as List<DuoClassLibrary.Models.Quizzes.Quiz>)
                     {
-                        <li class="list-group-item bg-dark text-light" style="cursor:pointer;" data-quiz-id="@quiz.Id">
+                        <li class="list-group-item" style="cursor:pointer;" data-quiz-id="@quiz.Id">
                             @quiz.Id
                         </li>
                     }
@@ -58,16 +58,16 @@
 <!-- Exam Modal -->
 <div class="modal fade" id="examModal" tabindex="-1" aria-labelledby="examModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
-        <div class="modal-content bg-dark text-light">
+        <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="examModalLabel">Select Exam</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <ul class="list-group" id="exam-list-modal">
                     @foreach (var exam in ViewBag.Exams as List<DuoClassLibrary.Models.Quizzes.Exam>)
                     {
-                        <li class="list-group-item bg-dark text-light" style="cursor:pointer;" data-exam-id="@exam.Id">
+                        <li class="list-group-item" style="cursor:pointer;" data-exam-id="@exam.Id">
                             @exam.Id
                         </li>
                     }
@@ -79,49 +79,14 @@
 
 @section Styles {
     <style>
-        body {
-            background-color: #121212;
-            color: #f8f9fa;
-        }
-
-        .dark-box {
-            background-color: #1e1e1e;
-            border-color: #444;
-            color: #f8f9fa;
-        }
-
-        .form-control {
-            background-color: #1e1e1e;
-            border-color: #444;
-            color: #f8f9fa;
-        }
-
-        .btn-primary {
-            background-color: #0d6efd;
-            border: none;
-        }
-
-        .btn-primary:hover {
-            background-color: #0b5ed7;
-        }
-
-        .btn-secondary {
-            background-color: #6c757d;
-            border: none;
-        }
-
-        .btn-secondary:hover {
-            background-color: #5a6268;
-        }
-
-        .list-group-item {
-            background-color: #1e1e1e;
-            border-color: #444;
-            color: #f8f9fa;
+        .light-box {
+            background-color: #f8f9fa;
+            border-color: #dee2e6;
+            color: #333;
         }
 
         .list-group-item:hover {
-            background-color: #2d2d2d;
+            background-color: #f8f9fa;
             cursor: pointer;
         }
 
@@ -164,7 +129,7 @@
             } else {
                 const ul = $('<ul class="list-group"></ul>');
                 selectedQuizzes.forEach(q => {
-                    const li = $(`<li class="list-group-item bg-dark text-light d-flex justify-content-between align-items-center">
+                    const li = $(`<li class="list-group-item d-flex justify-content-between align-items-center">
                         <span>${q.id}: ${q.title}</span>
                         <button class="btn btn-danger btn-sm remove-quiz" data-quiz-id="${q.id}">
                             <i class="fas fa-times"></i> Remove
@@ -189,7 +154,7 @@
                 container.append('<div class="text-muted">No exam selected.</div>');
             } else {
                 container.append(`
-                    <div class="bg-dark text-light p-2 rounded d-flex justify-content-between align-items-center">
+                    <div class="bg-light border p-2 rounded d-flex justify-content-between align-items-center">
                         <span>${selectedExam.id}: ${selectedExam.title}</span>
                         <button class="btn btn-danger btn-sm remove-exam">
                             <i class="fas fa-times"></i> Remove
