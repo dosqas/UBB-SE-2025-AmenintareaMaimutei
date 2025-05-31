@@ -126,3 +126,16 @@
 		}
 	}
 </script>
+
+@section Scripts {
+	<script>
+		@if (TempData["Error"] != null)
+		{
+			<text>alert('@TempData["Error"]');</text>
+		}
+		@if (TempData["Notification"] != null)
+		{
+			<text>alert('@TempData["Notification"]');</text>
+		}
+	</script>
+}
