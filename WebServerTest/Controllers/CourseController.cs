@@ -3,6 +3,9 @@ using DuoClassLibrary.Services;
 using System.Security.Claims;
 using DuoClassLibrary.Models;
 using WebServerTest.Models;
+using DuoClassLibrary.Services.Interfaces;
+using System.Text.Json;
+using System.Numerics;
 
 namespace WebServerTest.Controllers
 {
@@ -10,6 +13,7 @@ namespace WebServerTest.Controllers
     {
         private readonly ICourseService _courseService;
         private readonly ICoinsService _coinsService;
+        private readonly IUserService _userService;
 
         public CourseController(ICourseService courseService, ICoinsService coinsService)
         {
@@ -36,7 +40,7 @@ namespace WebServerTest.Controllers
 
         public async Task<IActionResult> CoursePreview(int id)
         {
-            int userId = 1;  // Replace with actual userId if you're using authentication
+            var userId = HttpContext.Session.GetInt32("UserId") ?? 0;
 
             // Fetch course data
             var course = await _courseService.GetCourseAsync(id);
@@ -62,6 +66,7 @@ namespace WebServerTest.Controllers
                     CourseId = id,  // Course ID is still relevant for context
                     IsCompleted = isCompleted,
                     IsUnlocked = isUnlocked,
+                    IsBonus = module.IsBonus,
                     TimeSpent = await _courseService.GetTimeSpentAsync(userId, id).ContinueWith(t =>
                         TimeSpan.FromSeconds(t.Result).ToString(@"hh\:mm\:ss")), // Format time spent
                     CoinBalance = coinBalance.ToString()  // Assuming coin balance is an integer
@@ -118,9 +123,10 @@ namespace WebServerTest.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Enroll(int id)
         {
-            int userId = 1;
+            var userId = HttpContext.Session.GetInt32("UserId") ?? 0; ;
             var CurrentCourse = await _courseService.GetCourseAsync(id);
             var CoinBalance = await _coinsService.GetCoinBalanceAsync(userId);
             var IsEnrolled = await _courseService.IsUserEnrolledAsync(userId, id);

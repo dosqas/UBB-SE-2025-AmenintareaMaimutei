@@ -1,113 +1,128 @@
 ﻿@model CoursePreviewViewModel
 
 <div class="container py-4">
-    <!-- Notification Banner -->
-    @if (Model.ShowNotification)
-    {
-        <div class="alert alert-success text-center fw-semibold">
-            @Model.NotificationMessage
-        </div>
-    }
+	<!-- Notification Banner -->
+	@if (Model.ShowNotification)
+	{
+		<div class="alert alert-success text-center fw-semibold">
+			@Model.NotificationMessage
+		</div>
+	}
 
-    <!-- Timer + Progress + Coins -->
-    <div class="d-flex justify-content-between align-items-start mb-4">
-        <!-- Timer -->
-        <div class="bg-light border rounded px-3 py-2 d-flex align-items-center">
-            <span class="me-2">⏱️</span>
-            <strong>@Model.FormattedTimeRemaining</strong>
-        </div>
+	<!-- Timer + Progress + Coins -->
+	<div class="d-flex justify-content-between align-items-start mb-4">
+		<!-- Timer -->
+		<div class="bg-light border rounded px-3 py-2 d-flex align-items-center">
+			<span class="me-2">⏱️</span>
+			<strong>@Model.FormattedTimeRemaining</strong>
+		</div>
 
-        <!-- Progress -->
-        <div class="text-center">
-            <strong>Progress:</strong>
-            <span class="text-primary fw-bold">@Model.CompletedModules</span> /
-            <span>@Model.RequiredModules</span> modules completed
-        </div>
+		<!-- Progress -->
+		<div class="text-center">
+			<strong>Progress:</strong>
+			<span class="text-primary fw-bold">@Model.CompletedModules</span> /
+			<span>@Model.RequiredModules</span> modules completed
+		</div>
 
-        <!-- Coin Balance -->
-        <div class="bg-light border rounded px-3 py-2 d-flex align-items-center">
-            <strong>@Model.CoinBalance</strong>
-            <span class="ms-2">🪙</span>
-        </div>
-    </div>
+		<!-- Coin Balance -->
+		<div class="bg-light border rounded px-3 py-2 d-flex align-items-center">
+			<strong>@Model.CoinBalance</strong>
+			<span class="ms-2">🪙</span>
+		</div>
+	</div>
 
-    <!-- Course Header -->
-    <h1 class="fw-bold mb-3">@Model.Course.Title</h1>
-    <div class="d-flex flex-wrap align-items-center mb-3">
-        <span class="badge bg-primary me-2">@Model.Course.Difficulty</span>
-        @foreach (var tag in Model.Tags)
-        {
-            <span class="badge bg-secondary me-2">@tag.Name</span>
-        }
-    </div>
-    <p class="text-muted">@Model.Course.Description</p>
+	<!-- Course Header -->
+	<h1 class="fw-bold mb-3">@Model.Course.Title</h1>
+	<div class="d-flex flex-wrap align-items-center mb-3">
+		<span class="badge bg-primary me-2">@Model.Course.Difficulty</span>
+		@foreach (var tag in Model.Tags)
+		{
+			<span class="badge bg-secondary me-2">@tag.Name</span>
+		}
+	</div>
+	<p class="text-muted">@Model.Course.Description</p>
 
-    <!-- Enroll Button -->
-    <div class="mb-4 d-flex align-items-center">
-        <a asp-controller="Course" asp-action="ViewCourses" class="btn btn-outline-secondary me-3">Back</a>
+	<!-- Enroll Button -->
+	<div class="mb-4 d-flex align-items-center">
+		<a asp-controller="Course" asp-action="ViewCourses" class="btn btn-outline-secondary me-3">Back</a>
 
-        @if (!Model.IsEnrolled)
-        {
-            <form asp-controller="Course" asp-action="Enroll" method="post" class="me-3">
-                @Html.AntiForgeryToken()
-                <input type="hidden" name="id" value="@Model.Course.CourseId" />
-                <button type="submit" class="btn btn-primary">Enroll</button>
-            </form>
-            @if (Model.Course.Cost > 0)
-            {
-                <div class="bg-light border rounded px-3 py-2 d-flex align-items-center">
-                    <strong>@Model.Course.Cost</strong><span class="ms-2">🪙</span>
-                </div>
-            }
-        }
-        else
-        {
-            <span class="text-success fw-bold">Already Enrolled</span>
-        }
-    </div>
+		@if (!Model.IsEnrolled)
+		{
+			<form method="post" action="/Course/Enroll" class="me-3">
+				@Html.AntiForgeryToken()
+				<input type="hidden" name="id" value="@Model.Course.CourseId" />
+				<button type="submit" class="btn btn-primary">Enroll</button>
+			</form>
+			@if (Model.Course.Cost > 0)
+			{
+				<div class="bg-light border rounded px-3 py-2 d-flex align-items-center">
+					<strong>@Model.Course.Cost</strong><span class="ms-2">🪙</span>
+				</div>
+			}
+		}
+		else
+		{
+			<span class="text-success fw-bold">Already Enrolled</span>
+		}
+	</div>
 
-    <hr />
+	<hr />
 
-    <!-- Modules List -->
-    <h2 class="fw-bold">Modules</h2>
-    <ul class="list-group list-group-flush">
-        @foreach (var moduleViewModel in Model.Modules)
-        {
-            <li class="list-group-item bg-light border mb-2 rounded" onclick="onModuleClick('@moduleViewModel.Module.ModuleId', '@moduleViewModel.IsUnlocked')">
-                <div class="d-flex justify-content-between align-items-start">
-                    <div>
-                        @if (!moduleViewModel.IsUnlocked)
-                        {
-                            <span class="text-danger me-2">🔴</span>
-                        }
-                        <strong>@moduleViewModel.Module.Title</strong>
-                        <p class="mb-0 text-muted">@moduleViewModel.Module.ShortDescription</p>
-                    </div>
-                    @if (moduleViewModel.IsUnlocked && moduleViewModel.IsCompleted)
-                    {
-                        <div class="d-flex align-items-center">
-                            <span class="text-success fw-semibold">Completed</span>
-                        </div>
-                    }
-                    @if (moduleViewModel.IsUnlocked && !moduleViewModel.IsCompleted && moduleViewModel.Module.Cost > 0)
-                    {
-                        <div class="d-flex align-items-center">
-                            <span class="text-warning fw-semibold">@moduleViewModel.Module.Cost</span>
-                            <span class="ms-2 text-warning">🪙</span>
-                        </div>
-                    }
-                </div>
-            </li>
-        }
-    </ul>
+	<!-- Modules List -->
+	<h2 class="fw-bold">Modules</h2>
+	<ul class="list-group list-group-flush">
+		@foreach (var moduleViewModel in Model.Modules)
+		{
+			<li class="list-group-item bg-light border mb-2 rounded" onclick="onModuleClick('@moduleViewModel.Module.ModuleId', '@moduleViewModel.IsUnlocked', '@moduleViewModel.IsBonus')">
+				<div class="d-flex justify-content-between align-items-start">
+					<div>
+						@if (!moduleViewModel.IsUnlocked)
+						{
+							@if (moduleViewModel.IsBonus)
+							{
+								<span class="text-danger me-2">🔑 @moduleViewModel.Module.Cost</span>
+							}
+							else
+							{
+								<span class="text-danger me-2">🔴</span>
+							}
+						}
+						<strong>@moduleViewModel.Module.Title</strong>
+						<p class="mb-0 text-muted">@moduleViewModel.Module.ShortDescription</p>
+					</div>
+					@if (moduleViewModel.IsUnlocked && moduleViewModel.IsCompleted)
+					{
+						<div class="d-flex align-items-center">
+							<span class="text-success fw-semibold">Completed</span>
+						</div>
+					}
+					@if (moduleViewModel.IsUnlocked && !moduleViewModel.IsCompleted && moduleViewModel.Module.Cost > 0)
+					{
+						<div class="d-flex align-items-center">
+							<span class="text-warning fw-semibold">@moduleViewModel.Module.Cost</span>
+							<span class="ms-2 text-warning">🪙</span>
+						</div>
+					}
+				</div>
+			</li>
+		}
+	</ul>
 </div>
 
 <script>
-	function onModuleClick(moduleId, isUnlocked) {
+	function onModuleClick(moduleId, isUnlocked, isBonus) {
 		if (isUnlocked === "True") {
-            window.location.href = '@Url.Action("Index", "Module")' + '/' + moduleId;
-        } else {
-			alert("This module is locked. Complete previous modules to unlock it.");
-        }
+			window.location.href = '@Url.Action("Index", "Module")' + '/' + moduleId;
+		}
+		else {
+			if (isBonus == "True"){
+				if (confirm("This is a bonus module. Do you want to purchase it?")) {
+					window.location.href = '/Module/PurchaseBonusModule?moduleId=' + moduleId;
+				}
+			}
+			else{
+				alert("This module is locked. Complete previous modules to unlock it.");
+			}
+		}
 	}
 </script>

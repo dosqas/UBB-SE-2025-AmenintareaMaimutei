@@ -37,3 +37,20 @@
         <div class="text-success fw-bold text-end mb-3">✅ Completed</div>
     }
 </div>
+
+@section Scripts {
+    <script>
+        @if (TempData["CompletionReward"] != null)
+        {
+            <text>alert('@TempData["CompletionReward"]');</text>
+        }
+        @if (TempData["TimedReward"] != null)
+        {
+            <text>alert('@TempData["TimedReward"]');</text>
+        }
+        @if (TempData["Error"] != null)
+        {
+            <text>alert('@TempData["Error"]');</text>
+        }
+    </script>
+}

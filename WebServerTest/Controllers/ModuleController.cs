@@ -20,11 +20,12 @@ namespace WebServerTest.Controllers
             _coinsService = coinsService;
         }
 
+        [HttpGet("/Module/{id}")]
         public async Task<IActionResult> Details(int id)
         {
             // Fetch the module details
             var module = await _courseService.GetModuleAsync(id);
-            var userId = 1;
+            var userId = HttpContext.Session.GetInt32("UserId") ?? 0;
 
             // Get the necessary details
             var timeSpent = await _courseService.GetTimeSpentAsync(userId, module.CourseId);
@@ -80,7 +81,7 @@ namespace WebServerTest.Controllers
         [HttpPost]
         public async Task<IActionResult> Complete(int id)
         {
-            var userId = 1;
+            var userId = HttpContext.Session.GetInt32("UserId") ?? 0;
             var module = await _courseService.GetModuleAsync(id);
             var courseId = module.CourseId;
             var CourseCompletionRewardCoins = 50;
@@ -91,33 +92,81 @@ namespace WebServerTest.Controllers
             {
                 await _courseService.CompleteModuleAsync(userId, id, courseId);
 
-                if (await IsCourseCompleted(userId, courseId))
+                if (await IsCourseCompleted(userId, courseId) && !module.IsBonus)
                 {
                     if (await _courseService.ClaimCompletionRewardAsync(userId, courseId, CourseCompletionRewardCoins))
                     {
-                        string message = $"Congratulations! You have completed all required modules in this course. {CourseCompletionRewardCoins} coins have been added to your balance.";
-                        // alert(message)
+                        TempData["CompletionReward"] = $"Congratulations! You have completed all required modules in this course. {CourseCompletionRewardCoins} coins have been added to your balance.";
                     }
 
-                    if (await _courseService.ClaimTimedRewardAsync(userId, courseId, totalSecondsSpentOnCourse, CourseCompletionRewardCoins))
+                    if (await _courseService.ClaimTimedRewardAsync(userId, courseId, totalSecondsSpentOnCourse, TimedCompletionRewardCoins))
                     {
-                        string message = $"Congratulations! You completed the course within the time limit. {TimedCompletionRewardCoins} coins have been added to your balance.";
-                        // alert(message)
+                        TempData["TimedReward"] = $"Congratulations! You completed the course within the time limit. {TimedCompletionRewardCoins} coins have been added to your balance.";
                     }
                 }
             }
             catch (Exception e)
             {
                 Console.WriteLine($"Error completing module: {e.Message}");
+                TempData["Error"] = "An error occurred while completing the module.";
             }
-            return RedirectToRoute("Module", new { id });
+            return RedirectToAction("Details", "Module", new { id });
+        }
+
+        [HttpGet("/Module/PurchaseBonusModule")]
+        public async Task<IActionResult> PurchaseBonusModule(int moduleId)
+        {
+            var userId = HttpContext.Session.GetInt32("UserId") ?? 0;
+            if (userId == 0)
+            {
+                TempData["Error"] = "You must be logged in to purchase modules.";
+                return RedirectToAction("Login", "User");
+            }
+
+            var module = await _courseService.GetModuleAsync(moduleId);
+
+            if (!module.IsBonus)
+            {
+                TempData["Error"] = "This module is not a bonus module.";
+                return RedirectToAction("Preview", "Course", new { id = module.CourseId });
+            }
+
+            // ✅ Check if the user is enrolled
+            var isEnrolled = await _courseService.IsUserEnrolledAsync(userId, module.CourseId);
+            if (!isEnrolled)
+            {
+                TempData["Error"] = "You must be enrolled in the course to purchase bonus modules.";
+                return RedirectToAction("CoursePreview", "Course", new { id = module.CourseId });
+            }
+
+            // ✅ Check if all required modules are completed
+            var isCourseCompleted = await IsCourseCompleted(userId, module.CourseId);
+            if (!isCourseCompleted)
+            {
+                TempData["Error"] = "You must complete all required modules before purchasing bonus modules.";
+                return RedirectToAction("CoursePreview", "Course", new { id = module.CourseId });
+            }
+
+            // Attempt purchase
+            var success = await _courseService.BuyBonusModuleAsync(userId, moduleId);
+            if (success)
+            {
+                TempData["Notification"] = "Bonus module purchased successfully!";
+            }
+            else
+            {
+                TempData["Error"] = "Not enough coins or module already unlocked.";
+            }
+
+            return RedirectToAction("CoursePreview", "Course", new { id = module.CourseId });
         }
 
         private async Task<Boolean> IsCourseCompleted(int userId, int courseId)
         {
             var completedModulesCount = await _courseService.GetCompletedModulesCountAsync(userId, courseId);
             var requiredModulesCount = await _courseService.GetRequiredModulesCountAsync(courseId);
-            return completedModulesCount >= requiredModulesCount;
+            return completedModulesCount == requiredModulesCount;
         }
+
     }
 }

@@ -17,6 +17,9 @@ namespace WebServerTest.Models
         // Indicates whether the module is unlocked
         public bool IsUnlocked { get; set; }
 
+        // Indicates wheter the module is bonus
+        public bool IsBonus { get; set; }
+
         // Time spent in the module (used in the Razor page for display)
         public string TimeSpent { get; set; } = "0h 0m";
 
