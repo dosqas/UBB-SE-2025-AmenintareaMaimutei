@@ -78,7 +78,6 @@
                     <span class="badge bg-secondary">@Model.Difficulty</span>
                 </div>
                 <div id="timer" class="timer">
-                    00:@(Model.TimeInSeconds.ToString("00"))
                 </div>
             </div>
 
@@ -108,9 +107,7 @@
                     <span class="badge bg-secondary">@Model.Difficulty</span>
                 </div>
                 <h4 class="m-0">ANSWER:</h4>
-                <div id="backTimer" class="timer">
-                    00:@(Model.TimeInSeconds.ToString("00"))
-                </div>
+                <div id="backTimer" class="timer"></div>
             </div>
 
             <div class="answer-container mt-5 mb-4">
@@ -142,21 +139,35 @@
         const timerElement = document.getElementById('timer');
         const backTimerElement = document.getElementById('backTimer');
         const answerInput = document.getElementById('answerInput');
-        
-        const initialTime = parseInt(flashcard.dataset.time);
+
+        function computeTimeByDifficulty() {
+			const difficulty = "@Model.Difficulty".toLowerCase();
+            switch (difficulty)
+            {
+                case "easy":
+                    return 15; // 15 seconds for easy
+                case "hard":
+                    return 45; // 45 seconds for hard
+                case "normal":
+                default:
+                    return 30; // 30 seconds for normal
+            }
+        }
+
+		const initialTime = computeTimeByDifficulty();
         let timeLeft = initialTime;
         let isFlipped = false;
-        
+
         function formatTime(seconds) {
             return `00:${seconds.toString().padStart(2, '0')}`;
         }
-        
+
         function updateTimerDisplay(seconds) {
             const time = formatTime(seconds);
             timerElement.textContent = time;
             backTimerElement.textContent = time;
         }
-        
+
         function flipCard() {
             if (!isFlipped) {
                 isFlipped = true;
@@ -169,19 +180,19 @@
         updateTimerDisplay(timeLeft);
 
         flipButton.addEventListener('click', flipCard);
-        
+
         const timer = setInterval(() => {
-            if (timeLeft > 0) {
-                timeLeft--;
-                updateTimerDisplay(timeLeft);
-                
-                if (timeLeft === 0) {
-                    flipCard();
-                    clearInterval(timer);
-                }
+            timeLeft--;
+            updateTimerDisplay(timeLeft);
+
+            if (timeLeft <= 0) {
+                clearInterval(timer);
+                flipCard();
+                // Add the alert when time runs out
+                alert("Time is up");
             }
         }, 1000);
-        
+
         window.addEventListener('beforeunload', () => clearInterval(timer));
     });
 </script>
