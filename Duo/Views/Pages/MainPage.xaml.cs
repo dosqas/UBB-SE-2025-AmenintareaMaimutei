@@ -20,7 +20,10 @@ namespace Duo.Views.Pages
         public void LogoutButton_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
         {
             ((MainPageViewModel)App.ServiceProvider.GetService(typeof(MainPageViewModel))).HandleLogoutClick();
-            App.MainAppWindow.Content = new Duo.Views.Pages.LoginPage();
+
+            Frame loginFrame = new Frame();
+            loginFrame.Navigate(typeof(LoginPage));
+            App.MainAppWindow.Content = loginFrame;
         }
     }
 }

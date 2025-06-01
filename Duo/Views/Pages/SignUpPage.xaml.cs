@@ -6,6 +6,7 @@ using System;
 using System.Threading.Tasks;
 using DuolingoNou.Views;
 using Microsoft.Extensions.DependencyInjection;
+using DuoClassLibrary.Services.Interfaces;
 
 namespace Duo.Views.Pages
 {
@@ -75,9 +76,10 @@ namespace Duo.Views.Pages
             {
                 // Set the current user globally
                 App.CurrentUser = ViewModel.NewUser;
-
-                await ShowDialog("Account Created", "Your account has been successfully created!");
                 await App.userService.SetUser(App.CurrentUser.UserName);
+                IUserService _userService = App.ServiceProvider.GetRequiredService<IUserService>();
+                await _userService.SetUser(ViewModel.NewUser.UserName);
+                await ShowDialog("Account Created", "Your account has been successfully created!");
 
                 Frame.Navigate(typeof(CategoryPage));
             }
