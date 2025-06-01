@@ -291,5 +291,141 @@ namespace WebServerTest.Controllers
                 return RedirectToAction("Post", new { id = postId });
             }
         }
+
+        [HttpGet]
+        public async Task<IActionResult> AddPost()
+        {
+            // Optionally, load categories for dropdown
+            var categories = await _categoryService.GetAllCategories();
+            ViewBag.Categories = categories;
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddPost(string title, string description, int categoryId, string hashtags)
+        {
+            if (string.IsNullOrWhiteSpace(title) || string.IsNullOrWhiteSpace(description))
+            {
+                TempData["Error"] = "Title and description are required.";
+                return RedirectToAction("AddPost");
+            }
+            var userId = HttpContext.Session.GetInt32("UserId");
+            if (userId == null)
+            {
+                TempData["Error"] = "You must be logged in to add a post.";
+                return RedirectToAction("AddPost");
+            }
+            var post = new DuoClassLibrary.Models.Post
+            {
+                Title = title,
+                Description = description,
+                UserID = userId.Value,
+                CategoryID = categoryId,
+                CreatedAt = DateTime.Now,
+                UpdatedAt = DateTime.Now
+            };
+            try
+            {
+                int postId = await _postService.CreatePost(post);
+                // Handle hashtags
+                if (!string.IsNullOrWhiteSpace(hashtags))
+                {
+                    var tagList = hashtags.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).Distinct();
+                    foreach (var tag in tagList)
+                    {
+                        var existing = (await _hashtagService.GetAllHashtags()).FirstOrDefault(h => h.Tag == tag);
+                        DuoClassLibrary.Models.Hashtag hashtagObj = existing ?? await _hashtagService.CreateHashtag(tag);
+                        await _hashtagService.AddHashtagToPost(postId, hashtagObj.Id);
+                    }
+                }
+                TempData["Success"] = "Post created successfully.";
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = $"Failed to create post: {ex.Message}";
+                return RedirectToAction("AddPost");
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> EditPost(int id)
+        {
+            var post = await _postService.GetPostDetailsWithMetadata(id);
+            if (post == null)
+            {
+                TempData["Error"] = "Post not found.";
+                return RedirectToAction("Index");
+            }
+            var categories = await _categoryService.GetAllCategories();
+            ViewBag.Categories = categories;
+            return View(post);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditPost(int id, string title, string description, int categoryId, string hashtags)
+        {
+            if (string.IsNullOrWhiteSpace(title) || string.IsNullOrWhiteSpace(description))
+            {
+                TempData["Error"] = "Title and description are required.";
+                return RedirectToAction("EditPost", new { id });
+            }
+            var post = await _postService.GetPostDetailsWithMetadata(id);
+            if (post == null)
+            {
+                TempData["Error"] = "Post not found.";
+                return RedirectToAction("Index");
+            }
+            post.Title = title;
+            post.Description = description;
+            post.CategoryID = categoryId;
+            post.UpdatedAt = DateTime.Now;
+            try
+            {
+                await _postService.UpdatePost(post);
+                // Remove all old hashtags
+                var oldTags = await _postService.GetHashtagsByPostId(id);
+                foreach (var oldTag in oldTags)
+                {
+                    await _hashtagService.RemoveHashtagFromPost(id, oldTag.Id);
+                }
+                // Add new hashtags
+                if (!string.IsNullOrWhiteSpace(hashtags))
+                {
+                    var tagList = hashtags.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).Distinct();
+                    foreach (var tag in tagList)
+                    {
+                        var existing = (await _hashtagService.GetAllHashtags()).FirstOrDefault(h => h.Tag == tag);
+                        DuoClassLibrary.Models.Hashtag hashtagObj = existing ?? await _hashtagService.CreateHashtag(tag);
+                        await _hashtagService.AddHashtagToPost(id, hashtagObj.Id);
+                    }
+                }
+                TempData["Success"] = "Post updated successfully.";
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = $"Failed to update post: {ex.Message}";
+                return RedirectToAction("EditPost", new { id });
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeletePost(int id)
+        {
+            try
+            {
+                await _postService.DeletePost(id);
+                TempData["Success"] = "Post deleted successfully.";
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = $"Failed to delete post: {ex.Message}";
+            }
+            return RedirectToAction("Index");
+        }
     }
 } 

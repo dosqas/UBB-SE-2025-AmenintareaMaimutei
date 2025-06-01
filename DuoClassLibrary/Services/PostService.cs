@@ -527,8 +527,8 @@ namespace DuoClassLibrary.Services
                 if (selectedHashtags.Count > DEFAULT_COUNT && !selectedHashtags.Contains("All"))
                 {
                     filteredPosts = filteredPosts.Where(p => 
-                        p.Hashtags != null && 
-                        p.Hashtags.Any(h => selectedHashtags.Contains(h)));
+                            p.Hashtags != null && 
+                            p.Hashtags.Any(h => selectedHashtags.Contains(h)));
                 }
 
                 // Apply text filtering if needed
