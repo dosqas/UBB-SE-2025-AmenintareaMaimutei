@@ -50,8 +50,8 @@
                 <ul class="list-group" id="quiz-list-modal">
                     @foreach (var quiz in ViewBag.Quizzes as List<DuoClassLibrary.Models.Quizzes.Quiz>)
                     {
-                        <li class="list-group-item" style="cursor:pointer;" data-quiz-id="@quiz.Id">
-                            @quiz.Id
+                        <li class="list-group-item" style="cursor:pointer;" data-quiz-id="@quiz.Id" data-quiz-display="@quiz.ToString()">
+                            @quiz.ToString()
                         </li>
                     }
                 </ul>
@@ -72,8 +72,8 @@
                 <ul class="list-group" id="exam-list-modal">
                     @foreach (var exam in ViewBag.Exams as List<DuoClassLibrary.Models.Quizzes.Exam>)
                     {
-                        <li class="list-group-item" style="cursor:pointer;" data-exam-id="@exam.Id">
-                            @exam.Id
+                        <li class="list-group-item" style="cursor:pointer;" data-exam-id="@exam.Id" data-exam-display="@exam.ToString()">
+                            @exam.ToString()
                         </li>
                     }
                 </ul>
@@ -190,9 +190,9 @@
             // Handle quiz selection
             $('#quiz-list-modal li').on('click', function() {
                 const quizId = $(this).data('quiz-id');
-                const quizTitle = $(this).text().trim();
+                const quizDisplay = $(this).data('quiz-display');
                 if (!selectedQuizzes.some(q => q.id === quizId)) {
-                    selectedQuizzes.push({ id: quizId, title: quizTitle });
+                    selectedQuizzes.push({ id: quizId, title: quizDisplay });
                     renderSelectedQuizzes();
                 }
                 quizModal.hide();
@@ -201,8 +201,8 @@
             // Handle exam selection
             $('#exam-list-modal li').on('click', function() {
                 const examId = $(this).data('exam-id');
-                const examTitle = $(this).text().trim();
-                selectedExam = { id: examId, title: examTitle };
+                const examDisplay = $(this).data('exam-display');
+                selectedExam = { id: examId, title: examDisplay };
                 renderSelectedExam();
                 examModal.hide();
             });
@@ -232,8 +232,10 @@
                     exam: { id: selectedExam.id }
                 };
 
+                console.log('Sending section data:', JSON.stringify(sectionData, null, 2));
+
                 $.ajax({
-                    url: '@Url.Action("AddSection", "Section")',
+                    url: '/Section/AddSection',
                     method: 'POST',
                     contentType: 'application/json',
                     data: JSON.stringify(sectionData),
