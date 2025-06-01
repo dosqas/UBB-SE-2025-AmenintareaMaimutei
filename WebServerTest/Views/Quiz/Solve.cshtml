@@ -76,6 +76,10 @@
 </form>
 
 <script>
+    document.addEventListener('timeUp', function() {
+		validateExercise();
+    })
+
     async function validateExercise() {
         const form = document.getElementById('exerciseForm');
         const submitButton = document.getElementById('submitButton');
@@ -92,13 +96,13 @@
         {
             <text>
             const answerInput = document.getElementById('answerInput');
-            if (!answerInput.value.trim()) {
-                feedbackMessage.style.display = 'block';
-                feedbackMessage.className = 'alert alert-warning mt-3';
-                feedbackText.textContent = 'Please enter an answer.';
-                submitButton.disabled = false;
-                return;
-            }
+            // if (!answerInput.value.trim()) {
+            //     feedbackMessage.style.display = 'block';
+            //     feedbackMessage.className = 'alert alert-warning mt-3';
+            //     feedbackText.textContent = 'Please enter an answer.';
+            //     submitButton.disabled = false;
+            //     return;
+            // }
             answer = answerInput.value;
             </text>
         }

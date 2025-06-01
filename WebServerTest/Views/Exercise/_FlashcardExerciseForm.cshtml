@@ -188,8 +188,7 @@
             if (timeLeft <= 0) {
                 clearInterval(timer);
                 flipCard();
-                // Add the alert when time runs out
-                alert("Time is up");
+				document.dispatchEvent(new Event('timeUp'));
             }
         }, 1000);
 
