@@ -62,7 +62,7 @@ namespace Duo.Views.Pages
         /// <param name="e">The event arguments.</param>
         private void NavigateToSignUpPage(object sender, RoutedEventArgs e)
         {
-            Frame.Navigate(typeof(SignUpPage));
+            this.Frame.Navigate(typeof(SignUpPage));
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -116,7 +116,7 @@ namespace Duo.Views.Pages
         /// <param name="e">The event arguments.</param>
         private void OnForgotPasswordClick(object sender, RoutedEventArgs e)
         {
-            Frame.Navigate(typeof(ResetPasswordPage));
+            this.Frame.Navigate(typeof(ResetPasswordPage));
         }
 
         /// <summary>
