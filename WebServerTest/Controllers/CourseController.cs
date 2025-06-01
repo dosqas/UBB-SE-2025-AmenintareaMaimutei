@@ -6,6 +6,8 @@ using WebServerTest.Models;
 using DuoClassLibrary.Services.Interfaces;
 using System.Text.Json;
 using System.Numerics;
+using Microsoft.AspNetCore.Cors.Infrastructure;
+using Microsoft.Extensions.Configuration.UserSecrets;
 
 namespace WebServerTest.Controllers
 {
@@ -147,6 +149,45 @@ namespace WebServerTest.Controllers
             }
 
             return RedirectToAction("CoursePreview", new { id = CurrentCourse.CourseId });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateTimeLocal([FromBody] Dictionary<string, object> data)
+        {
+            // Extract values safely
+            if (!data.TryGetValue("courseId", out var courseIdObj) ||
+                !data.TryGetValue("seconds", out var secondsObj))
+            {
+                return BadRequest("Missing one or more required parameters: courseId, or seconds.");
+            }
+
+            // Extract from JsonElement
+            int courseId, seconds;
+
+            if (courseIdObj is JsonElement courseIdElement)
+            {
+                courseId = courseIdElement.ValueKind == JsonValueKind.Number
+                    ? courseIdElement.GetInt32()
+                    : int.Parse(courseIdElement.GetString());
+            }
+            else
+            {
+                courseId = Convert.ToInt32(courseIdObj);
+            }
+
+            if (secondsObj is JsonElement secondsElement)
+            {
+                seconds = secondsElement.ValueKind == JsonValueKind.Number
+                    ? secondsElement.GetInt32()
+                    : int.Parse(secondsElement.GetString());
+            }
+            else
+            {
+                seconds = Convert.ToInt32(secondsObj);
+            }
+            var userId = HttpContext.Session.GetInt32("UserId") ?? 0; ;
+            await _courseService.UpdateTimeSpentAsync(userId, courseId, seconds);
+            return Ok();
         }
     }
 }

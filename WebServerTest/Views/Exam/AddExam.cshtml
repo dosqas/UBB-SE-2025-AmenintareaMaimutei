@@ -6,12 +6,18 @@
 }
 
 <div class="container-fluid px-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
         <h2>Create New Exam</h2>
+        <a asp-controller="Admin"
+           asp-action="Index"
+           class="btn btn-outline-secondary btn-sm">
+            ← Back
+
+        </a>
     </div>
 
     <h5>Selected Exercises</h5>
-    <div class="border rounded p-4 mb-4 dark-box" style="min-height: 150px;" id="selectedExercisesBox">
+    <div class="border rounded p-4 mb-4" style="min-height: 150px;" id="selectedExercisesBox">
         <p class="text-muted">No exercises selected yet.</p>
     </div>
 
@@ -20,15 +26,14 @@
     </div>
 
     <div class="text-end">
-        <a href="@Url.Action("ManageExam", "Exam")" class="btn btn-secondary">Cancel</a>
-        <button class="btn btn-primary" id="saveExamBtn">Save</button>
+        <button type="submit" class="btn btn-primary px-4" id="saveExamBtn">Save</button>
     </div>
 </div>
 
 <!-- Modal -->
 <div class="modal fade" id="exerciseModal" tabindex="-1" aria-labelledby="exerciseModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
-        <div class="modal-content bg-dark text-light">
+        <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exerciseModalLabel">Select Exercise</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -37,7 +42,7 @@
                 <ul class="list-group" id="exerciseList">
                     @foreach (var ex in exercises)
                     {
-                        <li class="list-group-item bg-dark text-light exercise-item" data-id="@ex.ExerciseId" data-name="@ex.Question">
+                        <li class="list-group-item exercise-item" data-id="@ex.ExerciseId" data-name="@ex.Question">
                             Exercise #@ex.ExerciseId – @ex.Question
                         </li>
                     }
@@ -45,49 +50,14 @@
                 </ul>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" id="confirmAddExercise" disabled>Add</button>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="confirmAddExercise" disabled>Add</button>
             </div>
         </div>
     </div>
 </div>
 
-@section Styles {
-    <style>
-        body {
-            background-color: #121212;
-            color: #f8f9fa;
-        }
 
-        .dark-box {
-            background-color: #1e1e1e;
-            border-color: #444;
-            color: #f8f9fa;
-        }
-
-        .btn-primary {
-            background-color: #0d6efd;
-            border: none;
-        }
-
-            .btn-primary:hover {
-                background-color: #0b5ed7;
-            }
-
-        .btn-secondary {
-            background-color: #6c757d;
-            border: none;
-        }
-
-            .btn-secondary:hover {
-                background-color: #5a6268;
-            }
-
-        .exercise-item.active {
-            background-color: #343a40;
-        }
-    </style>
-}
 
 @section Scripts {
     <script>

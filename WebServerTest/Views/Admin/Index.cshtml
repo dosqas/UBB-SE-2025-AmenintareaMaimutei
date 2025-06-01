@@ -16,7 +16,9 @@
     <div class="admin-actions">
 
         <!-- Manage Sections -->
-        <div class="admin-card">
+        <div class="admin-card"
+             style="cursor:pointer;"
+             onclick="location.href='@Url.Action("ManageSection","Section")'">
             <div class="admin-card-icon">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <rect x="3" y="3" width="18" height="18" rx="2" />
@@ -24,10 +26,10 @@
                     <path d="M9 3v18" />
                 </svg>
             </div>
-            <a href="~/Section/ManageSection" class="admin-card-content">
+            <div class="admin-card-content">
                 <div class="admin-card-title">Manage Sections</div>
                 <div class="admin-card-desc">Here you can view and delete sections</div>
-            </a>
+            </div>
             <div class="admin-card-actions">
                 <a href="~/Section/AddSection" class="admin-card-btn">Add Section</a>
             </div>
@@ -72,7 +74,7 @@
                 <div class="admin-card-title">Manage Exams</div>
                 <div class="admin-card-desc">Here you can see and delete</div>
             </div>
-            <a asp-controller="Exam" asp-action="AddExam"
+            <a href="Exam/AddExam"
                class="admin-card-btn btn btn-primary"
                onclick="event.stopPropagation()">
                 Add Exam

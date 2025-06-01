@@ -1,4 +1,4 @@
-@model DuoClassLibrary.Models.Exercises.Exercise
+﻿@model DuoClassLibrary.Models.Exercises.Exercise
 @{
     ViewData["Title"] = "Create Exercise";
     var exerciseTypes = ViewBag.ExerciseTypes as List<string>;
@@ -6,12 +6,14 @@
 }
 
 <div class="container-fluid exercise-container">
-    <div class="row mb-4">
-        <div class="col">
-            <a href="@Url.Action("Index", "Home")" class="btn btn-outline-secondary">
-                <i class="fas fa-arrow-left"></i> Back
-            </a>
-        </div>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Create Exercise</h2>
+        <a asp-controller="Admin"
+           asp-action="Index"
+           class="btn btn-outline-secondary btn-sm">
+            ← Back
+
+        </a>
     </div>
 
     <div class="card shadow-sm">
@@ -70,7 +72,6 @@
                 </div>
 
                 <div class="d-flex justify-content-end gap-2">
-                    <button type="button" id="cancelBtn" class="btn btn-outline-secondary px-4">Cancel</button>
                     <button type="submit" class="btn btn-primary px-4">Save</button>
                 </div>
             </form>

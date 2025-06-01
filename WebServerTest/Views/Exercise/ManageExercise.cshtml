@@ -1,4 +1,4 @@
-@model IEnumerable<DuoClassLibrary.Models.Exercises.Exercise>
+﻿@model IEnumerable<DuoClassLibrary.Models.Exercises.Exercise>
 @{
     ViewData["Title"] = "Manage Exercises";
 }
@@ -81,13 +81,18 @@
 </style>
 
 <div class="container-fluid exercise-container">
-    <div class="row mb-4">
-        <div class="col">
-            <a href="@Url.Action("Index", "Home")" class="btn btn-outline-secondary">
-                <i class="fas fa-arrow-left"></i> Back
-            </a>
-            <h2 class="d-inline-block ms-3">Manage Exercises</h2>
-        </div>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Manage Exercises</h2>
+        <a asp-controller="Admin"
+           asp-action="Index"
+           class="btn btn-outline-secondary btn-sm">
+            ← Back
+
+        </a>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <a href="@Url.Action("CreateExercise", "Exercise")" class="btn btn-primary">Add Exercise</a>
     </div>
 
     <div class="card shadow-sm">

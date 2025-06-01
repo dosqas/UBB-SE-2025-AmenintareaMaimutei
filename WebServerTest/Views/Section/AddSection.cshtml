@@ -1,11 +1,17 @@
-@{
+﻿@{
     ViewData["Title"] = "Create New Section";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="container-fluid px-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
         <h2>Create New Section</h2>
+        <a asp-controller="Admin"
+           asp-action="Index"
+           class="btn btn-outline-secondary btn-sm">
+            ← Back
+
+        </a>
     </div>
 
     <h5>Subject</h5>
@@ -28,7 +34,6 @@
     </div>
 
     <div class="text-end">
-        <a href="@Url.Action("ManageSection", "Section")" class="btn btn-secondary">Cancel</a>
         <button class="btn btn-primary" id="saveBtn">Save</button>
     </div>
 </div>

@@ -12,9 +12,12 @@
 	<!-- Timer + Progress + Coins -->
 	<div class="d-flex justify-content-between align-items-start mb-4">
 		<!-- Timer -->
-		<div class="bg-light border rounded px-3 py-2 d-flex align-items-center">
+		<div id="timer"
+			 class="bg-secondary rounded px-3 py-2 d-flex align-items-center"
+			 data-initial="@Model.FormattedTimeRemaining"
+			 data-courseid="@Model.Course.CourseId">
 			<span class="me-2">⏱️</span>
-			<strong>@Model.FormattedTimeRemaining</strong>
+			<strong id="timer-value">@Model.FormattedTimeRemaining</strong>
 		</div>
 
 		<!-- Progress -->
@@ -125,6 +128,67 @@
 			}
 		}
 	}
+	// Converts "hh:mm:ss" or "mm:ss" to seconds
+	function parseTimeString(timeStr) {
+		const parts = timeStr.split(':').map(Number);
+		if (parts.length === 3) {
+			return parts[0] * 3600 + parts[1] * 60 + parts[2];
+		} else if (parts.length === 2) {
+			return parts[0] * 60 + parts[1];
+		}
+		return 0;
+	}
+
+	function formatTime(seconds) {
+		const h = Math.floor(seconds / 3600);
+		const m = Math.floor((seconds % 3600) / 60);
+		const s = seconds % 60;
+		if (h > 0) {
+			return h.toString().padStart(2, '0') + ':' +
+				   m.toString().padStart(2, '0') + ':' +
+				   s.toString().padStart(2, '0');
+		} else {
+			return m.toString().padStart(2, '0') + ':' +
+				   s.toString().padStart(2, '0');
+		}
+	}
+
+	document.addEventListener('DOMContentLoaded', function () {
+		const timerDiv = document.getElementById('timer');
+		const timerValue = document.getElementById('timer-value');
+		let remaining = parseTimeString(timerDiv.getAttribute('data-initial'));
+		const courseId = timerDiv.getAttribute('data-courseid');
+		let timeSpent = 0;
+		console.log(remaining);
+
+		if (!isNaN(remaining) && remaining > 0) {
+			const interval = setInterval(function () {
+				remaining--;
+				timeSpent++;
+				timerValue.textContent = formatTime(remaining);
+				if (remaining <= 0) {
+					clearInterval(interval);
+					timerValue.textContent = "00:00";
+				}
+			}, 1000);
+
+			// Send updated time to backend when user leaves the page
+			window.addEventListener('beforeunload', function () {
+				// Use fetch with keepalive for PUT requests
+				fetch('/Course/UpdateTimeLocal', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({
+						courseId: parseInt(courseId),
+						seconds: timeSpent
+					}),
+					keepalive: true
+				});
+			});
+		}
+	});
 </script>
 
 @section Scripts {
