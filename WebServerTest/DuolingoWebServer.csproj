@@ -33,7 +33,6 @@
 	</ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Duo.Api\Duo.Api.csproj" />
     <ProjectReference Include="..\DuoClassLibrary\DuoClassLibrary.csproj" />
   </ItemGroup>
 

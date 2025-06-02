@@ -1,4 +1,3 @@
-using Duo.Api.Persistence;
 using DuoClassLibrary.Services;
 using DuoClassLibrary.Services.Interfaces;
 using DuoClassLibrary.Repositories.Proxies;
@@ -7,7 +6,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Duo.Services;
 using Microsoft.AspNetCore.Mvc.Razor;
-using Duo.Api.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,10 +17,10 @@ if (string.IsNullOrWhiteSpace(apiBase))
 }
 
 // Add services to the container.
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-builder.Services.AddDbContext<DataContext>(options =>
-    options.UseSqlServer(connectionString));
+
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
+builder.Services.AddRazorPages();
 
 builder.Services.AddHttpClient();
 
@@ -41,7 +39,6 @@ builder.Services.AddScoped<ICategoryRepository, CategoryRepositoryProxi>();
 builder.Services.AddScoped<IPostRepository, PostRepositoryProxi>();
 builder.Services.AddScoped<IHashtagRepository, HashtagRepositoryProxi>();
 builder.Services.AddScoped<ICommentRepository, CommentRepositoryProxi>();
-builder.Services.AddScoped<Duo.Api.Repositories.IRepository, Duo.Api.Repositories.Repository>();
 
 // Register services
 builder.Services.AddScoped<IUserHelperService, UserHelperService>();
@@ -70,8 +67,6 @@ builder.Services.AddScoped<ICourseServiceProxy, CourseServiceProxy>();
 builder.Services.AddScoped<ICoinsServiceProxy, CoinsServiceProxy>();
 
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<DataContext>();
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();

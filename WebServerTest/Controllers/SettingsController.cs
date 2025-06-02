@@ -1,5 +1,4 @@
 using System.Threading.Tasks;
-using Duo.Api.Models;
 using DuoClassLibrary.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
