@@ -1,0 +1,73 @@
+@{
+    ViewData["Title"] = "Create New Section";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid px-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Create New Section</h2>
+    </div>
+
+    <h5>Subject</h5>
+    <input type="text" class="form-control bg-dark text-light border-dark mb-4" placeholder="Enter section subject" />
+
+    <h5>Selected Quizzes</h5>
+    <div class="border rounded p-4 mb-4 dark-box" style="min-height: 150px;">
+        <!-- Selected quizzes go here -->
+    </div>
+    <div class="text-end mb-4">
+        <button class="btn btn-primary">Add Quiz</button>
+    </div>
+
+    <h5>Final Exam</h5>
+    <div class="border rounded p-4 mb-4 dark-box" style="min-height: 150px;">
+        <!-- Selected exam goes here -->
+    </div>
+    <div class="text-end mb-4">
+        <button class="btn btn-primary">Select Exam</button>
+    </div>
+
+    <div class="text-end">
+        <a href="@Url.Action("ManageSection", "Section")" class="btn btn-secondary">Cancel</a>
+        <button class="btn btn-primary">Save</button>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        body {
+            background-color: #121212;
+            color: #f8f9fa;
+        }
+
+        .dark-box {
+            background-color: #1e1e1e;
+            border-color: #444;
+            color: #f8f9fa;
+        }
+
+        .form-control {
+            background-color: #1e1e1e;
+            border-color: #444;
+            color: #f8f9fa;
+        }
+
+        .btn-primary {
+            background-color: #0d6efd;
+            border: none;
+        }
+
+            .btn-primary:hover {
+                background-color: #0b5ed7;
+            }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            border: none;
+        }
+
+            .btn-secondary:hover {
+                background-color: #5a6268;
+            }
+    </style>
+}
