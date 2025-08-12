@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35913.81
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Duo.Api", "Duo.Api.csproj", "{3D0F9283-F5DF-483C-BC39-03AF2059D80D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Duo.Api.Tests", "..\Duo.Api.Tests\Duo.Api.Tests.csproj", "{45C8073A-5268-488A-8751-872F03D8608F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3D0F9283-F5DF-483C-BC39-03AF2059D80D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D0F9283-F5DF-483C-BC39-03AF2059D80D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D0F9283-F5DF-483C-BC39-03AF2059D80D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D0F9283-F5DF-483C-BC39-03AF2059D80D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{45C8073A-5268-488A-8751-872F03D8608F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{45C8073A-5268-488A-8751-872F03D8608F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{45C8073A-5268-488A-8751-872F03D8608F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{45C8073A-5268-488A-8751-872F03D8608F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5CA62408-4D4F-48BE-88C0-48D6B4EFF1EA}
+	EndGlobalSection
+EndGlobal
