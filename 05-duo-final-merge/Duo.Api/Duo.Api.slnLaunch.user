@@ -1,0 +1,15 @@
+[
+  {
+    "Name": "New Profile",
+    "Projects": [
+      {
+        "Path": "Duo.Api.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "..\\WebServerTest\\DuolingoWebServer.csproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]

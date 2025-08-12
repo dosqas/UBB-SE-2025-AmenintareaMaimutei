@@ -1,0 +1,131 @@
+﻿@{
+    ViewData["Title"] = "Create New Exam";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var exercises = ViewBag.AllExercises as List<DuoClassLibrary.Models.Exercises.Exercise> ?? new List<DuoClassLibrary.Models.Exercises.Exercise>();
+
+}
+
+<div class="container-fluid px-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Create New Exam</h2>
+        <a asp-controller="Admin"
+           asp-action="Index"
+           class="btn btn-outline-secondary btn-sm">
+            ← Back
+
+        </a>
+    </div>
+
+    <h5>Selected Exercises</h5>
+    <div class="border rounded p-4 mb-4" style="min-height: 150px;" id="selectedExercisesBox">
+        <p class="text-muted">No exercises selected yet.</p>
+    </div>
+
+    <div class="text-end mb-4">
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exerciseModal">Add Exercise</button>
+    </div>
+
+    <div class="text-end">
+        <button type="submit" class="btn btn-primary px-4" id="saveExamBtn">Save</button>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="exerciseModal" tabindex="-1" aria-labelledby="exerciseModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exerciseModalLabel">Select Exercise</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <ul class="list-group" id="exerciseList">
+                    @foreach (var ex in exercises)
+                    {
+                        <li class="list-group-item exercise-item" data-id="@ex.ExerciseId" data-name="@ex.Question">
+                            Exercise #@ex.ExerciseId – @ex.Question
+                        </li>
+                    }
+
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="confirmAddExercise" disabled>Add</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    <script>
+        let selectedExercises = [];
+        let selectedItem = null;
+
+        function renderSelectedExercises() {
+            fetch('/Exam/RenderSelectedExercises', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(selectedExercises)
+            })
+                .then(res => res.text())
+                .then(html => {
+                    document.getElementById('selectedExercisesBox').innerHTML = html;
+                    attachRemoveListeners();
+                });
+        }
+
+        function attachRemoveListeners() {
+            document.querySelectorAll('.remove-exercise').forEach(btn => {
+                btn.addEventListener('click', function () {
+                    const id = parseInt(this.dataset.id);
+                    selectedExercises = selectedExercises.filter(e => e.exerciseId !== id);
+                    renderSelectedExercises();
+                });
+            });
+        }
+
+        document.querySelectorAll('.exercise-item').forEach(item => {
+            item.addEventListener('click', function () {
+                document.querySelectorAll('.exercise-item').forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+                selectedItem = {
+                    id: this.dataset.id,
+                    name: this.dataset.name
+                };
+                document.getElementById('confirmAddExercise').disabled = false;
+            });
+        });
+
+        document.getElementById('confirmAddExercise').addEventListener('click', function () {
+            if (!selectedItem) return;
+
+            const id = parseInt(selectedItem.id);
+            if (!selectedExercises.some(e => e.exerciseId === id)) {
+                selectedExercises.push({ exerciseId: id, question: selectedItem.name });
+            }
+
+            renderSelectedExercises();
+            bootstrap.Modal.getInstance(document.getElementById('exerciseModal')).hide();
+            selectedItem = null;
+            this.disabled = true;
+        });
+
+        document.getElementById('saveExamBtn').addEventListener('click', function () {
+            const ids = selectedExercises.map(e => e.exerciseId);
+            fetch('@Url.Action("CreateExam", "Exam")', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(ids)
+            }).then(res => {
+                if (res.ok) {
+                    window.location.href = '/Exam/ManageExam';
+                } else {
+                    alert('Failed to create exam.');
+                }
+            });
+        });
+    </script>
+}

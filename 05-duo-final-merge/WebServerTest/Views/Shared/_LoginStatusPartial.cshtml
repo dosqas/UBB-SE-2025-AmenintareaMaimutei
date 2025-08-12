@@ -1,0 +1,56 @@
+@using Microsoft.AspNetCore.Http
+
+@{
+    string username = Context.Session.GetString("Username");
+    int? userId = Context.Session.GetInt32("UserId");
+    bool isLoggedIn = !string.IsNullOrEmpty(username);
+}
+
+@if (isLoggedIn)
+{
+    <div class="dropdown">
+        <a class="nav-link dropdown-toggle user-link" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-person-circle"></i> @username
+        </a>
+        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+            <a class="dropdown-item" href="#">
+                <i class="bi bi-person"></i> User ID: @userId
+            </a>
+            <a class="dropdown-item" href="#">
+                <i class="bi bi-person-badge"></i> Username: @username
+            </a>
+            <div class="dropdown-divider"></div>
+            <form asp-controller="Account" asp-action="Logout" method="post">
+                <button type="submit" class="dropdown-item">
+                    <i class="bi bi-box-arrow-right"></i> Logout
+                </button>
+            </form>
+        </div>
+    </div>
+}
+else
+{
+    <div class="d-flex">
+        <a class="nav-link" asp-controller="Account" asp-action="Register">
+            <i class="bi bi-person-plus"></i> Register
+        </a>
+        <a class="nav-link" asp-controller="Account" asp-action="Login">
+            <i class="bi bi-box-arrow-in-right"></i> Login
+        </a>
+    </div>
+}
+
+<style>
+    .user-link {
+        color: #1899D6 !important;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        padding: 0.5rem 1rem;
+    }
+    
+    .user-link i {
+        font-size: 1.2rem;
+        margin-right: 0.5rem;
+    }
+</style> 
