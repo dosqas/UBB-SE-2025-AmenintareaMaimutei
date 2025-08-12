@@ -1,0 +1,205 @@
+﻿@model CoursePreviewViewModel
+
+<div class="container py-4">
+	<!-- Notification Banner -->
+	@if (Model.ShowNotification)
+	{
+		<div class="alert alert-success text-center fw-semibold">
+			@Model.NotificationMessage
+		</div>
+	}
+
+	<!-- Timer + Progress + Coins -->
+	<div class="d-flex justify-content-between align-items-start mb-4">
+		<!-- Timer -->
+		<div id="timer"
+			 class="bg-secondary rounded px-3 py-2 d-flex align-items-center"
+			 data-initial="@Model.FormattedTimeRemaining"
+			 data-courseid="@Model.Course.CourseId">
+			<span class="me-2">⏱️</span>
+			<strong id="timer-value">@Model.FormattedTimeRemaining</strong>
+		</div>
+
+		<!-- Progress -->
+		<div class="text-center">
+			<strong>Progress:</strong>
+			<span class="text-primary fw-bold">@Model.CompletedModules</span> /
+			<span>@Model.RequiredModules</span> modules completed
+		</div>
+
+		<!-- Coin Balance -->
+		<div class="bg-light border rounded px-3 py-2 d-flex align-items-center">
+			<strong>@Model.CoinBalance</strong>
+			<span class="ms-2">🪙</span>
+		</div>
+	</div>
+
+	<!-- Course Header -->
+	<h1 class="fw-bold mb-3">@Model.Course.Title</h1>
+	<div class="d-flex flex-wrap align-items-center mb-3">
+		<span class="badge bg-primary me-2">@Model.Course.Difficulty</span>
+		@foreach (var tag in Model.Tags)
+		{
+			<span class="badge bg-secondary me-2">@tag.Name</span>
+		}
+	</div>
+	<p class="text-muted">@Model.Course.Description</p>
+
+	<!-- Enroll Button -->
+	<div class="mb-4 d-flex align-items-center">
+		<a asp-controller="Course" asp-action="ViewCourses" class="btn btn-outline-secondary me-3">Back</a>
+
+		@if (!Model.IsEnrolled)
+		{
+			<form method="post" action="/Course/Enroll" class="me-3">
+				@Html.AntiForgeryToken()
+				<input type="hidden" name="id" value="@Model.Course.CourseId" />
+				<button type="submit" class="btn btn-primary">Enroll</button>
+			</form>
+			@if (Model.Course.Cost > 0)
+			{
+				<div class="bg-light border rounded px-3 py-2 d-flex align-items-center">
+					<strong>@Model.Course.Cost</strong><span class="ms-2">🪙</span>
+				</div>
+			}
+		}
+		else
+		{
+			<span class="text-success fw-bold">Already Enrolled</span>
+		}
+	</div>
+
+	<hr />
+
+	<!-- Modules List -->
+	<h2 class="fw-bold">Modules</h2>
+	<ul class="list-group list-group-flush">
+		@foreach (var moduleViewModel in Model.Modules)
+		{
+			<li class="list-group-item bg-light border mb-2 rounded" onclick="onModuleClick('@moduleViewModel.Module.ModuleId', '@moduleViewModel.IsUnlocked', '@moduleViewModel.IsBonus')">
+				<div class="d-flex justify-content-between align-items-start">
+					<div>
+						@if (!moduleViewModel.IsUnlocked)
+						{
+							@if (moduleViewModel.IsBonus)
+							{
+								<span class="text-danger me-2">🔑 @moduleViewModel.Module.Cost</span>
+							}
+							else
+							{
+								<span class="text-danger me-2">🔴</span>
+							}
+						}
+						<strong>@moduleViewModel.Module.Title</strong>
+						<p class="mb-0 text-muted">@moduleViewModel.Module.ShortDescription</p>
+					</div>
+					@if (moduleViewModel.IsUnlocked && moduleViewModel.IsCompleted)
+					{
+						<div class="d-flex align-items-center">
+							<span class="text-success fw-semibold">Completed</span>
+						</div>
+					}
+					@if (moduleViewModel.IsUnlocked && !moduleViewModel.IsCompleted && moduleViewModel.Module.Cost > 0)
+					{
+						<div class="d-flex align-items-center">
+							<span class="text-warning fw-semibold">@moduleViewModel.Module.Cost</span>
+							<span class="ms-2 text-warning">🪙</span>
+						</div>
+					}
+				</div>
+			</li>
+		}
+	</ul>
+</div>
+
+<script>
+	function onModuleClick(moduleId, isUnlocked, isBonus) {
+		if (isUnlocked === "True") {
+			window.location.href = '@Url.Action("Index", "Module")' + '/' + moduleId;
+		}
+		else {
+			if (isBonus == "True"){
+				if (confirm("This is a bonus module. Do you want to purchase it?")) {
+					window.location.href = '/Module/PurchaseBonusModule?moduleId=' + moduleId;
+				}
+			}
+			else{
+				alert("This module is locked. Complete previous modules to unlock it.");
+			}
+		}
+	}
+	// Converts "hh:mm:ss" or "mm:ss" to seconds
+	function parseTimeString(timeStr) {
+		const parts = timeStr.split(':').map(Number);
+		if (parts.length === 3) {
+			return parts[0] * 3600 + parts[1] * 60 + parts[2];
+		} else if (parts.length === 2) {
+			return parts[0] * 60 + parts[1];
+		}
+		return 0;
+	}
+
+	function formatTime(seconds) {
+		const h = Math.floor(seconds / 3600);
+		const m = Math.floor((seconds % 3600) / 60);
+		const s = seconds % 60;
+		if (h > 0) {
+			return h.toString().padStart(2, '0') + ':' +
+				   m.toString().padStart(2, '0') + ':' +
+				   s.toString().padStart(2, '0');
+		} else {
+			return m.toString().padStart(2, '0') + ':' +
+				   s.toString().padStart(2, '0');
+		}
+	}
+
+	document.addEventListener('DOMContentLoaded', function () {
+		const timerDiv = document.getElementById('timer');
+		const timerValue = document.getElementById('timer-value');
+		let remaining = parseTimeString(timerDiv.getAttribute('data-initial'));
+		const courseId = timerDiv.getAttribute('data-courseid');
+		let timeSpent = 0;
+		console.log(remaining);
+
+		if (!isNaN(remaining) && remaining > 0) {
+			const interval = setInterval(function () {
+				remaining--;
+				timeSpent++;
+				timerValue.textContent = formatTime(remaining);
+				if (remaining <= 0) {
+					clearInterval(interval);
+					timerValue.textContent = "00:00";
+				}
+			}, 1000);
+
+			// Send updated time to backend when user leaves the page
+			window.addEventListener('beforeunload', function () {
+				// Use fetch with keepalive for PUT requests
+				fetch('/Course/UpdateTimeLocal', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({
+						courseId: parseInt(courseId),
+						seconds: timeSpent
+					}),
+					keepalive: true
+				});
+			});
+		}
+	});
+</script>
+
+@section Scripts {
+	<script>
+		@if (TempData["Error"] != null)
+		{
+			<text>alert('@TempData["Error"]');</text>
+		}
+		@if (TempData["Notification"] != null)
+		{
+			<text>alert('@TempData["Notification"]');</text>
+		}
+	</script>
+}

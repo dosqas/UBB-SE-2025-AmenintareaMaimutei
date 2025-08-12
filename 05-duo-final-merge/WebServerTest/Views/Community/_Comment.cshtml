@@ -1,0 +1,99 @@
+@model DuoClassLibrary.Models.Comment
+@inject IHtmlHelper<DuoClassLibrary.Models.Comment> Html
+
+@{
+    string GetIndentClass(int level)
+    {
+        switch (level)
+        {
+            case 1:
+                return "ms-0";
+            case 2:
+                return "ms-4";
+            case 3:
+                return "ms-5";
+            default:
+                return "ms-5";
+        }
+    }
+
+    var indentClass = GetIndentClass(Model.Level);
+    var comments = ViewBag.Comments as List<DuoClassLibrary.Models.Comment> ?? new List<DuoClassLibrary.Models.Comment>();
+    var replies = comments.Where(c => c.ParentCommentId == Model.Id).ToList();
+}
+
+<div class="comment @indentClass mb-3">
+    <div class="card">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-start">
+                <div>
+                    <h6 class="card-subtitle mb-2 text-muted">@Model.Username</h6>
+                    <p class="card-text">@Model.Content</p>
+                </div>
+                <div class="d-flex align-items-center">
+                    <span class="likes-count me-2">@Model.LikeCount</span>
+                    <form asp-controller="Community" asp-action="LikeComment" method="post" class="d-inline">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="id" value="@Model.Id" />
+                        <input type="hidden" name="postId" value="@Model.PostId" />
+                        <button type="submit" class="btn btn-sm btn-outline-primary me-2">
+                            <i class="bi bi-heart"></i>
+                        </button>
+                    </form>
+                    @if (Model.UserId == Context.Session.GetInt32("UserId"))
+                    {
+                        <form asp-controller="Community" asp-action="DeleteComment" method="post" class="d-inline me-2">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="id" value="@Model.Id" />
+                            <input type="hidden" name="postId" value="@Model.PostId" />
+                            <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Are you sure you want to delete this comment? This will also delete all replies.')">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </form>
+                    }
+                    @if (Model.Level < 3)
+                    {
+                        <form asp-controller="Community" asp-action="ShowReplyForm" method="post" class="d-inline">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="commentId" value="@Model.Id" />
+                            <input type="hidden" name="postId" value="@Model.PostId" />
+                            <input type="hidden" name="level" value="@Model.Level" />
+                            <button type="submit" class="btn btn-sm btn-outline-secondary">
+                                Reply
+                            </button>
+                        </form>
+                    }
+                </div>
+            </div>
+            <small class="text-muted">@Model.CreatedAt.ToString("g")</small>
+        </div>
+    </div>
+
+    @if (ViewBag.ReplyToCommentId == Model.Id)
+    {
+        <div class="reply-form mt-2 ms-4">
+            <form asp-controller="Community" asp-action="AddComment" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="postId" value="@Model.PostId" />
+                <input type="hidden" name="parentCommentId" value="@Model.Id" />
+                <div class="mb-2">
+                    <textarea class="form-control form-control-sm" name="content" rows="2" placeholder="Write a reply..." required></textarea>
+                </div>
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-sm btn-primary">Post Reply</button>
+                    <a asp-controller="Community" asp-action="Post" asp-route-id="@Model.PostId" class="btn btn-sm btn-outline-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+    }
+
+    @if (replies.Any())
+    {
+        <div class="replies mt-2">
+            @foreach (var reply in replies)
+            {
+                <partial name="_Comment" model="reply" view-data="ViewData" />
+            }
+        </div>
+    }
+</div> 

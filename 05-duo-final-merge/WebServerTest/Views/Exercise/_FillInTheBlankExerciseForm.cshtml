@@ -1,0 +1,33 @@
+﻿@model DuoClassLibrary.Models.Exercises.FillInTheBlankExercise
+@using System.Text.RegularExpressions
+
+<div class="card mb-3">
+    <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <div>
+                <span class="badge bg-secondary">@Model.Difficulty</span>
+            </div>
+        </div>
+
+        <h5 class="card-title mb-4">@Model.Question</h5>
+        
+        <div class="card-text">
+            @{
+                var parts = Regex.Split(@Model.Question, @"\{\}");
+                for (int i = 0; i < parts.Length; i++)
+                {
+                    @Html.Raw(parts[i])
+                    if (i < parts.Length - 1)
+                    {
+                        <input type="text"
+                               class="form-control d-inline-block blank-input"
+                               style="width: 150px; margin: 0 0.5rem;"
+                               placeholder="Type your answer"
+                               data-index="@i" />
+                    }
+                }
+            }
+        </div>
+        <input type="hidden" id="BlankAnswersJson" name="BlankAnswersJson" />
+    </div>
+</div>

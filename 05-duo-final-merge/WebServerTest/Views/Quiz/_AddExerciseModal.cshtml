@@ -1,0 +1,20 @@
+﻿@model List<DuoClassLibrary.Models.Exercises.Exercise>
+
+<form asp-controller="Quiz" asp-action="AddSelectedExercise" method="post">
+    @Html.AntiForgeryToken()
+    <div class="modal-body">
+        @foreach (var ex in Model)
+        {
+            <div class="form-check mb-2">
+                <input class="form-check-input" type="checkbox" name="exerciseIds" id="ex@ex.ExerciseId" value="@ex.ExerciseId" />
+                <label class="form-check-label" for="ex@ex.ExerciseId">
+                    Exercise #@ex.ExerciseId - @ex.Question
+                </label>
+            </div>
+        }
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="submit" class="btn btn-primary">Add</button>
+    </div>
+</form>
