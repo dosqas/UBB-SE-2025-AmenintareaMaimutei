@@ -1,0 +1,79 @@
+# Ignore build artifacts and user-specific files
+*.exe
+*.dll
+*.appx
+*.appxbundle
+*.msix
+*.msixbundle
+*.msixupload
+*.pdb
+*.cache
+*.log
+*.tlog
+*.tmp
+*.bak
+
+# Visual Studio files
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.csproj.user
+
+# Build directories
+**/bin/
+**/obj/
+**/publish/
+**/out/
+
+# Rider/JetBrains IDE files
+.idea/
+*.sln.iml
+*.iml
+
+# NuGet packages and artifacts
+*.nupkg
+*.snupkg
+packages/
+project.lock.json
+project.assets.json
+*.nuget.props
+*.nuget.targets
+
+# Test results
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+TestResult.xml
+nunit-*.xml
+*.VisualState.xml
+*.trx
+
+# StyleCop
+StyleCopReport.xml
+
+# OS-specific
+Thumbs.db
+Desktop.ini
+
+# VS Code settings (optional)
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# Others
+*.dbmdl
+*.jfm
+*.log
+*.vspscc
+*.vssscc
+*.scc
+*.psess
+*.vsp
+*.coverage
+*.coveragexml
+*.testresults
+TestResult.xml
+*.gpState

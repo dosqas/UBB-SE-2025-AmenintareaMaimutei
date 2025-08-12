@@ -1,0 +1,7 @@
+<Window
+    x:Class="CourseApp.Views.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="CourseApp - Main Window">
+    <Frame x:Name="MainFrame"/>
+</Window>
