@@ -55,6 +55,11 @@ namespace Duo.Api.Models.Sections
         public ICollection<Quiz> Quizzes { get; set; } = [];
 
         /// <summary>
+        /// Gets or sets the collection of completions associated with this section.
+        /// </summary>
+        public ICollection<SectionCompletions> SectionCompletions { get; set; } = [];
+
+        /// <summary>
         /// Gets or sets the exam associated with this section (optional).
         /// </summary>
         public Exam? Exam { get; set; }

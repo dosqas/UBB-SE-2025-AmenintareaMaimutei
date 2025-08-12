@@ -47,7 +47,14 @@ namespace Duo.ViewModels.Roadmap
                     }
                     if (this.quiz is Quiz quizInstance)
                     {
-                        return $"Quiz nr. {quizInstance.OrderNumber.ToString()}" ?? "-1";
+                        if (quizInstance.OrderNumber.HasValue && quizInstance.OrderNumber.Value > 0)
+                        {
+                            return $"Quiz nr. {quizInstance.OrderNumber.Value}";
+                        }
+                        else
+                        {
+                            return "Quiz nr. ?";
+                        }
                     }
                     return "-1";
                 }

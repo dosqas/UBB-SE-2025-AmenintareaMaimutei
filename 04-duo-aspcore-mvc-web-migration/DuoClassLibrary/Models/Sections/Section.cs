@@ -61,7 +61,7 @@ public class Section
 
     public IEnumerable<Quiz> GetAllQuizzes()
     {
-        return Quizzes;
+        return Quizzes.OrderBy(q => q.OrderNumber ?? int.MaxValue);
     }
 
     public Exam? GetFinalExam()

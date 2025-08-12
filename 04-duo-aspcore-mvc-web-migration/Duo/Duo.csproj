@@ -5,15 +5,11 @@
     <TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
     <RootNamespace>Duo</RootNamespace>
     <ApplicationManifest>app.manifest</ApplicationManifest>
-    <Platform>x64</Platform>
-    <Platforms>x86;x64;ARM64</Platforms>
-    <WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
-    <RuntimeIdentifiers>win-x86;win-x64;win-arm64</RuntimeIdentifiers>
-    <PublishProfile>win-$(Platform).pubxml</PublishProfile>
+	<Platform>x64</Platform> 
     <UseWinUI>true</UseWinUI>
     <EnableMsixTooling>true</EnableMsixTooling>
     <Nullable>enable</Nullable>
-	  <SelfContained>true</SelfContained>
+    <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="ViewModels\NewFolder\**" />
@@ -197,5 +193,9 @@
     <Reference Include="DuoClassLibrary">
       <HintPath>..\DuoClassLibrary\bin\Debug\net8.0\DuoClassLibrary.dll</HintPath>
     </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DuoClassLibrary\DuoClassLibrary.csproj" />
   </ItemGroup>
 </Project>

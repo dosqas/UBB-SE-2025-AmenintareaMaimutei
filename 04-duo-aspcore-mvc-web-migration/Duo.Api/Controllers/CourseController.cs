@@ -151,6 +151,7 @@ namespace Duo.Api.Controllers
         /// <param name="filterFree">Whether to filter free courses.</param>
         /// <param name="filterEnrolled">Whether to filter enrolled courses.</param>
         /// <param name="filterNotEnrolled">Whether to filter not enrolled courses.</param>
+        /// <param name="userId">The ID of the user.</param>
         /// <returns>A filtered list of courses.</returns>
         [HttpGet("get-filtered")]
         public async Task<IActionResult> GetFilteredCourses(
@@ -158,9 +159,9 @@ namespace Duo.Api.Controllers
             [FromQuery] bool filterPremium,
             [FromQuery] bool filterFree,
             [FromQuery] bool filterEnrolled,
-            [FromQuery] bool filterNotEnrolled)
+            [FromQuery] bool filterNotEnrolled,
+            [FromQuery] int userId)
         {
-            var userId = 1; // Hardcoded for simplicity, replace this with actual UserId based on your auth system
             var courses = await repository.GetFilteredCoursesAsync(searchText, filterPremium, filterFree, filterEnrolled, filterNotEnrolled, userId);
             return Ok(courses);
         }
@@ -276,6 +277,56 @@ namespace Duo.Api.Controllers
         {
             int timeLimit = await repository.GetCourseTimeLimitAsync(courseId);
             return Ok(timeLimit);
+        }
+
+
+        [HttpPost("buyBonusModule")]
+        public async Task<IActionResult> BuyBonusModule([FromBody] Dictionary<string, object> data)
+        {
+            try
+            {
+                if (!data.TryGetValue("UserId", out var userIdObj) || !data.TryGetValue("ModuleId", out var moduleIdObj))
+                {
+                    return this.BadRequest("Missing userId or courseId");
+                }
+
+                var userId = ((JsonElement)data["UserId"]).GetInt32();
+                var moduleId = ((JsonElement)data["ModuleId"]).GetInt32();
+
+                // Check if the user has enough coins
+                var user = await this.repository.GetUserByIdAsync(userId);
+                if (user == null)
+                {
+                    return this.NotFound("User not found");
+                }
+
+                var module = await this.repository.GetModuleByIdAsync(moduleId);
+                if (module == null)
+                {
+                    return this.NotFound("Module not found");
+                }
+
+                if (user.CoinBalance < module.Cost)
+                {
+                    return this.BadRequest("Not enough coins");
+                }
+
+                var succes = await this.repository.BuyBonusModuleAsync(userId, moduleId);
+                if (!succes)
+                {
+                    return this.BadRequest("Failed to buy bonus module");
+                }
+
+                // Deduct the cost from the user's coin balance
+                user.CoinBalance -= module.Cost;
+                await this.repository.UpdateUserAsync(user);
+
+                return this.Ok();
+            }
+            catch (Exception ex)
+            {
+                return this.BadRequest(ex.Message);
+            }
         }
 
         #endregion

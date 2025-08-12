@@ -21,7 +21,7 @@ namespace Duo.ViewModels
         public Module CurrentModule { get; set; }
         public bool IsCompleted { get; set; }
         public ICommand CompleteModuleCommand { get; set; }
-        private int UserId { get; set; }
+        public int UserId { get; set; }
 
         public ICommand ModuleImageClickCommand { get; set; }
 
@@ -73,6 +73,8 @@ namespace Duo.ViewModels
                     }
                 };
                 OnPropertyChanged(nameof(IsCompleted));
+
+                await LoadCoinBalanceAsync();
             }
             catch (Exception ex)
             {
@@ -112,7 +114,7 @@ namespace Duo.ViewModels
         // Async method to load and update the CoinBalance
         public async Task LoadCoinBalanceAsync()
         {
-            CoinBalance = await coinsService.GetCoinBalanceAsync(0);
+            CoinBalance = await coinsService.GetCoinBalanceAsync(UserId);
         }
 
         private bool CanCompleteModule(object? parameter)

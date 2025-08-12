@@ -48,6 +48,11 @@ namespace Duo.Api.Models.Quizzes
         /// </summary>
         public ICollection<Exercise> Exercises { get; set; } = [];
 
+        /// <summary>
+        /// Gets or sets the collection of completions associated with this quiz.
+        /// </summary>
+        public ICollection<QuizCompletions> QuizCompletions { get; set; } = [];
+
         #endregion
 
         #region Constructors

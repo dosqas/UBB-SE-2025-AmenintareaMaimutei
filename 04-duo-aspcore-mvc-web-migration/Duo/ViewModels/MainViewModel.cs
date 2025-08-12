@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Collections.Generic;
 using Duo.Commands;
 using DuoClassLibrary.Models;
 using DuoClassLibrary.Services;
@@ -49,7 +50,19 @@ namespace Duo.ViewModels
         /// <summary>
         /// Observable collection of available tags.
         /// </summary>
-        public ObservableCollection<Tag> AvailableTags { get; private set; }
+        private ObservableCollection<Tag> availableTags;
+        public ObservableCollection<Tag> AvailableTags
+        {
+            get => availableTags;
+            set
+            {
+                if (availableTags != value)
+                {
+                    availableTags = value;
+                    OnPropertyChanged(nameof(AvailableTags));
+                }
+            }
+        }
 
         /// <summary>
         /// User's current coin balance.
@@ -184,15 +197,21 @@ namespace Duo.ViewModels
         {
             try
             {
+                // Initialize the command first to ensure it's available
+                ResetAllFiltersCommand = new RelayCommand(ResetAllFilters);
+
                 var courseList = await this.courseService.GetCoursesAsync();
+                // Load tags for each course
+                foreach (var course in courseList)
+                {
+                    course.Tags = await this.courseService.GetCourseTagsAsync(course.CourseId);
+                }
                 DisplayedCourses = new ObservableCollection<Course>(courseList);
                 AvailableTags = new ObservableCollection<Tag>(await this.courseService.GetTagsAsync());
                 foreach (var tag in AvailableTags)
                 {
                     tag.PropertyChanged += OnTagSelectionChanged;
                 }
-
-                ResetAllFiltersCommand = new RelayCommand(ResetAllFilters);
 
                 await RefreshUserCoinBalanceAsync();
             }
@@ -266,31 +285,71 @@ namespace Duo.ViewModels
                     return;
                 }
 
+                var existingCourseTags = CacheExistingCourseTags();
                 DisplayedCourses.Clear();
-
-                var selectedTagIds = AvailableTags
-                    .Where(tag => tag.IsSelected)
-                    .Select(tag => tag.TagId)
-                    .ToList();
-
-                var filteredCourses = await courseService.GetFilteredCoursesAsync(
-                    searchQuery,
-                    filterByPremium,
-                    filterByFree,
-                    filterByEnrolled,
-                    filterByNotEnrolled,
-                    selectedTagIds,
-                    CurrentUserId);
-
-                foreach (var course in filteredCourses)
-                {
-                    DisplayedCourses.Add(course);
-                }
+                await LoadFilteredCoursesWithTags(existingCourseTags);
             }
             catch (Exception e)
             {
                 RaiseErrorMessage("Failed to apply filters", e.Message);
             }
+        }
+
+        /// <summary>
+        /// Saves the tags of currently displayed courses for reuse.
+        /// </summary>
+        private Dictionary<int, List<Tag>> CacheExistingCourseTags()
+        {
+            var tagCache = new Dictionary<int, List<Tag>>();
+            foreach (var course in DisplayedCourses)
+            {
+                if (course.Tags != null && course.Tags.Any())
+                {
+                    tagCache[course.CourseId] = course.Tags.ToList();
+                }
+            }
+            return tagCache;
+        }
+
+        /// <summary>
+        /// Loads filtered courses with their tags, using cached tags when available.
+        /// </summary>
+        private async Task LoadFilteredCoursesWithTags(Dictionary<int, List<Tag>> tagCache)
+        {
+            var selectedTagIds = AvailableTags
+                .Where(tag => tag.IsSelected)
+                .Select(tag => tag.TagId)
+                .ToList();
+
+            var filteredCourses = await courseService.GetFilteredCoursesAsync(
+                searchQuery,
+                filterByPremium,
+                filterByFree,
+                filterByEnrolled,
+                filterByNotEnrolled,
+                selectedTagIds,
+                CurrentUserId);
+
+            foreach (var course in filteredCourses)
+            {
+                if (tagCache.ContainsKey(course.CourseId))
+                {
+                    course.Tags = tagCache[course.CourseId];
+                }
+                else if (course.Tags == null || !course.Tags.Any())
+                {
+                    course.Tags = await courseService.GetCourseTagsAsync(course.CourseId);
+                }
+
+                DisplayedCourses.Add(course);
+            }
+        }
+
+        /// <summary>
+        /// </summary>
+        public void ResetAllFiltersPublic()
+        {
+            ResetAllFilters(null);
         }
     }
 }

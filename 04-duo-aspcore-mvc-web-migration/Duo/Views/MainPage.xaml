@@ -4,7 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:vm="using:Duo.ViewModels"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" d:DataContext="{d:DesignInstance Type=vm:MainViewModel}"
     mc:Ignorable="d">
     <Grid Background="#1E1E1E" Margin="20" x:Name="RootGrid" Loaded="RootGrid_Loaded">
         <Grid.ColumnDefinitions>
@@ -134,9 +134,14 @@
                                                 </ItemsControl.ItemsPanel>
                                                 <ItemsControl.ItemTemplate>
                                                     <DataTemplate>
-                                                        <TextBlock Text="{Binding Name}" 
-                                                                   Foreground="#AAAAAA" 
-                                                                   FontSize="12"/>
+                                                        <Border Background="#4A4A4A" 
+                                                                CornerRadius="4" 
+                                                                Padding="6,2">
+                                                            <TextBlock Text="{Binding Name}" 
+                                                                       Foreground="#E0E0E0" 
+                                                                       FontSize="12"
+                                                                       FontWeight="Medium"/>
+                                                        </Border>
                                                     </DataTemplate>
                                                 </ItemsControl.ItemTemplate>
                                             </ItemsControl>

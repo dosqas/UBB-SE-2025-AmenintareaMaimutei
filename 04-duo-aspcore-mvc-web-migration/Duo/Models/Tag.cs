@@ -31,7 +31,7 @@ namespace Duo.Models
                 if (isSelected != value)
                 {
                     isSelected = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(isSelected));
                 }
             }
         }

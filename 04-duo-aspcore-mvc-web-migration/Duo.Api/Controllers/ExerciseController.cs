@@ -255,6 +255,43 @@ namespace Duo.Api.Controllers
                     return NotFound();
                 }
 
+                // Handle quizzes
+                var quizzes = await repository.GetQuizzesFromDbAsync();
+                foreach (var quiz in quizzes)
+                {
+                    var exerciseIds = quiz.Exercises.Select(e => e.ExerciseId).ToList();
+                    if (exerciseIds.Contains(id))
+                    {
+                        if (exerciseIds.Count == 1)
+                        {
+                            await repository.DeleteQuizAsync(quiz.Id);
+                        }
+                        else
+                        {
+                            await repository.RemoveExerciseFromQuizAsync(quiz.Id, id);
+                        }
+                    }
+                }
+
+                // Handle exams
+                var exams = await repository.GetExamsFromDbAsync();
+                foreach (var exam in exams)
+                {
+                    var exerciseIds = exam.Exercises.Select(e => e.ExerciseId).ToList();
+                    if (exerciseIds.Contains(id))
+                    {
+                        if (exerciseIds.Count == 1)
+                        {
+                            await repository.DeleteExamAsync(exam.Id);
+                        }
+                        else
+                        {
+                            await repository.RemoveExerciseFromExamAsync(exam.Id, id);
+                        }
+                    }
+                }
+
+                // Delete the exercise itself
                 await repository.DeleteExerciseAsync(id);
                 return NoContent();
             }

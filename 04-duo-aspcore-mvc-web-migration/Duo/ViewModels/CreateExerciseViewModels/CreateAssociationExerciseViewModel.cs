@@ -60,13 +60,34 @@ namespace Duo.ViewModels.CreateExerciseViewModels
         {
             try
             {
-                Exercise newExercise = new AssociationExercise(0, question, difficulty, GenerateAnswerList(LeftSideAnswers), GenerateAnswerList(RightSideAnswers));
+                // Validate: No empty pairings and minimum answers
+                var leftAnswers = GenerateAnswerList(LeftSideAnswers);
+                var rightAnswers = GenerateAnswerList(RightSideAnswers);
+
+                // Check for minimum answers
+                if (leftAnswers.Count < MINIMUM_ANSWERS || rightAnswers.Count < MINIMUM_ANSWERS)
+                {
+                    parentViewModel.RaiseErrorMessage("Not enough answers", $"You must provide at least {MINIMUM_ANSWERS} answer pairs.");
+                    return null;
+                }
+
+                // Check for empty values in any pairing
+                for (int i = 0; i < leftAnswers.Count; i++)
+                {
+                    if (string.IsNullOrWhiteSpace(leftAnswers[i]) || string.IsNullOrWhiteSpace(rightAnswers[i]))
+                    {
+                        parentViewModel.RaiseErrorMessage("Empty Pairing", "All answer pairings must be filled in.");
+                        return null;
+                    }
+                }
+
+                Exercise newExercise = new AssociationExercise(0, question, difficulty, leftAnswers, rightAnswers);
                 return newExercise;
             }
             catch (Exception ex)
             {
                 RaiseErrorMessage("Create Exercise Error", $"Failed to create association exercise.\nDetails: {ex.Message}");
-                return null; // Fallback, though ideally handled by caller
+                return null;
             }
         }
 

@@ -9,6 +9,8 @@ using DuoClassLibrary.Models.Quizzes;
 using DuoClassLibrary.Models.Sections;
 using DuoClassLibrary.Services;
 using Duo.ViewModels.Base;
+using DuoClassLibrary.Models;
+using Microsoft.UI.Dispatching;
 
 namespace Duo.ViewModels.Roadmap
 {
@@ -17,6 +19,8 @@ namespace Duo.ViewModels.Roadmap
         private ISectionService sectionService;
         private int sectionId;
         private Section section;
+        private User user;
+
         public Section Section
         {
             get => section;
@@ -66,7 +70,7 @@ namespace Duo.ViewModels.Roadmap
             }
         }
 
-        public async Task SetupForSection(int sectionId, bool isCompleted, int nrOfCompletedQuizzes)
+        public async Task SetupForSection(int sectionId, bool isCompleted, int nrOfCompletedQuizzes, bool isPreviousSectionCompleted)
         {
             try
             {
@@ -75,6 +79,8 @@ namespace Duo.ViewModels.Roadmap
                 section = await sectionService.GetSectionById(this.sectionId);
 
                 IQuizService quizService = (IQuizService)App.ServiceProvider.GetService(typeof(IQuizService));
+                IUserService userService = (IUserService)App.ServiceProvider.GetService(typeof(IUserService));
+                this.user = await userService.GetByIdAsync(1);
                 section.Quizzes = await quizService.GetAllQuizzesFromSection(this.sectionId);
                 section.Exam = await quizService.GetExamFromSection(this.sectionId);
 
@@ -83,7 +89,12 @@ namespace Duo.ViewModels.Roadmap
 
                 OnPropertyChanged(nameof(Section));
 
-                PopulateQuizButtonTemplates();
+                List<bool> completedQuizzes = new List<bool>();
+                foreach (Quiz quiz in section.GetAllQuizzes())
+                {
+                    completedQuizzes.Add(await quizService.IsQuizCompleted(user.UserId, quiz.Id));
+                }
+                PopulateQuizButtonTemplates(completedQuizzes, isPreviousSectionCompleted);
             }
             catch (Exception ex)
             {
@@ -91,28 +102,36 @@ namespace Duo.ViewModels.Roadmap
             }
         }
 
-        private void PopulateQuizButtonTemplates()
+        private void PopulateQuizButtonTemplates(List<bool> completedQuizzes, bool isPreviousSectionCompleted)
         {
             try
             {
+                IQuizService quizService = (IQuizService)App.ServiceProvider.GetService(typeof(IQuizService));
+
                 Debug.WriteLine($"++++++ Populating section {section.Id}");
                 quizButtonTemplates.Clear();
+                bool previousIsCompleted = isPreviousSectionCompleted;
+                bool currentIsCompleted = false;
+                int counter = 0;
                 foreach (Quiz quiz in section.GetAllQuizzes())
                 {
+                    currentIsCompleted = completedQuizzes[counter];
                     RoadmapButtonTemplate.QUIZ_STATUS quizStatus = RoadmapButtonTemplate.QUIZ_STATUS.LOCKED;
                     if (isCompleted)
                     {
                         quizStatus = RoadmapButtonTemplate.QUIZ_STATUS.COMPLETED;
                     }
-                    else if (quiz.OrderNumber <= nrOfCompletedQuizzes)
+                    else if (currentIsCompleted)
                     {
                         quizStatus = RoadmapButtonTemplate.QUIZ_STATUS.COMPLETED;
                     }
-                    else if (quiz.OrderNumber == nrOfCompletedQuizzes + 1)
+                    else if (previousIsCompleted && !currentIsCompleted)
                     {
                         quizStatus = RoadmapButtonTemplate.QUIZ_STATUS.INCOMPLETE;
                     }
 
+                    previousIsCompleted = currentIsCompleted;
+                    counter++;
                     Debug.WriteLine($"++++++++++ Populating quiz {quiz.Id} -> {quizStatus}");
                     quizButtonTemplates.Add(new RoadmapButtonTemplate(quiz, OpenQuizPreviewCommand, quizStatus));
                 }
@@ -122,11 +141,10 @@ namespace Duo.ViewModels.Roadmap
                 {
                     examStatus = RoadmapButtonTemplate.QUIZ_STATUS.COMPLETED;
                 }
-                else if (section.GetAllQuizzes().Count<Quiz>() == nrOfCompletedQuizzes)
+                else if (previousIsCompleted)
                 {
                     examStatus = RoadmapButtonTemplate.QUIZ_STATUS.INCOMPLETE;
                 }
-
                 Debug.WriteLine($"++++++++++ Populating exam -> {examStatus}");
                 examButtonTemplate = new RoadmapButtonTemplate(section.GetFinalExam(), OpenQuizPreviewCommand, examStatus);
 

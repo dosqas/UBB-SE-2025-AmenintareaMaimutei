@@ -13,7 +13,7 @@ using DuoClassLibrary.Models.Exercises.DTO;
 
 namespace DuoClassLibrary.Services
 {
-    public class ExerciseServiceProxy : IExerciseService
+    public class ExerciseServiceProxy : IExerciseServiceProxy
     {
         private readonly HttpClient httpClient;
         private string url = "https://localhost:7174/";

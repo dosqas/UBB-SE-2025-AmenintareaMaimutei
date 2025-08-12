@@ -68,6 +68,19 @@ namespace DuoClassLibrary.Services
             await userServiceProxy.UpdateUserAsync(user);
         }
 
+        public async Task IncrementSectionProgressAsync(int userId)
+        {
+            if (userId <= 0)
+            {
+                throw new ArgumentException("User ID must be greater than 0.", nameof(userId));
+            }
+            var user = await GetByIdAsync(userId);
+            user.NumberOfCompletedSections++;
+            user.NumberOfCompletedQuizzesInSection = 0;
+
+            await userServiceProxy.UpdateUserAsync(user);
+        }
+
         public async Task UpdateUserAsync(User user)
         {
             if (user == null)

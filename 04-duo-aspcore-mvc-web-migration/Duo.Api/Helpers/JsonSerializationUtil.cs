@@ -168,6 +168,7 @@ namespace Duo.Api.Helpers
             // Deserialize and attach quizzes
             if (root.TryGetProperty("QuizIds", out var quizIdsElement) && quizIdsElement.ValueKind == JsonValueKind.Array)
             {
+                int counter = 1;
                 foreach (var quizIdElement in quizIdsElement.EnumerateArray())
                 {
                     int quizId = quizIdElement.GetInt32();
@@ -176,6 +177,9 @@ namespace Duo.Api.Helpers
                     {
                         throw new InvalidOperationException($"Quiz with ID {quizId} not found.");
                     }
+
+                    quiz.OrderNumber = counter++;
+                    await repo.UpdateQuizAsync(quiz);
 
                     section.Quizzes.Add(quiz);
                 }

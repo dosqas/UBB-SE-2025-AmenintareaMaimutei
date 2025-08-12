@@ -179,6 +179,15 @@ namespace Duo.Api.Repositories
         /// <returns>True if the user has clicked the module image, otherwise false.</returns>
         public Task<bool> IsModuleImageClickedAsync(int userId, int moduleId);
 
+        /// <summary>
+        /// Marks a module as opened for a user asynchronously.
+        /// </summary>
+        /// <param name="userId">The unique identifier of the user. </param>
+        /// <param name="courseId"> The unique identifier of the course. </param>
+        /// <param name="moduleId"> The unique identifier of the module. </param>
+        /// <returns>A task </returns>
+        public Task<bool> BuyBonusModuleAsync(int userId, int moduleId);
+
         #endregion
 
         #region Exercises
@@ -327,6 +336,28 @@ namespace Duo.Api.Repositories
         /// <returns>A list of all available quizzes in the database.</returns>
         public Task<List<Quiz>> GetAvailableQuizzesAsync();
 
+        /// <summary>
+        /// Checks if a user has completed a specific quiz asynchronously.
+        /// </summary>
+        /// <param name="userId"> Id of user.</param>
+        /// <param name="quizId"> Id of quiz.</param>
+        /// <returns> A task returning a boolean result indicating whether the quiz is completed or not for the user.</returns>
+        public Task<bool> IsQuizCompleted(int userId, int quizId);
+
+        /// <summary>
+        /// Marks a quiz as completed for a user asynchronously.
+        /// </summary>
+        /// <param name="completedQuiz"> Completed quiz for a user. </param>
+        /// <returns> A task representing the async operation.</returns>
+        public Task CompleteQuizForUser(QuizCompletions completedQuiz);
+
+        /// <summary>
+        /// Deletes a quiz completion record for all users by quiz ID asynchronously.
+        /// </summary>
+        /// <param name="quizId"> Quiz id</param>
+        /// <returns> A task representing the async operation. </returns>
+        Task DeleteQuizCompletions(int quizId);
+
         #endregion
 
         #region Courses
@@ -335,14 +366,14 @@ namespace Duo.Api.Repositories
         /// Retrieves all courses from the database asynchronously.
         /// </summary>
         /// <returns>A list of all courses in the database.</returns>
-        public Task<List<Course>> GetCoursesFromDbAsync();
+        public Task<List<CourseDto>> GetCoursesFromDbAsync();
 
         /// <summary>
         /// Retrieves a specific course by its unique identifier asynchronously.
         /// </summary>
         /// <param name="id">The unique identifier of the course to retrieve.</param>
         /// <returns>The course with the specified ID, or null if not found.</returns>
-        public Task<Course?> GetCourseByIdAsync(int id);
+        public Task<CourseDto?> GetCourseByIdAsync(int id);
 
         /// <summary>
         /// Adds a new course to the database asynchronously.
@@ -439,7 +470,7 @@ namespace Duo.Api.Repositories
         /// <param name="filterNotEnrolled">Whether to filter for courses the user is not enrolled in.</param>
         /// <param name="userId">The unique identifier of the user for whom the courses are being filtered.</param>
         /// <returns>A list of courses that match the filter criteria.</returns>
-        public Task<List<Course>> GetFilteredCoursesAsync(string searchText, bool filterPremium, bool filterFree, bool filterEnrolled, bool filterNotEnrolled, int userId);
+        public Task<List<CourseDto>> GetFilteredCoursesAsync(string searchText, bool filterPremium, bool filterFree, bool filterEnrolled, bool filterNotEnrolled, int userId);
 
         Task<List<Module>> GetModulesByCourseIdAsync(int courseId);
 
@@ -510,6 +541,28 @@ namespace Duo.Api.Repositories
         /// <returns>A list of all available exams in the database.</returns>
         public Task<List<Exam>> GetAvailableExamsAsync();
 
+        /// <summary>
+        /// Checks if a user has completed a specific exam asynchronously.
+        /// </summary>
+        /// <param name="userId"> Id of user.</param>
+        /// <param name="examId"> Id of exam.</param>
+        /// <returns> A task returning a boolean result indicating whether the exam is completed or not for the user.</returns>
+        public Task<bool> IsExamCompleted(int userId, int examId);
+
+        /// <summary>
+        /// Marks an exam as completed for a user asynchronously.
+        /// </summary>
+        /// <param name="completedExam"> Completed exam for a user. </param>
+        /// <returns> A task representing the async operation.</returns>
+        public Task CompleteExamForUser(ExamCompletions completedExam);
+
+        /// <summary>
+        /// Deletes an exam completion record for all users by exam ID asynchronously.
+        /// </summary>
+        /// <param name="examId"> Exam id.</param>
+        /// <returns> A task representing the asynchronous operation.</returns>
+        Task DeleteExamCompletions(int examId);
+
         #endregion
 
         #region Sections
@@ -547,6 +600,28 @@ namespace Duo.Api.Repositories
         /// <param name="id">The unique identifier of the section to be deleted.</param>
         /// <returns>A task representing the asynchronous operation. The task completes once the section is removed.</returns>
         public Task DeleteSectionAsync(int id);
+
+        /// <summary>
+        /// Checks if a section is open for a user asynchronously.
+        /// </summary>
+        /// <param name="userId"> The unique id of the user.</param>
+        /// <param name="sectionId"> The unique id of the section. </param>
+        /// <returns> A task returning a bool result indicating if the section is completed. </returns>
+        public Task<bool> IsSectionCompletedAsync(int userId, int sectionId);
+
+        /// <summary>
+        /// Marks a section as completed for a user asynchronously.
+        /// </summary>
+        /// <param name="completedSection"> SectionCompletions object reprsenting a section completed by an user. </param>
+        /// <returns> A task representing the asynchronous operation. The task completes once the sectionCompletion is added. </returns>
+        public Task CompleteSectionForUser(SectionCompletions completedSection);
+
+        /// <summary>
+        /// Deletes a section completion record for all users by section ID asynchronously.
+        /// </summary>
+        /// <param name="sectionId"> Id of the section. </param>
+        /// <returns> A task representing the asynchronous operation.</returns>
+        Task DeleteSectionCompletions(int sectionId);
 
         #endregion
 
@@ -604,10 +679,9 @@ namespace Duo.Api.Repositories
         /// <summary>
         /// Asynchronously retrieves a specific roadmap by its unique identifier.
         /// </summary>
-        /// <param name="id">The unique identifier of the roadmap to retrieve.</param>
+        /// <param name="sectionId">The unique identifier of the roadmap to retrieve.</param>
         /// <returns>A <see cref="Roadmap"/> object representing the specified roadmap, or null if not found.</returns>
-        Task<Roadmap> GetRoadmapByIdAsync(int id);
-
+        Task<Roadmap> GetRoadmapByIdAsync(int sectionId);
         #endregion
     }
 }

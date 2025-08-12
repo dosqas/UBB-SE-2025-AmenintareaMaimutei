@@ -6,7 +6,7 @@ using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-
+using DuoClassLibrary.Models;
 using DuoClassLibrary.Models.Sections;
 using DuoClassLibrary.Models.Sections.DTO;
 using DuoClassLibrary.Services.Interfaces;
@@ -40,7 +40,7 @@ namespace DuoClassLibrary.Services
             string json = JsonSerializer.Serialize(dto, new JsonSerializerOptions { WriteIndented = true });
             var content = new StringContent(json, Encoding.UTF8, "application/json");
             var response = await httpClient.PostAsync(
-                    $"{url}/api/section/add",
+                    $"{url}/api/Section/add",
                     content).ConfigureAwait(false);
 
             response.EnsureSuccessStatusCode();
@@ -56,21 +56,21 @@ namespace DuoClassLibrary.Services
 
         public async Task<int> CountSectionsFromRoadmap(int roadmapId)
         {
-            var response = await httpClient.GetAsync($"{url}/api/sections/count/{roadmapId}");
+            var response = await httpClient.GetAsync($"{url}/api/Section/count-on-roadmap?roadmapId={roadmapId}");
             response.EnsureSuccessStatusCode();
             return await response.Content.ReadFromJsonAsync<int>();
         }
 
         public async Task DeleteSection(int sectionId)
         {
-            var response = await httpClient.DeleteAsync($"{url}/api/section/{sectionId}");
+            var response = await httpClient.DeleteAsync($"{url}/api/Section/{sectionId}");
             response.EnsureSuccessStatusCode();
         }
 
         public async Task<List<Section>> GetAllSections()
         {
             var list = await httpClient
-                    .GetFromJsonAsync<List<Section>>($"{url}/api/section/list")
+                    .GetFromJsonAsync<List<Section>>($"{url}/api/Section/list")
                     .ConfigureAwait(false);
             if (list == null)
             {
@@ -102,6 +102,7 @@ namespace DuoClassLibrary.Services
         {
             var response = await httpClient.GetAsync($"{url}/api/Section/{sectionId}?id={sectionId}");
             response.EnsureSuccessStatusCode();
+            string s = await response.Content.ReadAsStringAsync();
             var section = await response.Content.ReadFromJsonAsync<Section>();
             if (section == null)
             {
@@ -112,14 +113,14 @@ namespace DuoClassLibrary.Services
 
         public async Task<int> LastOrderNumberFromRoadmap(int roadmapId)
         {
-            var response = await httpClient.GetAsync($"{url}/api/sections/lastordernumber/{roadmapId}");
+            var response = await httpClient.GetAsync($"{url}/api/Section/last-from-roadmap?roadmapId={roadmapId}");
             response.EnsureSuccessStatusCode();
             return await response.Content.ReadFromJsonAsync<int>();
         }
 
         public async Task UpdateSection(Section section)
         {
-            var response = await httpClient.PutAsJsonAsync($"{url}/api/sections/update", section);
+            var response = await httpClient.PutAsJsonAsync($"{url}/api/Section/patch", section);
             response.EnsureSuccessStatusCode();
         }
 
@@ -140,6 +141,24 @@ namespace DuoClassLibrary.Services
             var response = await httpClient.GetAsync($"{url}/api/sections/dependencies/{sectionId}");
             response.EnsureSuccessStatusCode();
             return await response.Content.ReadFromJsonAsync<List<SectionDependency>>() ?? new List<SectionDependency>();
+        }
+
+        public Task<bool> IsSectionCompleted(int userId, int sectionId)
+        {
+            var response = httpClient.GetFromJsonAsync<SectionCompletionDTO>($"{url}/api/Section/is-completed?userId={userId}&sectionId={sectionId}");
+            //Get boolean result from response
+            if (response.Result == null)
+            {
+                throw new InvalidOperationException("Empty or invalid response from server.");
+            }
+
+            return Task.FromResult(response.Result.IsCompleted);
+        }
+
+        public async Task CompleteSection(int userId, int sectionId)
+        {
+            var response = httpClient.PostAsJsonAsync($"{url}/api/Section/add-completed-section?userId={userId}&sectionId={sectionId}", new { });
+            response.Result.EnsureSuccessStatusCode();
         }
     }
 }

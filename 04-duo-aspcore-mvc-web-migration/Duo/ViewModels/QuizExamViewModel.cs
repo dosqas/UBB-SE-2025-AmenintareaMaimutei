@@ -520,7 +520,18 @@ namespace Duo.ViewModels
                     ?? throw new InvalidOperationException("User not found.");
                 List<Section> sections = await sectionService.GetByRoadmapId(1)
                     ?? throw new InvalidOperationException("Sections not found.");
-                Section currentUserSection = sections[user.NumberOfCompletedSections];
+
+                int sectionId;
+                if (QuizId == -1)
+                {
+                    sectionId = CurrentExam.SectionId.HasValue ? CurrentExam.SectionId.Value : -1;
+                }
+                else
+                {
+                    sectionId = CurrentQuiz.SectionId.HasValue ? CurrentQuiz.SectionId.Value : -1;
+                }
+                Section currentUserSection = await sectionService.GetSectionById(sectionId)
+                    ?? throw new InvalidOperationException("Current user section not found.");
                 List<Quiz> currentSectionQuizzes = await quizService.GetAllQuizzesFromSection(currentUserSection.Id)
                     ?? throw new InvalidOperationException("Quizzes not found.");
 
@@ -531,15 +542,31 @@ namespace Duo.ViewModels
                         RaiseErrorMessage("Progression Error", "Current exam is not set.");
                         return;
                     }
-                    if (user.NumberOfCompletedQuizzesInSection != currentSectionQuizzes.Count())
+                    foreach (Quiz q in currentSectionQuizzes)
                     {
-                        RaiseErrorMessage("Progression Error", "Not all quizzes in section completed.");
-                        return;
+                        bool isCompleted = await quizService.IsQuizCompleted(user.UserId, q.Id);
+                        if (!isCompleted)
+                        {
+                            RaiseErrorMessage("Progression Error", "Not all quizzes in section completed.");
+                            return;
+                        }
                     }
                     if (currentUserSection.GetFinalExam().Id != ExamId)
                     {
                         RaiseErrorMessage("Progression Error", "Exam ID does not match section's final exam.");
                         return;
+                    }
+
+                    await userService.IncrementSectionProgressAsync(1);
+                    if (CurrentExam.SectionId == null)
+                    {
+                        RaiseErrorMessage("Error", "Exam has no section Id");
+                        return;
+                    }
+                    else
+                    {
+                        await quizService.CompleteExam(user.UserId, ExamId);
+                        await sectionService.CompleteSection(user.UserId, sectionId);
                     }
                 }
                 else
@@ -549,19 +576,28 @@ namespace Duo.ViewModels
                         RaiseErrorMessage("Progression Error", "Current quiz is not set.");
                         return;
                     }
-                    if (user.NumberOfCompletedQuizzesInSection == currentSectionQuizzes.Count())
+                    int ct = 0;
+                    foreach (Quiz q in currentSectionQuizzes)
                     {
-                        RaiseErrorMessage("Progression Error", "All quizzes in section already completed.");
+                        bool isCompleted = await quizService.IsQuizCompleted(user.UserId, q.Id);
+                        if (isCompleted)
+                        {
+                            ct++;
+                        }
+                    }
+                    if (ct == currentSectionQuizzes.Count)
+                    {
+                        RaiseErrorMessage("Progression Error", "All quizzes already completed.");
                         return;
                     }
-                    if (currentSectionQuizzes[user.NumberOfCompletedQuizzesInSection].Id != QuizId)
+                    if (CurrentQuiz.Id != QuizId)
                     {
                         RaiseErrorMessage("Progression Error", "Quiz ID does not match expected quiz.");
                         return;
                     }
+                    await quizService.CompleteQuiz(user.UserId, QuizId);
+                    await userService.IncrementUserProgressAsync(1);
                 }
-
-                await userService.IncrementUserProgressAsync(1);
             }
             catch (Exception ex)
             {

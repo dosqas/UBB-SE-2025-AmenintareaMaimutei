@@ -3,6 +3,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Duo.Api.DTO;
 using Duo.Api.Helpers;
+using Duo.Api.Models;
 using Duo.Api.Models.Exercises;
 using Duo.Api.Models.Quizzes;
 using Duo.Api.Repositories;
@@ -185,6 +186,16 @@ namespace Duo.Api.Controllers
                     return NotFound();
                 }
 
+                // Delete section if it exists
+                if (exam.SectionId != null)
+                {
+                    var section = await repository.GetSectionByIdAsync(exam.SectionId.Value);
+                    if (section != null)
+                    {
+                        await repository.DeleteSectionAsync(section.Id);
+                    }
+                }
+
                 await repository.DeleteExamAsync(id);
                 return Ok();
             }
@@ -292,6 +303,56 @@ namespace Duo.Api.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Checks if an exam is completed by a specific user.
+        /// </summary>
+        /// <param name="examId"> Id of the exam. </param>
+        /// <param name="userId"> Id of the user. </param>
+        /// <returns> A boolean in an http response signaling the status of the exam for the user. </returns>
+        [HttpGet("is-completed")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> IsExamCompleted([FromQuery] int userId, [FromQuery] int examId)
+        {
+            try
+            {
+                bool isCompleted = await this.repository.IsExamCompleted(userId, examId);
+                return this.Ok(new { IsCompleted = isCompleted });
+            }
+            catch (Exception e)
+            {
+                return this.BadRequest(new { message = e.Message });
+            }
+        }
+
+
+        /// <summary>
+        /// Marks an exam as completed for a specific user.
+        /// </summary>
+        /// <param name="examId"> Id of the completed exam.</param>
+        /// <param name="userId"> Id of the user.</param>
+        /// <returns> Answer indicating the exam was added.</returns>
+        [HttpPost("add-completed-exam")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> AddCompletedExam([FromQuery] int examId, [FromQuery] int userId)
+        {
+            try
+            {
+                ExamCompletions examCompletion = new ExamCompletions
+                {
+                    ExamId = examId,
+                    UserId = userId,
+                };
+                await this.repository.CompleteExamForUser(examCompletion);
+                return this.Ok(new { message = "Quiz marked as completed." });
+            }
+            catch (Exception e)
+            {
+                return this.BadRequest(new { message = e.Message });
             }
         }
 

@@ -1,0 +1,187 @@
+﻿@model DuoClassLibrary.Models.Exercises.FlashcardExercise
+
+<style>
+    .flashcard {
+        perspective: 1000px;
+        width: 100%;
+        max-width: 500px;
+        margin: 0 auto;
+        min-height: 400px;
+    }
+
+    .flashcard-inner {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        text-align: center;
+        transition: transform 0.8s;
+        transform-style: preserve-3d;
+    }
+
+    .flashcard.flipped .flashcard-inner {
+        transform: rotateY(180deg);
+    }
+
+    .flashcard-front, .flashcard-back {
+        position: absolute;
+        width: 100%;
+        min-height: 400px;
+        backface-visibility: hidden;
+        background: white;
+        border-radius: 1rem;
+        border: 2px solid #6f42c1;
+        padding: 1.5rem;
+    }
+
+    .flashcard-back {
+        transform: rotateY(180deg);
+    }
+
+    .flip-button {
+        background-color: #4a90e2;
+        color: white;
+        border: none;
+        padding: 10px;
+        border-radius: 5px;
+        cursor: pointer;
+        width: 100%;
+        margin-top: 20px;
+    }
+
+    .flip-button:hover {
+        background-color: #357abd;
+    }
+
+    .flip-button:disabled {
+        background-color: #cccccc;
+        cursor: not-allowed;
+    }
+
+    .timer {
+        font-family: monospace;
+        font-size: 1.2rem;
+        font-weight: bold;
+    }
+</style>
+
+<div class="flashcard" id="flashcard" data-time="@Model.TimeInSeconds">
+    <div class="flashcard-inner">
+        <div class="flashcard-front">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div class="d-flex align-items-center">
+                    <svg class="clock-icon" viewBox="0 0 24 24" width="24" height="24">
+                        <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/>
+                        <path d="M12 6 L12 12 L16 12" stroke="currentColor" stroke-width="2" fill="none"/>
+                    </svg>
+                </div>
+                <div>
+                    <span class="badge bg-secondary">@Model.Difficulty</span>
+                </div>
+                <div id="timer" class="timer">
+                    00:@(Model.TimeInSeconds.ToString("00"))
+                </div>
+            </div>
+
+            <h3 class="text-center mb-4">FlashCard</h3>
+            
+            <div class="text-center mb-4">
+                <p class="lead">@Model.Question</p>
+            </div>
+
+            <div class="mb-3">
+                <input type="text" 
+                       id="answerInput" 
+                       name="FlashcardAnswer"
+                       class="form-control" 
+                       placeholder="Enter your answer here:"
+                       autocomplete="off">
+            </div>
+
+            <button type="button" class="flip-button" id="flipButton">
+                Flip Card
+            </button>
+        </div>
+
+        <div class="flashcard-back">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                    <span class="badge bg-secondary">@Model.Difficulty</span>
+                </div>
+                <h4 class="m-0">ANSWER:</h4>
+                <div id="backTimer" class="timer">
+                    00:@(Model.TimeInSeconds.ToString("00"))
+                </div>
+            </div>
+
+            <div class="answer-container mt-5 mb-4">
+                <h2 class="display-4">@Model.Answer</h2>
+            </div>
+
+            <div class="mt-4">
+                <div class="d-flex justify-content-center gap-4">
+                    <button type="button" class="btn btn-danger rounded-circle p-3">
+                        <svg width="24" height="24" viewBox="0 0 24 24">
+                            <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" fill="currentColor"/>
+                        </svg>
+                    </button>
+                    <button type="button" class="btn btn-success rounded-circle p-3">
+                        <svg width="24" height="24" viewBox="0 0 24 24">
+                            <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" fill="currentColor"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const flashcard = document.getElementById('flashcard');
+        const flipButton = document.getElementById('flipButton');
+        const timerElement = document.getElementById('timer');
+        const backTimerElement = document.getElementById('backTimer');
+        const answerInput = document.getElementById('answerInput');
+        
+        const initialTime = parseInt(flashcard.dataset.time);
+        let timeLeft = initialTime;
+        let isFlipped = false;
+        
+        function formatTime(seconds) {
+            return `00:${seconds.toString().padStart(2, '0')}`;
+        }
+        
+        function updateTimerDisplay(seconds) {
+            const time = formatTime(seconds);
+            timerElement.textContent = time;
+            backTimerElement.textContent = time;
+        }
+        
+        function flipCard() {
+            if (!isFlipped) {
+                isFlipped = true;
+                flashcard.classList.add('flipped');
+                answerInput.disabled = true;
+                flipButton.disabled = true;
+            }
+        }
+
+        updateTimerDisplay(timeLeft);
+
+        flipButton.addEventListener('click', flipCard);
+        
+        const timer = setInterval(() => {
+            if (timeLeft > 0) {
+                timeLeft--;
+                updateTimerDisplay(timeLeft);
+                
+                if (timeLeft === 0) {
+                    flipCard();
+                    clearInterval(timer);
+                }
+            }
+        }, 1000);
+        
+        window.addEventListener('beforeunload', () => clearInterval(timer));
+    });
+</script>

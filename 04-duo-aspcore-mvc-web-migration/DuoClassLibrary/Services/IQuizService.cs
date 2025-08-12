@@ -28,5 +28,9 @@ namespace DuoClassLibrary.Services
         Task RemoveExerciseFromExam(int examId, int exerciseId);
         Task UpdateExam(Exam exam);
         Task UpdateQuiz(Quiz quiz);
+        Task<bool> IsQuizCompleted(int userId, int quizId);
+        Task CompleteQuiz(int userId, int quizId);
+        Task<bool> IsExamCompleted(int userId, int examId);
+        Task CompleteExam(int userId, int examId);
     }
 }

@@ -12,6 +12,7 @@ using DuoClassLibrary.Models.Exercises;
 using DuoClassLibrary.Models.Quizzes;
 using DuoClassLibrary.Helpers;
 using DuoClassLibrary.Models.Quizzes.API;
+using DuoClassLibrary.Models;
 
 namespace DuoClassLibrary.Services
 {
@@ -111,7 +112,7 @@ namespace DuoClassLibrary.Services
 
         public async Task<Exam> GetExamByIdAsync(int id)
         {
-            var result = await httpClient.GetAsync($"{url}exam/get?id={id}");
+            var result = await httpClient.GetAsync($"{url}Exam/get?id={id}");
             result.EnsureSuccessStatusCode();
             string responseJson = await result.Content.ReadAsStringAsync();
             return JsonSerializationUtil.DeserializeExamWithTypedExercises(responseJson);
@@ -119,7 +120,7 @@ namespace DuoClassLibrary.Services
 
         public async Task<List<Quiz>> GetAllQuizzesFromSectionAsync(int sectionId)
         {
-            var result = await httpClient.GetFromJsonAsync<List<Quiz>>($"{url}quiz/get-all-section?sectionId={sectionId}");
+            var result = await httpClient.GetFromJsonAsync<List<Quiz>>($"{url}Quiz/get-all-section?sectionId={sectionId}");
             return result ?? throw new QuizServiceProxyException($"Received null response for section {sectionId} quizzes.");
         }
 
@@ -137,8 +138,10 @@ namespace DuoClassLibrary.Services
 
         public async Task<Exam> GetExamFromSectionAsync(int sectionId)
         {
-            var result = await httpClient.GetFromJsonAsync<Exam>($"{url}exam/get-from-section?sectionId={sectionId}");
-            return result ?? throw new QuizServiceProxyException($"Received null response for exam from section {sectionId}.");
+            var result = await httpClient.GetAsync($"{url}Exam/get-from-section?sectionId={sectionId}");
+            result.EnsureSuccessStatusCode();
+            string responseJson = await result.Content.ReadAsStringAsync();
+            return JsonSerializationUtil.DeserializeExamWithTypedExercises(responseJson);
         }
 
         public async Task DeleteQuizAsync(int quizId)
@@ -215,12 +218,15 @@ namespace DuoClassLibrary.Services
             response.EnsureSuccessStatusCode();
         }
 
-        public async Task CreateExamAsync(Exam exam)
+        public async Task<Exam> CreateExamAsync(Exam exam)
         {
             string serialized = JsonSerializationUtil.SerializeExamWithTypedExercises(exam);
             var response = await httpClient.PostAsync($"{url}exam/add", new StringContent(serialized, Encoding.UTF8, "application/json"));
             response.EnsureSuccessStatusCode();
+            string responseJson = await response.Content.ReadAsStringAsync();
+            return JsonSerializationUtil.DeserializeExamWithTypedExercises(responseJson);
         }
+
 
         public async Task<QuizResult> GetResultAsync(int quizId)
         {
@@ -232,6 +238,42 @@ namespace DuoClassLibrary.Services
         {
             var response = await httpClient.PostAsJsonAsync($"{url}quiz/submit", submission);
             response.EnsureSuccessStatusCode();
+        }
+
+        public Task<bool> IsQuizCompletedAsync(int userId, int quizId)
+        {
+            var response = httpClient.GetFromJsonAsync<QuizCompletionDTO>($"{url}Quiz/is-completed?userId={userId}&quizId={quizId}");
+            //Get boolean result from response
+            if (response.Result == null)
+            {
+                throw new InvalidOperationException("Empty or invalid response from server.");
+            }
+
+            return Task.FromResult(response.Result.IsCompleted);
+        }
+
+        public Task<bool> IsExamCompletedAsync(int userId, int examId)
+        {
+            var response = httpClient.GetFromJsonAsync<ExamCompletionDTO>($"{url}Exam/is-completed?userId={userId}&examId={examId}");
+            //Get boolean result from response
+            if (response.Result == null)
+            {
+                throw new InvalidOperationException("Empty or invalid response from server.");
+            }
+
+            return Task.FromResult(response.Result.IsCompleted);
+        }
+
+        public async Task CompleteQuizAsync(int userId, int quizId)
+        {
+            var response = httpClient.PostAsJsonAsync($"{url}Quiz/add-completed-quiz?userId={userId}&quizId={quizId}", new { });
+            response.Result.EnsureSuccessStatusCode();
+        }
+
+        public async Task CompleteExamAsync(int userId, int examId)
+        {
+            var response = httpClient.PostAsJsonAsync($"{url}Exam/add-completed-exam?userId={userId}&examId={examId}", new { });
+            response.Result.EnsureSuccessStatusCode();
         }
     }
 }

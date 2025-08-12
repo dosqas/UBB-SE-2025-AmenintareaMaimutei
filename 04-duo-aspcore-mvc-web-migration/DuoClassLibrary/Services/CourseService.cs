@@ -30,6 +30,11 @@ namespace DuoClassLibrary.Services
             return await courseServiceProxy.GetAllCourses();
         }
 
+        public async Task<Course> GetCourseAsync(int id)
+        {
+            return await courseServiceProxy.GetCourse(id);
+        }
+
         /// <summary>
         /// Retrieves all available tags.
         /// </summary>
@@ -277,9 +282,14 @@ namespace DuoClassLibrary.Services
                 return await courseServiceProxy.GetCourseTimeLimit(courseId);
         }
 
-        public async Task<bool> BuyBonusModuleAsync(int userId, int moduleId, int courseId)
+        public async Task<bool> BuyBonusModuleAsync(int userId, int moduleId)
         {
-                return await courseServiceProxy.BuyBonusModule(userId, moduleId, courseId);
+                return await courseServiceProxy.BuyBonusModule(userId, moduleId);
+        }
+
+        public async Task<Module> GetModuleAsync(int moduleId)
+        {
+            return await courseServiceProxy.GetModule(moduleId);
         }
     }
 }

@@ -1,0 +1,50 @@
+﻿@model Duo.Web.ViewModels.ExamPreviewViewModel
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+
+            <!-- Back button -->
+            <a asp-controller="Roadmap" asp-action="Index" class="text-decoration-none mb-4 d-inline-block">
+                <div class="d-flex align-items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                         fill="currentColor" class="bi bi-arrow-left me-2" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd"
+                              d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146
+                     a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4
+                     a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5
+                     0 0 0 15 8z" />
+                    </svg>
+                    <span class="fw-bold">Back</span>
+                </div>
+            </a>
+
+            <!-- Quiz title -->
+            <h2 class="text-center mb-4">Exam Preview</h2>
+
+            <!-- Quiz section info -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">@Model.SectionTitle</h5>
+                    <p class="card-text">
+                        "Final Exam"                            
+                    </p>
+                </div>
+            </div>
+
+            <!-- Description -->
+            <p class="text-center mb-5">
+                Get ready to test your knowledge with this quiz. Answer the questions to progress through the roadmap.
+            </p>
+
+            <!-- Start button -->
+            <a asp-controller="Exam"
+               asp-action="Solve"
+               asp-route-id="@Model.Exam.Id"
+               class="btn btn-primary float-end">
+                @(Model.Exam is DuoClassLibrary.Models.Quizzes.Exam ? "Start Exam" : "Start Quiz")
+            </a>
+
+        </div>
+    </div>
+</div>

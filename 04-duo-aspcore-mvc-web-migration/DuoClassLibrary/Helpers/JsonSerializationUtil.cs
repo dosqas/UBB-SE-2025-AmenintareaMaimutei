@@ -63,7 +63,7 @@ namespace DuoClassLibrary.Helpers
             int? sectionId = root.TryGetProperty("sectionId", out var sectionProp) && sectionProp.ValueKind != JsonValueKind.Null
             ? sectionProp.GetInt32()
             : null;
-            int? orderNumber = root.TryGetProperty("OrderNumber", out var orderProp) && orderProp.ValueKind != JsonValueKind.Null
+            int? orderNumber = root.TryGetProperty("orderNumber", out var orderProp) && orderProp.ValueKind != JsonValueKind.Null
                 ? orderProp.GetInt32()
                 : null;
 
@@ -112,7 +112,7 @@ namespace DuoClassLibrary.Helpers
             var root = doc.RootElement;
 
             int id = root.GetProperty("id").GetInt32();
-            int? sectionId = root.TryGetProperty("sectionId", out var sectionProp) && sectionProp.ValueKind != JsonValueKind.Null
+            int? sectionId = root.TryGetProperty("SectionId", out var sectionProp) && sectionProp.ValueKind != JsonValueKind.Null
                 ? sectionProp.GetInt32()
                 : null;
 

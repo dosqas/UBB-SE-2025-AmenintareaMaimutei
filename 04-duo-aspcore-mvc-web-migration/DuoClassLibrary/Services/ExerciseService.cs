@@ -9,9 +9,9 @@ namespace DuoClassLibrary.Services
 {
     public class ExerciseService : IExerciseService
     {
-        private readonly IExerciseService exerciseServiceProxy;
+        private readonly IExerciseServiceProxy exerciseServiceProxy;
 
-        public ExerciseService(IExerciseService exerciseServiceProxy)
+        public ExerciseService(IExerciseServiceProxy exerciseServiceProxy)
         {
             this.exerciseServiceProxy = exerciseServiceProxy ?? throw new ArgumentNullException(nameof(exerciseServiceProxy));
         }

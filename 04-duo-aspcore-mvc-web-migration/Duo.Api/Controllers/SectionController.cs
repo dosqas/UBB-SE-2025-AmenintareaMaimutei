@@ -2,6 +2,7 @@
 using System.Text.Json;
 using Duo.Api.DTO.Requests;
 using Duo.Api.Helpers;
+using Duo.Api.Models;
 using Duo.Api.Models.Sections;
 using Duo.Api.Repositories;
 using Microsoft.AspNetCore.Mvc;
@@ -74,6 +75,20 @@ namespace Duo.Api.Controllers
                 string json = rawJson.GetRawText();
                 var section = await JsonSerializationUtil.DeserializeSection(json, this.repository);
 
+                // Validate required fields
+                if (string.IsNullOrEmpty(section.Title))
+                    return BadRequest(new { message = "Title is required" });
+                if (string.IsNullOrEmpty(section.Description))
+                    return BadRequest(new { message = "Description is required" });
+                if (section.RoadmapId <= 0)
+                    return BadRequest(new { message = "Valid RoadmapId is required" });
+
+                // Set order number if not provided
+                if (!section.OrderNumber.HasValue)
+                {
+                    section.OrderNumber = await GetLastOrderNumberAsync(section.RoadmapId);
+                }
+
                 await this.repository.AddSectionAsync(section);
                 return Ok(new { message = "Section added successfully!", id = section.Id });
             }
@@ -101,6 +116,26 @@ namespace Duo.Api.Controllers
                 {
                     return NotFound(new { message = "Section not found!" });
                 }
+
+                // Firstly remove all exam completions related to this section
+                var exam = section.Exam;
+                if (exam != null)
+                {
+                    await repository.DeleteExamCompletions(exam.Id);
+                }
+
+                // Then remove all quiz completions related to this section
+                var quizzes = section.Quizzes;
+                if (quizzes != null)
+                {
+                    foreach (var quiz in quizzes)
+                    {
+                        await repository.DeleteQuizCompletions(quiz.Id);
+                    }
+                }
+
+                // Finally, remove the section itself
+                await repository.DeleteSectionCompletions(id);
 
                 await repository.DeleteSectionAsync(id);
                 return Ok(new { message = "Section removed successfully!" });
@@ -130,7 +165,7 @@ namespace Duo.Api.Controllers
                     return NotFound(new { message = "Section not found!" });
                 }
 
-                return Ok(new { result = section, message = "Successfully retrieved section!" });
+                return Ok(section);
             }
             catch (Exception e)
             {
@@ -266,6 +301,57 @@ namespace Duo.Api.Controllers
             catch (Exception e)
             {
                 return BadRequest(new { message = e.Message });
+            }
+        }
+
+        /// <summary>
+        /// Checks if a section is completed by a specific user.
+        /// </summary>
+        /// <param name="sectionId"> Id of the section. </param>
+        /// <param name="userId"> Id of the user. </param>
+        /// <returns> A boolean in an http response signaling the status of the section for the user. </returns>
+        [HttpGet("is-completed")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> IsSectionCompleted([FromQuery] int userId, [FromQuery] int sectionId)
+        {
+            try
+            {
+                bool isCompleted = await this.repository.IsSectionCompletedAsync(userId, sectionId);
+                return this.Ok(new { IsCompleted = isCompleted });
+            }
+            catch (Exception e)
+            {
+                return this.BadRequest(new { message = e.Message });
+            }
+        }
+
+
+        /// <summary>
+        /// Marks a section as completed for a specific user.
+        /// </summary>
+        /// <param name="sectionId"> Id of the completed section.</param>
+        /// <param name="userId"> Id of the user.</param>
+        /// <returns> Answer indicating the section was added.</returns>
+        [HttpPost("add-completed-section")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> AddCompletedSection([FromQuery] int sectionId, [FromQuery] int userId)
+        {
+            try
+            {
+                SectionCompletions sectionCompletion = new SectionCompletions
+                {
+                    SectionId = sectionId,
+                    UserId = userId,
+                    Completed = true,
+                };
+                await this.repository.CompleteSectionForUser(sectionCompletion);
+                return this.Ok(new { message = "Section marked as completed." });
+            }
+            catch (Exception e)
+            {
+                return this.BadRequest(new { message = e.Message });
             }
         }
 

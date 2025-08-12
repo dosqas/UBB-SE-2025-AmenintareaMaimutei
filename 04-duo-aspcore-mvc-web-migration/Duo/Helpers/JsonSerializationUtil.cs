@@ -112,7 +112,7 @@ namespace Duo.Helpers
             var root = doc.RootElement;
 
             int id = root.GetProperty("id").GetInt32();
-            int? sectionId = root.TryGetProperty("sectionId", out var sectionProp) && sectionProp.ValueKind != JsonValueKind.Null
+            int? sectionId = root.TryGetProperty("SectionId", out var sectionProp) && sectionProp.ValueKind != JsonValueKind.Null
                 ? sectionProp.GetInt32()
                 : null;
 

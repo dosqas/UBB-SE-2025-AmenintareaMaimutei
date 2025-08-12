@@ -87,7 +87,6 @@ namespace Duo.Views.Pages
                     {
                         await ViewModel.SetQuizIdAsync(quizId);
                     }
-
                     LoadCurrentExercise();
                 }
                 else

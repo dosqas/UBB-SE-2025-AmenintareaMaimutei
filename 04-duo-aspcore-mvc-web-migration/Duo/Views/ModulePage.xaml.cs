@@ -12,9 +12,11 @@ namespace Duo.Views
     [ExcludeFromCodeCoverage]
     public sealed partial class ModulePage : Page
     {
-        private IModuleViewModel viewModel = null!;
+        private ModuleViewModel viewModel = null!;
 
         private int CurrentUserId { get; init; } = 1;
+
+        private CourseViewModel ParentVM { get; set; } = null!;
 
         public ModulePage()
         {
@@ -26,6 +28,7 @@ namespace Duo.Views
             if (e.Parameter is ValueTuple<Module, CourseViewModel> tuple)
             {
                 var (module, courseVM) = tuple;
+                ParentVM = courseVM;
 
                 var httpClient = new HttpClient
                 {
@@ -61,10 +64,11 @@ namespace Duo.Views
                 });
             }
         }
-        private void BackButton_Click(object sender, RoutedEventArgs e)
+        private async void BackButton_Click(object sender, RoutedEventArgs e)
         {
             if (this.Frame.CanGoBack)
             {
+                await ParentVM.PauseCourseProgressTimer(viewModel.UserId);
                 this.Frame.GoBack();
             }
         }

@@ -1,0 +1,119 @@
+﻿@{
+    ViewData["Title"] = "Fill in the Blanks";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .placeholder-badge {
+        padding: .25rem .75rem;
+        border: 1px solid var(--bs-secondary);
+        border-radius: .5rem;
+        background-color: var(--bs-light);
+        color: var(--bs-dark);
+        min-width: 70px;
+        display: inline-block;
+        text-align: center;
+    }
+</style>
+
+<div class="container py-5">
+    <h1 class="text-center mb-4 display-6">Fill in the Blanks</h1>
+
+    <!-- Exercise Card -->
+    <div id="exerciseCard" class="card shadow-sm mx-auto mb-4" style="max-width: 680px;">
+        <div class="card-body p-4">
+            <h5 class="fw-semibold mb-4">Complete the sentence</h5>
+            <p id="sentence" class="mb-4"></p>
+            <form id="blankForm" class="row gy-3"></form>
+            <div class="d-flex justify-content-end mt-4">
+                <button type="submit" form="blankForm" class="btn btn-primary"><i class="bi bi-check-circle me-1"></i>Submit</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Feedback Card -->
+    <div id="feedbackCard" class="card shadow-sm mx-auto d-none" style="max-width: 680px;">
+        <div class="card-body p-4 text-center">
+            <h5 id="feedbackHeader" class="fw-semibold"></h5>
+            <div id="feedbackDetails" class="alert mt-3 mb-0" role="alert"></div>
+            <button id="retryBtn" class="btn btn-outline-secondary mt-3"><i class="bi bi-arrow-clockwise me-1"></i>Try Again</button>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script type="module">
+        /***** Mock fetch – replace with a class‑library call later *****/
+        async function getExercise() {
+            // e.g., return await exerciseService.GetByIdAsync(2);
+            return {
+                id: 2,
+                template: 'The three primary colors are {0}, {1}, and {2}.',
+                answers: ['red', 'blue', 'yellow']
+            };
+        }
+
+        /***** Render helpers *****/
+        function buildSentence(template, blanks) {
+            return template.replace(/\{(\d+)\}/g, (_, idx) => `<span class="placeholder-badge" data-idx="${idx}">_______</span>`);
+        }
+
+        async function init() {
+            const data = await getExercise();
+            const sentenceEl = document.getElementById('sentence');
+            const form = document.getElementById('blankForm');
+
+            sentenceEl.innerHTML = buildSentence(data.template, data.answers.length);
+
+            data.answers.forEach((_, i) => {
+                const col = document.createElement('div');
+                col.className = 'col-md-4 col-12';
+                col.innerHTML = `<input type="text" class="form-control" placeholder="Blank ${i + 1}" data-idx="${i}" required />`;
+                form.appendChild(col);
+            });
+
+            form.addEventListener('submit', e => {
+                e.preventDefault();
+                evaluate(form, data.answers);
+            });
+        }
+
+        function evaluate(form, correct) {
+            const inputs = [...form.querySelectorAll('input')];
+            const user = inputs.map(inp => inp.value.trim().toLowerCase());
+            const results = user.map((ans, i) => ans === correct[i]);
+            const score = results.filter(r => r).length;
+
+            showFeedback(score === correct.length, score, correct.length, correct);
+        }
+
+        function showFeedback(allCorrect, score, total, correct) {
+            const card = document.getElementById('feedbackCard');
+            const header = document.getElementById('feedbackHeader');
+            const details = document.getElementById('feedbackDetails');
+
+            if (allCorrect) {
+                header.innerHTML = '<i class="bi bi-emoji-smile text-success me-1"></i> All correct!';
+                details.className = 'alert alert-success';
+                details.textContent = 'Great job!';
+            } else {
+                header.innerHTML = '<i class="bi bi-emoji-neutral text-warning me-1"></i> You got ' + score + ' / ' + total;
+                details.className = 'alert alert-info';
+                details.textContent = 'Correct answers: ' + correct.join(', ');
+            }
+
+            card.classList.remove('d-none');
+            card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        /***** Retry *****/
+        document.getElementById('retryBtn').addEventListener('click', () => {
+            document.getElementById('blankForm').reset();
+            document.getElementById('feedbackCard').classList.add('d-none');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Kickoff
+        init();
+    </script>
+}

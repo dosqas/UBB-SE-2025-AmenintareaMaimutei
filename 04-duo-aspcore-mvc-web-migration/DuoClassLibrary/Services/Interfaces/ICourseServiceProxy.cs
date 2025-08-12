@@ -32,6 +32,6 @@ namespace DuoClassLibrary.Services.Interfaces
         Task<bool> ClaimCompletionReward(int userId, int courseId);
         Task<bool> ClaimTimedReward(int userId, int courseId, int timeSpent);
         Task<int> GetCourseTimeLimit(int courseId);
-        Task<bool> BuyBonusModule(int userId, int moduleId, int courseId);
+        Task<bool> BuyBonusModule(int userId, int moduleId);
     }
 }

@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using System.Text.Json;
 using Duo.Api.DTO.Requests;
 using Duo.Api.Models;
 using Duo.Api.Repositories;
@@ -296,5 +297,34 @@ namespace Duo.Api.Controllers
             }
         }
         #endregion
+
+        [HttpPost("complete")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> CompleteModule([FromBody] Dictionary<string, object> data)
+        {
+            try
+            {
+                if (!data.TryGetValue("userId", out var userIdObj) || !data.TryGetValue("moduleId", out var moduleIdObj))
+                {
+                    return this.BadRequest("Missing userId or moduleId");
+                }
+
+                var userId = ((JsonElement)data["userId"]).GetInt32();
+                var moduleId = ((JsonElement)data["moduleId"]).GetInt32();
+
+                await repository.CompleteModuleAsync(userId, moduleId);
+
+                return Ok(new { message = "Module completed successfully!" });
+            }
+            catch (Exception e)
+            {
+                // Log the exception internally
+                Console.Error.WriteLine($"Error in CompleteModule: {e}");
+                
+                // Return a generic error message to the client
+                return BadRequest(new { message = "An error occurred while processing your request." });
+            }
+        }
     }
 }

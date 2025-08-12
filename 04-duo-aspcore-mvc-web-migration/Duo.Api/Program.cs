@@ -41,6 +41,8 @@ namespace Duo.Api
             // Build the application.
             var app = builder.Build();
 
+            app.UseCors("AllowLocalHost");
+
             // Configure the HTTP request pipeline.
             ConfigureMiddleware(app);
 
@@ -57,6 +59,15 @@ namespace Duo.Api
         /// <param name="builder">The WebApplication builder.</param>
         private static void ConfigureServices(WebApplicationBuilder builder)
         {
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowLocalHost", builder =>
+                    builder.WithOrigins("http://localhost:7037", "http://127.0.0.1:7037", "http://localhost:5198", "http://127.0.0.1:5198")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .AllowCredentials());
+            });
+
             // Add controllers with JSON options.
             builder.Services.AddControllers()
                 .AddJsonOptions(options =>
@@ -71,6 +82,18 @@ namespace Duo.Api
             // Configure Swagger/OpenAPI.
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            // Add CORS
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowFrontend", builder =>
+                {
+                    builder.WithOrigins("https://localhost:7037")
+                           .AllowAnyHeader()
+                           .AllowAnyMethod()
+                           .AllowCredentials();
+                });
+            });
 
             // Configure the database context with a connection string.
             var connectionString = Environment.GetEnvironmentVariable("ConnectionStrings__WebApiDatabase");
@@ -92,6 +115,9 @@ namespace Duo.Api
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+
+            // Enable CORS
+            app.UseCors("AllowFrontend");
 
             // Enable HTTPS redirection and authorization.
             app.UseHttpsRedirection();

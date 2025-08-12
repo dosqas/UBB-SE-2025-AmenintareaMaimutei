@@ -10,6 +10,8 @@ namespace DuoClassLibrary.Services
     public interface ICourseService
     {
         Task<List<Course>> GetCoursesAsync();
+
+        Task<Course> GetCourseAsync(int id);
         Task<List<Course>> GetFilteredCoursesAsync(string searchText, bool filterPremium, bool filterFree,
                                       bool filterEnrolled, bool filterNotEnrolled, List<int> selectedTagIds, int userId);
         Task<List<Module>> GetModulesAsync(int courseId);
@@ -37,6 +39,7 @@ namespace DuoClassLibrary.Services
 
         Task<List<Tag>> GetTagsAsync();
         Task<List<Tag>> GetCourseTagsAsync(int courseId);
-        Task<bool> BuyBonusModuleAsync(int userId, int moduleId, int courseId);
+        Task<bool> BuyBonusModuleAsync(int userId, int moduleId);
+        Task<Module> GetModuleAsync(int moduleId);
     }
 }

@@ -91,5 +91,16 @@ namespace DuoClassLibrary.Services
             }
             return true;
         }
+
+        public async Task<bool> IsSectionCompleted(int userId, int sectionId)
+        {
+            bool result = await this.sectionServiceProxy.IsSectionCompleted(userId, sectionId);
+            return result;
+        }
+
+        public async Task CompleteSection(int userId, int sectionId)
+        {
+            await sectionServiceProxy.CompleteSection(userId, sectionId);
+        }
     }
 }
