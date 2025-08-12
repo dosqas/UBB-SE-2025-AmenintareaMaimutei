@@ -1,0 +1,138 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+/* Custom styles that aren't covered by Bootstrap */
+.sidebar {
+    background-color: #f8f9fa;
+    border-right: 1px solid #dee2e6;
+}
+
+.nav-pills .nav-link.active {
+    background-color: #0d6efd;
+}
+
+.course-card .card-footer {
+    border-top: 1px solid rgba(0,0,0,.125);
+}
+
+.progress {
+    background-color: #e9ecef;
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        width: 70px !important;
+    }
+
+        .sidebar .menu-text {
+            display: none;
+        }
+
+        .sidebar .nav-link {
+            text-align: center;
+        }
+
+            .sidebar .nav-link i {
+                margin-right: 0;
+            }
+}
+
+.grid-view .col-md-4 {
+    flex: 0 0 33.333333%;
+    max-width: 33.333333%;
+}
+
+/* List View */
+.list-view .col-md-4 {
+    flex: 0 0 100%;
+    max-width: 100%;
+}
+
+.list-view .course-card {
+    display: flex;
+    flex-direction: row;
+}
+
+.list-view .course-img {
+    width: 200px;
+    height: auto;
+}
+
+.exercise-component {
+    font-family: Arial, sans-serif;
+}
+
+.ex-id {
+    font-size: 14px;
+    color: #666;
+}
+
+.flashcard {
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+    position: relative;
+}
+
+.flashcard .back-face {
+    transform: rotateY(180deg);
+}
+
+.flashcard .front-face,
+.flashcard .back-face {
+    backface-visibility: hidden;
+    position: absolute;
+    width: 100%;
+    top: 0;
+}
+
+.flashcard.flipped .front-face {
+    transform: rotateY(180deg);
+}
+
+.flashcard.flipped .back-face {
+    transform: rotateY(0deg);
+}
+
+.btn-purple {
+    background-color: #6f42c1;
+    color: white;
+}
+
+.btn-purple:hover {
+    background-color: #563d7c;
+}
+
+.arrow {
+    font-size: 12px;
+}
+
+@media (max-width: 768px) {
+    .association-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .items, .matches {
+        width: 100%;
+    }
+}

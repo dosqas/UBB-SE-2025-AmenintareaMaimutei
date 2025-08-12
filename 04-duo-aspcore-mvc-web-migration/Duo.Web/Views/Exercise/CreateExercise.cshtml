@@ -1,0 +1,354 @@
+@model DuoClassLibrary.Models.Exercises.Exercise
+@{
+    ViewData["Title"] = "Create Exercise";
+    var exerciseTypes = ViewBag.ExerciseTypes as List<string>;
+    var difficulties = ViewBag.Difficulties as Array;
+}
+
+<div class="container-fluid exercise-container">
+    <div class="row mb-4">
+        <div class="col">
+            <a href="@Url.Action("Index", "Home")" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left"></i> Back
+            </a>
+        </div>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <form id="exerciseForm" asp-action="Create" method="post">
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="Question" class="control-label">Question</label>
+                            <textarea asp-for="Question" class="form-control" rows="3" 
+                                      placeholder="Write the question here..."></textarea>
+                            <span asp-validation-for="Question" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label">Exercise Type</label>
+                            <select id="exerciseType" class="form-select">
+                                <option value="">Select exercise type</option>
+                                @if (exerciseTypes != null)
+                                {
+                                    foreach (var type in exerciseTypes)
+                                    {
+                                        <option value="@type">@type</option>
+                                    }
+                                }
+                                else
+                                {
+                                    <option value="">No exercise types available</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label asp-for="Difficulty" class="control-label">Difficulty</label>
+                            <select asp-for="Difficulty" class="form-select">
+                                @if (difficulties != null)
+                                {
+                                    for (int i = 0; i < difficulties.Length; i++)
+                                    {
+                                        <option value=@(i + 1)>@difficulties.GetValue(i)</option>
+                                    }
+                                }
+                                else
+                                {
+                                    <option value="">No difficulties available</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="exerciseFormContainer" class="mb-4">
+                    <!-- Dynamic form content will be loaded here -->
+                </div>
+
+                <div class="d-flex justify-content-end gap-2">
+                    <button type="button" id="cancelBtn" class="btn btn-outline-secondary px-4">Cancel</button>
+                    <button type="submit" class="btn btn-primary px-4">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Initialize with current theme
+            const currentTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-bs-theme', currentTheme);
+
+            // Exercise type change handler
+            $('#exerciseType').change(function() {
+                const selectedType = $(this).val();
+                if (selectedType) {
+                    $.get(`/Exercise/GetExerciseForm?type=${selectedType}`, function(data) {
+                        $('#exerciseFormContainer').html(data);
+                        initializeExerciseForm(selectedType);
+                    });
+                } else {
+                    $('#exerciseFormContainer').empty();
+                }
+            });
+
+            // Cancel button handler
+            $('#cancelBtn').click(function() {
+                window.location.href = '/Home';
+            });
+
+            // Form submission
+            $('#exerciseForm').submit(function(e) {
+                e.preventDefault();
+                const exerciseType = $('#exerciseType').val();
+                const formData = collectFormData(exerciseType);
+
+                // Validate form data
+                let isValid = true;
+                let errorMessage = '';
+
+                if (!formData.Question || formData.Question.trim().length === 0) {
+                    isValid = false;
+                    errorMessage = 'Please enter a question.';
+                }
+                else if (formData.Question.length > 200) {
+                    isValid = false;
+                    errorMessage = 'Question is too long (maximum 200 characters).';
+                }
+
+                switch (exerciseType) {
+                    case 'Multiple Choice':
+                        if (!formData.Choices || formData.Choices.length < 2) {
+                            isValid = false;
+                            errorMessage = 'Please add at least 2 choices.';
+                        }
+                        else if (formData.Choices.length > 5) {
+                            isValid = false;
+                            errorMessage = 'Maximum 5 choices allowed.';
+                        }
+                        else if (!formData.Choices.some(c => c.IsCorrect)) {
+                            isValid = false;
+                            errorMessage = 'Please select at least one correct answer.';
+                        }
+                        break;
+
+                    case 'Fill in the blank':
+                        if (!formData.PossibleCorrectAnswers || formData.PossibleCorrectAnswers.length === 0) {
+                            isValid = false;
+                            errorMessage = 'Please add at least one answer.';
+                        }
+                        else if (formData.PossibleCorrectAnswers.length > 3) {
+                            isValid = false;
+                            errorMessage = 'Maximum 3 answers allowed.';
+                        }
+                        const blankCount = (formData.Question.match(/\{\}/g) || []).length;
+                        if (blankCount !== formData.PossibleCorrectAnswers.length) {
+                            isValid = false;
+                            errorMessage = 'Number of blanks in question must match number of answers.';
+                        }
+                        break;
+                }
+
+                if (!isValid) {
+                    alert(errorMessage);
+                    return;
+                }
+
+                console.log(formData); // Debugging line
+                formData.Difficulty = parseInt(formData.Difficulty, 10);
+                console.log(JSON.stringify(formData))
+                
+                $.ajax({
+                    url: '/Exercise/Create',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(formData),
+                    success: function() {
+                        window.location.href = '/Home';
+                    },
+                    error: function(xhr) {
+                        if (xhr.status === 400 && xhr.responseJSON) {
+                            alert('Validation error: ' + xhr.responseJSON);
+                        } else {
+                            alert('Error saving exercise: ' + xhr.responseText);
+                        }
+                    }
+                });
+            });
+
+            function initializeExerciseForm(type) {
+                switch(type) {
+                    case 'Association':
+                        setupAssociationForm();
+                        break;
+                    case 'Multiple Choice':
+                        setupMultipleChoiceForm();
+                        break;
+                    case 'Fill in the blank':
+                        setupFillInTheBlankForm();
+                        break;
+                    case 'Flashcard':
+                        setupFlashcardForm();
+                        break;
+                }
+            }
+
+            function setupAssociationForm() {
+                $('#addPairBtn').click(function() {
+                    const newPair = $('.pair-row').first().clone();
+                    newPair.find('input').val('');
+                    newPair.appendTo('#associationPairs');
+                });
+
+                $(document).on('click', '.remove-pair', function() {
+                    if ($('.pair-row').length > 1) {
+                        $(this).closest('.pair-row').remove();
+                    } else {
+                        alert('At least one pair is required');
+                    }
+                });
+            }
+
+            function setupMultipleChoiceForm() {
+                $('#addChoiceBtn').click(function() {
+                    const newChoice = $('.choice-row').first().clone();
+                    newChoice.find('input').val('');
+                    newChoice.find('.is-correct').prop('checked', false);
+                    newChoice.appendTo('#choiceItems');
+                });
+
+                $(document).on('click', '.remove-choice', function() {
+                    if ($('.choice-row').length > 1) {
+                        $(this).closest('.choice-row').remove();
+                    } else {
+                        alert('At least one choice is required');
+                    }
+                });
+            }
+
+            function setupFillInTheBlankForm() {
+                $('#addBlankBtn').click(function() {
+                    const newBlank = $('.blank-row').first().clone();
+                    newBlank.find('input').val('');
+                    newBlank.appendTo('#blankItems');
+                });
+
+                $(document).on('click', '.remove-blank', function() {
+                    if ($('.blank-row').length > 1) {
+                        $(this).closest('.blank-row').remove();
+                    } else {
+                        alert('At least one blank is required');
+                    }
+                });
+            }
+
+            function setupFlashcardForm() {
+                // Answer text box
+                $('#flashcardAnswer').on('input', function() {
+                    const answer = $(this).val();
+                    if (answer.length > 0) {
+                        $('#flashcardTime').prop('disabled', false);
+                    } else {
+                        $('#flashcardTime').prop('disabled', true);
+                    }
+                });
+            }
+
+            function collectFormData(type) {
+                const baseData = {
+                    Question: $('#Question').val(),
+                    Difficulty: $('#Difficulty').val(),
+                    Type: type === 'Multiple Choice' ? 'MultipleChoice' : 
+                          type === 'Fill in the blank' ? 'FillInTheBlank' : type
+                };
+
+                switch(type) {
+                    case 'Association':
+                        const pairs = [];
+                        $('.pair-row').each(function() {
+                            pairs.push({
+                                first: $(this).find('.first-answer').val(),
+                                second: $(this).find('.second-answer').val()
+                            });
+                        });
+                        return { 
+                            ...baseData, 
+                            FirstAnswersList: pairs.map(p => p.first), 
+                            SecondAnswersList: pairs.map(p => p.second) 
+                        };
+                    
+                    case 'Multiple Choice':
+                        const choices = [];
+                        $('.choice-row').each(function() {
+                            const choiceText = $(this).find('.choice-text').val().trim();
+                            const isCorrect = $(this).find('.is-correct').is(':checked');
+                            if (choiceText) {
+                                choices.push({
+                                    Answer: choiceText,
+                                    IsCorrect: isCorrect
+                                });
+                            }
+                        });
+                        return { ...baseData, Choices: choices };
+                    
+                    case 'Fill in the blank':
+                        const possibleAnswers = [];
+                        $('.blank-answer').each(function() {
+                            const answer = $(this).val().trim();
+                            if (answer) {
+                                possibleAnswers.push(answer);
+                            }
+                        });
+                        // Add {} placeholders to the question for each answer
+                        baseData.Question = baseData.Question.trim();
+                        if (!baseData.Question.includes('{}')) {
+                            baseData.Question = baseData.Question + ' ' + Array(possibleAnswers.length).fill('{}').join(' ');
+                        }
+                        return { ...baseData, PossibleCorrectAnswers: possibleAnswers };
+                    
+                    case 'Flashcard':
+                        return { 
+                            ...baseData, 
+                            Answer: $('#flashcardAnswer').val(),
+                            TimeInSeconds: parseInt($('#flashcardTime').val(), 10) || 30
+                        };
+                    
+                    default:
+                        return baseData;
+                }
+            }
+        });
+
+        // Global theme toggle function
+        function toggleTheme() {
+            const currentTheme = localStorage.getItem('theme') || 'dark';
+            const newTheme = currentTheme === 'light' ? 'dark' : 'dark';
+            document.documentElement.setAttribute('data-bs-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        }
+    </script>
+}
+    <style>
+        .exercise-container {
+            background-color: #fff;
+            color: #212529;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        [data-bs-theme="dark"] .exercise-container {
+            background-color: #23272b;
+            color: #f8f9fa;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+    </style>

@@ -1,0 +1,286 @@
+@{
+    ViewData["Title"] = "Create New Section";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid px-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Create New Section</h2>
+    </div>
+
+    <h5>Subject</h5>
+    <input type="text" id="subjectInput" class="form-control bg-dark text-light border-dark mb-4" placeholder="Enter section subject" />
+
+    <h5>Selected Quizzes</h5>
+    <div class="border rounded p-4 mb-4 dark-box" id="selectedQuizzesContainer" style="min-height: 150px;">
+        <!-- Selected quizzes go here -->
+    </div>
+    <div class="text-end mb-4">
+        <button class="btn btn-primary" id="addQuizBtn" type="button">Add Quiz</button>
+    </div>
+
+    <h5>Final Exam</h5>
+    <div class="border rounded p-4 mb-4 dark-box" id="selectedExamContainer" style="min-height: 150px;">
+        <!-- Selected exam goes here -->
+    </div>
+    <div class="text-end mb-4">
+        <button class="btn btn-primary" id="addExamBtn" type="button">Select Exam</button>
+    </div>
+
+    <div class="text-end">
+        <a href="@Url.Action("ManageSection", "Section")" class="btn btn-secondary">Cancel</a>
+        <button class="btn btn-primary" id="saveBtn">Save</button>
+    </div>
+</div>
+
+<!-- Quiz Modal -->
+<div class="modal fade" id="quizModal" tabindex="-1" aria-labelledby="quizModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content bg-dark text-light">
+            <div class="modal-header">
+                <h5 class="modal-title" id="quizModalLabel">Select Quiz</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <ul class="list-group" id="quiz-list-modal">
+                    @foreach (var quiz in ViewBag.Quizzes as List<DuoClassLibrary.Models.Quizzes.Quiz>)
+                    {
+                        <li class="list-group-item bg-dark text-light" style="cursor:pointer;" data-quiz-id="@quiz.Id">
+                            @quiz.Id
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Exam Modal -->
+<div class="modal fade" id="examModal" tabindex="-1" aria-labelledby="examModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content bg-dark text-light">
+            <div class="modal-header">
+                <h5 class="modal-title" id="examModalLabel">Select Exam</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <ul class="list-group" id="exam-list-modal">
+                    @foreach (var exam in ViewBag.Exams as List<DuoClassLibrary.Models.Quizzes.Exam>)
+                    {
+                        <li class="list-group-item bg-dark text-light" style="cursor:pointer;" data-exam-id="@exam.Id">
+                            @exam.Id
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        body {
+            background-color: #121212;
+            color: #f8f9fa;
+        }
+
+        .dark-box {
+            background-color: #1e1e1e;
+            border-color: #444;
+            color: #f8f9fa;
+        }
+
+        .form-control {
+            background-color: #1e1e1e;
+            border-color: #444;
+            color: #f8f9fa;
+        }
+
+        .btn-primary {
+            background-color: #0d6efd;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background-color: #0b5ed7;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            border: none;
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+
+        .list-group-item {
+            background-color: #1e1e1e;
+            border-color: #444;
+            color: #f8f9fa;
+        }
+
+        .list-group-item:hover {
+            background-color: #2d2d2d;
+            cursor: pointer;
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+            border: none;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .btn-danger:hover {
+            background-color: #bb2d3b;
+        }
+
+        .remove-quiz, .remove-exam {
+            opacity: 0.8;
+            transition: opacity 0.2s;
+        }
+
+        .remove-quiz:hover, .remove-exam:hover {
+            opacity: 1;
+        }
+
+        .fas {
+            margin-right: 0.25rem;
+        }
+    </style>
+}
+
+@section Scripts {
+    <script>
+        let selectedQuizzes = [];
+        let selectedExam = null;
+
+        function renderSelectedQuizzes() {
+            const container = $('#selectedQuizzesContainer');
+            container.empty();
+            if (selectedQuizzes.length === 0) {
+                container.append('<div class="text-muted">No quizzes selected.</div>');
+            } else {
+                const ul = $('<ul class="list-group"></ul>');
+                selectedQuizzes.forEach(q => {
+                    const li = $(`<li class="list-group-item bg-dark text-light d-flex justify-content-between align-items-center">
+                        <span>${q.id}: ${q.title}</span>
+                        <button class="btn btn-danger btn-sm remove-quiz" data-quiz-id="${q.id}">
+                            <i class="fas fa-times"></i> Remove
+                        </button>
+                    </li>`);
+                    ul.append(li);
+                });
+                container.append(ul);
+            }
+            // Add click handler for remove buttons
+            $('.remove-quiz').off('click').on('click', function() {
+                const quizId = $(this).data('quiz-id');
+                selectedQuizzes = selectedQuizzes.filter(q => q.id !== quizId);
+                renderSelectedQuizzes();
+            });
+        }
+
+        function renderSelectedExam() {
+            const container = $('#selectedExamContainer');
+            container.empty();
+            if (!selectedExam) {
+                container.append('<div class="text-muted">No exam selected.</div>');
+            } else {
+                container.append(`
+                    <div class="bg-dark text-light p-2 rounded d-flex justify-content-between align-items-center">
+                        <span>${selectedExam.id}: ${selectedExam.title}</span>
+                        <button class="btn btn-danger btn-sm remove-exam">
+                            <i class="fas fa-times"></i> Remove
+                        </button>
+                    </div>
+                `);
+            }
+            // Add click handler for remove button
+            $('.remove-exam').off('click').on('click', function() {
+                selectedExam = null;
+                renderSelectedExam();
+            });
+        }
+
+        $(document).ready(function() {
+            // Initialize modals
+            const quizModal = new bootstrap.Modal(document.getElementById('quizModal'));
+            const examModal = new bootstrap.Modal(document.getElementById('examModal'));
+
+            $('#addQuizBtn').on('click', function() {
+                quizModal.show();
+            });
+
+            $('#addExamBtn').on('click', function() {
+                examModal.show();
+            });
+
+            // Handle quiz selection
+            $('#quiz-list-modal li').on('click', function() {
+                const quizId = $(this).data('quiz-id');
+                const quizTitle = $(this).text().trim();
+                if (!selectedQuizzes.some(q => q.id === quizId)) {
+                    selectedQuizzes.push({ id: quizId, title: quizTitle });
+                    renderSelectedQuizzes();
+                }
+                quizModal.hide();
+            });
+
+            // Handle exam selection
+            $('#exam-list-modal li').on('click', function() {
+                const examId = $(this).data('exam-id');
+                const examTitle = $(this).text().trim();
+                selectedExam = { id: examId, title: examTitle };
+                renderSelectedExam();
+                examModal.hide();
+            });
+
+            $('#saveBtn').on('click', function() {
+                const subject = $('#subjectInput').val();
+                if (!subject) {
+                    alert('Please enter a subject');
+                    return;
+                }
+                if (selectedQuizzes.length === 0) {
+                    alert('Please select at least one quiz');
+                    return;
+                }
+                if (!selectedExam) {
+                    alert('Please select an exam');
+                    return;
+                }
+
+                const sectionData = {
+                    title: subject,
+                    description: "Section created from web interface",
+                    roadmapId: 1,
+                    subjectId: 1,
+                    orderNumber: 1,
+                    quizzes: selectedQuizzes.map(q => ({ id: q.id })),
+                    exam: { id: selectedExam.id }
+                };
+
+                $.ajax({
+                    url: '@Url.Action("AddSection", "Section")',
+                    method: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(sectionData),
+                    success: function(response) {
+                        window.location.href = '@Url.Action("ManageSection", "Section")';
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error creating section:', xhr.responseText);
+                        const errorMessage = xhr.responseJSON?.message || 'Failed to create section. Please try again.';
+                        alert(errorMessage);
+                    }
+                });
+            });
+
+            // Initial render
+            renderSelectedQuizzes();
+            renderSelectedExam();
+        });
+    </script>
+}

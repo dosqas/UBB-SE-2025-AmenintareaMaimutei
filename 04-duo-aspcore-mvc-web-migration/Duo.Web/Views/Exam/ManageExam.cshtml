@@ -1,0 +1,191 @@
+﻿@{
+    ViewData["Title"] = "Manage Exams";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var exams = ViewBag.Exams as List<DuoClassLibrary.Models.Quizzes.Exam>;
+    var exercises = ViewBag.AllExercises as List<DuoClassLibrary.Models.Exercises.Exercise>;
+}
+
+<div class="container-fluid px-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="mb-0">Manage Exams</h2>
+        <a class="btn btn-outline-secondary btn-sm" onclick="history.back()">
+            <i class="bi bi-arrow-left"></i> Back
+        </a>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <a href="@Url.Action("AddExam", "Exam")" class="btn btn-primary">Add Exam</a>
+    </div>
+
+    <ul class="list-group" id="examList">
+        @foreach (var exam in exams)
+        {
+            <li class="list-group-item d-flex justify-content-between align-items-center bg-dark text-light">
+                <span class="exam-item" data-id="@exam.Id" style="cursor: pointer;">Exam #@exam.Id</span>
+                <form asp-action="Delete" asp-controller="Exam" method="post" class="m-0">
+                    <input type="hidden" name="id" value="@exam.Id" />
+                    <button type="submit" class="btn btn-sm btn-outline-danger">Remove</button>
+                </form>
+            </li>
+        }
+    </ul>
+
+    <div class="mt-4">
+        <h5>Selected Exercises</h5>
+        <div class="border rounded p-4 dark-box" style="min-height: 200px;" id="selectedExercisesBox">
+            <p class="text-muted">Select an exam to view exercises.</p>
+        </div>
+        <div class="text-end mt-3">
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exerciseModal" id="openAddExerciseModal" disabled>Add Exercise</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="exerciseModal" tabindex="-1" aria-labelledby="exerciseModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content bg-dark text-light">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exerciseModalLabel">Select Exercise</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <ul class="list-group" id="exerciseList">
+                    @foreach (var ex in exercises)
+                    {
+                        <li class="list-group-item bg-dark text-light exercise-item" data-id="@ex.ExerciseId" data-name="@ex.Question">
+                            Exercise #@ex.ExerciseId – @ex.Question
+                        </li>
+                    }
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="confirmAddExercise" disabled>Add</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        body {
+            background-color: #121212;
+            color: #f8f9fa;
+        }
+
+        .dark-box {
+            background-color: #1e1e1e;
+            border-color: #444;
+            color: #f8f9fa;
+        }
+
+        .list-group-item {
+            color: #f8f9fa;
+        }
+
+        .btn-outline-danger {
+            color: #dc3545;
+            border-color: #dc3545;
+        }
+
+            .btn-outline-danger:hover {
+                background-color: #dc3545;
+                color: white;
+            }
+
+        .btn-outline-secondary {
+            color: #adb5bd;
+            border-color: #6c757d;
+        }
+
+            .btn-outline-secondary:hover {
+                background-color: #6c757d;
+                color: white;
+            }
+
+        .btn-primary {
+            background-color: #0d6efd;
+            border: none;
+        }
+
+            .btn-primary:hover {
+                background-color: #0b5ed7;
+            }
+
+        .exercise-item.active {
+            background-color: #343a40;
+        }
+    </style>
+}
+
+@section Scripts {
+    <script>
+        let selectedExamId = null;
+        let selectedExercise = null;
+
+        document.querySelectorAll('.exam-item').forEach(item => {
+            item.addEventListener('click', function () {
+                selectedExamId = this.dataset.id;
+                document.getElementById('openAddExerciseModal').disabled = false;
+
+                fetch(`/Exam/GetExercisesForExam/${selectedExamId}`)
+                    .then(response => response.text())
+                    .then(html => {
+                        document.getElementById('selectedExercisesBox').innerHTML = html;
+                    });
+            });
+        });
+
+        document.querySelectorAll('.exercise-item').forEach(item => {
+            item.addEventListener('click', function () {
+                document.querySelectorAll('.exercise-item').forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+                selectedExercise = {
+                    id: this.dataset.id,
+                    name: this.dataset.name
+                };
+                document.getElementById('confirmAddExercise').disabled = false;
+            });
+        });
+
+        document.getElementById('confirmAddExercise').addEventListener('click', function () {
+            if (!selectedExamId || !selectedExercise) return;
+
+            fetch('/Exam/AddExerciseToExam', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ examId: selectedExamId, exerciseId: selectedExercise.id })
+            })
+            .then(() => {
+                bootstrap.Modal.getInstance(document.getElementById('exerciseModal')).hide();
+                document.getElementById('confirmAddExercise').disabled = true;
+
+                return fetch(`/Exercise/exam/${selectedExamId}`)
+                    .then(res => res.text())
+                    .then(html => {
+                        document.getElementById('selectedExercisesBox').innerHTML = html;
+                    });
+            });
+        });
+
+        document.addEventListener('click', function (e) {
+            if (e.target.classList.contains('remove-exercise')) {
+                const exerciseId = e.target.dataset.id;
+
+                fetch('/Exam/RemoveExerciseFromExam', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ examId: selectedExamId, exerciseId: exerciseId })
+                })
+                .then(() => {
+                    return fetch(`/Exam/GetExercisesForExam/${selectedExamId}`)
+                        .then(res => res.text())
+                        .then(html => {
+                            document.getElementById('selectedExercisesBox').innerHTML = html;
+                        });
+                });
+            }
+        });
+    </script>
+}
