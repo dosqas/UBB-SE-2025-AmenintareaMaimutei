@@ -117,7 +117,7 @@ You can find the other team's original repository here:
    We are migrating our existing solution to **ASP.NET Core MVC** (Model–View–Controller). This migration only affects the GUI, keeping the core business logic intact. The new MVC project will be added alongside the existing solution.
 
 2. **Architecture Options & Integration**:
-   For integrating with our existing API and service layer, we will use the following architecture strategy: **Class Library Sharing** - We move the service and proxy repository to a class library referenced by both the desktop and web apps.
+   For integrating with our existing API and service layer, we will use the following architecture strategy: **Class Library for Services** - We moved the service layer into a class library, connecting to the API through existing proxies.
 
 3. **UI & Security Enhancements**:
    * All functionalities will be protected against unauthorized access.
