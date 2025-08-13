@@ -6,8 +6,6 @@ Welcome to the **Amenintarea Maimutei** team repository! This project is being d
 
 You can find the original repository [here](https://github.com/alexzmmv/UBB-SEE-2025-OnlyFeatures).
 
-The next stage of development, which involves half-merging the code, can be found in the updated repository at [this link](https://github.com/dosqas/UBB-SE-2025-927-1).
-
 ---
 
 ## 📌 Project Overview  
