@@ -1,4 +1,4 @@
-# 🎯 Hospital & Duo Apps
+# 🎯 Hospital & Duo Apps - Software Engineering Course
 
 ## 🎉 Introduction
 
