@@ -4,8 +4,7 @@
 
 Welcome to the **Subgroup 927/1** team repository! This project is being developed as part of the **Software Engineering Course 2024-2025** at UBB by subgroup 927/1. Our teams have taken over and are continuing the work on the **Duolingo for Other Things** app, originally developed by subgroup 923/2. The app is built using **C# + .NET with WinUI** for the frontend, **Entity Framework** for database operations, and **SQL Server** as the database, designed to help users learn new skills in a fun, interactive way.
 
-You can find the original team repositories here:
-- [Amenintarea Maimutei](https://github.com/dosqas/UBB-SE-2025-AmenintareaMaimutei-NewBase)
+You can find the other team's original repository here:
 - [NewFolder](https://github.com/vodaioan03/UBB-SE-2025-League-Right)
 
 ---
