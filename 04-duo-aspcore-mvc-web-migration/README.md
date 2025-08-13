@@ -2,29 +2,44 @@
 
 ## 📱 Duolingo for Other Things
 
-Welcome to the **Subgroup 927/1** team repository! This project is being developed as part of the **Software Engineering Course 2024-2025** at UBB by subgroup 927/1. Our teams have taken over and are continuing the work on the **Duolingo for Other Things** app, originally developed by subgroup 923/2. The app is built using **C# + .NET with WinUI** for the frontend, **Entity Framework** for database operations, and **SQL Server** as the database, designed to help users learn new skills in a fun, interactive way.
+Welcome to the **Subgroup 927/1** team repository! This project is being developed as part of the **Software Engineering Course 2024-2025** at UBB by subgroup 927/1. Our teams have taken over and are continuing the work on the **Duolingo for Other Things** app, originally developed by subgroup 923/2. The app is built using **C# + .NET with WinUI/ASP.NET Core MVC** for the frontend, **Entity Framework** for database operations, and **SQL Server** as the database, designed to help users learn new skills in a fun, interactive way.
 
-You can find the original team repositories here:
-- [Amenintarea Maimutei](https://github.com/dosqas/UBB-SE-2025-AmenintareaMaimutei-NewBase)
+You can find the other team's original repository here:
 - [NewFolder](https://github.com/vodaioan03/UBB-SE-2025-League-Right)
 
 ---
 
-## 📌 Project Overview  
+**Latest Update**: We're migrating our WinUI desktop application to ASP.NET Core MVC while maintaining all existing functionality. Below are the key architectural changes:
 
-Our team is currently tasked with **merging our solutions** for the **Duolingo for Other Things** app. This involves:
+## 🚀 Current Migration Work
 
-- **Solution Merging**: We are in the process of **half-merging** our solutions with another team, combining both codebases into a unified structure. The final merge will follow soon, but our current focus is on making sure the architecture is aligned. The structure must be consistent across all classes, ensuring that each component has a defined role. For example, if one team used a model as a service, while the other used a separate service, we will ensure there is a unified approach with separate services for all features.
+### 🔧 Architectural Changes
+- **New ASP.NET Core MVC Web App** (Model-View-Controller) replacing WinUI frontend
+- **Service Layer Integration**:
+  - Shared service layer between desktop and web via class library
+  - API now exposes services instead of raw repositories
+  - Service proxy pattern implemented for cross-platform consistency
 
-- **Refactoring & Testing**: We are refactoring the codebase to improve maintainability and readability. During this phase, we are making sure that no business logic resides in the UI or data access layer, and that the **MVVM pattern** is respected. We are also writing comprehensive **Osherove-style mocked unit tests** to ensure proper isolation of components and **integration tests** to verify interactions between different system parts.
+### 🔒 Security Enhancements
+- All routes now require authentication
+- Role-based authorization for admin/user features
+- JWT token validation for API calls
 
-- **Entity Framework Core**: We are transitioning the data access layer to use **Entity Framework Core** with **Code First** and migrations to manage the database. This will allow us to maintain a single database across the entire project, eliminating the need for multiple databases. Raw SQL and stored procedures will no longer be used, and any file saving/loading will be handled outside of domain logic.
+### 🛠️ Technical Improvements
+- **Dependency Injection**:
+  - Full DI implementation across all layers
+  - Auto-wiring of services and repositories
+- **Caching Strategy**:
+  - Memory caching for frequent operations
+  - Automatic cache invalidation on data changes
+- **Client-Side Stack**:
+  - Standard Bootstrap/jQuery foundation
+  - Additional frameworks pending team approval
 
-- **Web API Setup**: Our solution now includes an **ASP.NET Core Web API** project, which will be hosted separately from the main application. This API will serve as the communication layer for data access, and each team member will run the API locally. The main application will interact with this Web API instead of connecting directly to the database.
-
-- **Code Quality & Standards**: We will continue to follow **StyleCop** rules for code readability, testability, and maintainability. The goal is to ensure that the code is clean, well-documented, and adheres to consistent formatting rules. All team members are expected to adhere to these guidelines, and code should be tested with appropriate unit and integration tests.
-
-Our work on these tasks is crucial for preparing the app for its final integration and ensuring it operates smoothly. After completing this phase, the project will be ready for further development and final integration into the complete system.
+### 📊 Progress Tracking
+- CRUD operations generated for 2 core entities (Courses, Modules)
+- Sequence diagrams created for premium course enrollment flow
+- Deployment pipeline configured for seminar #6 demo
 
 ---
 
@@ -89,20 +104,24 @@ Our work on these tasks is crucial for preparing the app for its final integrati
 ---
 
 ## 🛠️ Tech Stack  
-- **Frontend**: WinUI 3  
+- **Frontend**: WinUI 3 (Desktop) / ASP.NET Core MVC (Web)
 - **Backend**: .NET (C#)  
 - **Database**: SQL Server  
 - **ORM**: Entity Framework Core  
 
 ---
 
-## 📅 Development Process  
+## 📅 Development Process
 
-1. **Design and Initial Implementation**: The initial design, requirement modeling and initial implementations were developed by subgroup 923/2, laying the groundwork for the app’s core features.
+1. **Migration to ASP.NET Core MVC**:
+   We are migrating our existing solution to **ASP.NET Core MVC** (Model–View–Controller). This migration only affects the GUI, keeping the core business logic intact. The new MVC project will be added alongside the existing solution.
 
-2. **Project Handover and Merge Phase**: Our subgroup has received the projects and is currently focused on merging them. We are in the process of integrating the different solutions by refactoring the code, applying unit and integration tests, and making necessary adjustments to align the projects. This phase includes switching to **Entity Framework Core** for data access and implementing a unified API. 
+2. **Architecture Options & Integration**:
+   For integrating with our existing API and service layer, we will use the following architecture strategy: **Class Library Sharing** - We move the service and proxy repository to a class library referenced by both the desktop and web apps.
 
-3. **Final Integration**: Once the ongoing half-merge and refinements are completed, the project will be ready for final integration into the **Duolingo for Other Things** app. The final merge and polish will ensure the app is fully cohesive and ready for deployment.
+3. **UI & Security Enhancements**:
+   * All functionalities will be protected against unauthorized access.
+   * A **dependency injection** framework will handle all object instantiations.
 
 ---
 
